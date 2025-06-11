@@ -3,11 +3,11 @@ import { CiCircleChevRight } from "react-icons/ci";
 
 function  Tracks() {
     return(
-    <div className="flex flex-col items-center justify-center">
+    <div className="flex flex-col items-center justify-center p-4">
         
         <div className='bg-gray-100 px-8 rounded-2xl m-6'>
-          <div className='text-4xl font-bold mt-6' id="sec-1">Track 1 – Innovation in Science and Materials</div>
-          <div className='flex flex-row gap-6' >
+          <div className='text-4xl font-bold mt-6 max-sm:text-xl max-sm:p-4  max-sm:text-center' id="sec-1">Track 1 – Innovation in Science and Materials</div>
+          <div className='flex flex-row max-sm:flex-col items-center gap-6' >
             <div className='w-[400px] p-8'>
               <div className="flex items-center text-lg font-semibold text-gray-800">
                 <CiCircleChevRight className="mr-2 text-xl text-black-600" />
@@ -245,8 +245,8 @@ function  Tracks() {
 
 
         <div className='bg-gray-100 px-8 rounded-2xl m-6'>
-          <div className='text-4xl font-bold mt-6' id="sec-2">Track 2 - Innovation in Computer Science & Applications</div>
-          <div className='flex flex-row gap-6'>
+          <div className='text-4xl font-bold mt-6 max-sm:text-xl max-sm:p-4  max-sm:text-center' id="sec-2">Track 2 - Innovation in Computer Science & Applications</div>
+          <div className='flex flex-row max-sm:flex-col items-center gap-6'>
             <div className='w-[400px] p-8'>
               <div>
                 <div className="flex items-center text-lg font-semibold text-gray-800">
@@ -485,9 +485,9 @@ function  Tracks() {
 
 
         <div className='bg-gray-100 px-8 rounded-2xl m-6'>
-          <div className='text-4xl font-bold mt-6' id="sec-3">Track 3 – Innovation in Electrical & Electronics Engineering
+          <div className='text-4xl font-bold mt-6 max-sm:text-xl max-sm:p-4  max-sm:text-center' id="sec-3">Track 3 – Innovation in Electrical & Electronics Engineering
           </div>
-          <div className='flex flex-row gap-6'>
+          <div className='flex flex-row max-sm:flex-col items-center gap-6'>
             <div className='w-[400px] p-8'>
               <div>
                 <div className="flex items-center text-lg font-semibold text-gray-800">
@@ -761,10 +761,10 @@ function  Tracks() {
 
 
         <div className='bg-gray-100 px-8 rounded-2xl m-6'>
-          <div className='text-4xl font-bold mt-6' id="sec-4">
+          <div className='text-4xl font-bold max-sm:text-xl max-sm:p-4  max-sm:text-center mt-6' id="sec-4">
             Track 4 - Innovations in Management & SOCIAL SCIENCE
           </div>
-          <div className='flex flex-row gap-6'>
+          <div className='flex flex-row max-sm:flex-col items-center gap-6'>
             <div className='w-[400px] p-8'>
               <div>
                 <div className="flex items-center text-lg font-semibold text-gray-800">
