@@ -5,6 +5,8 @@ import About from '../components/Home Components/About'
 import ImportantNews from '../components/Home Components/ImportantNews'
 import ImportantLink from '../components/Home Components/ImportantLink'
 import Publisher from '../components/Home Components/Publisher'
+import GetInTouch from '../components/Home Components/GetInTouch'
+import Footer from '../components/Footer'
 
 function Home() {
   return (
@@ -14,6 +16,8 @@ function Home() {
       <ImportantNews />
       <ImportantLink />
       <Publisher />
+      <GetInTouch />
+      <Footer />
     </div>
   )
 }
