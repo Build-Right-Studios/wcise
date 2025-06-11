@@ -5,7 +5,7 @@ function Title(props) {
 
 
   return (
-    <div className='text-5xl font-bold text-center my-8 text-blue-600'>{props.title}</div>
+    <div className='text-4xl font-bold text-center my-8 text-[#1d3b58] lg:text-6xl lg:text-right lg:pr-6'>{props.title}</div>
   )
 }
 
