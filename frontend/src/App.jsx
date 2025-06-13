@@ -13,6 +13,9 @@ import TechnicalWorkshop from './pages/TechnicalWorkshop'
 import Keynote from './pages/Keynote'
 import PreviousEvents from './pages/PreviousEvents'
 import Awards from './pages/Awards'
+import Awards2019 from './pages/Awards2019'
+import Awards2022 from './pages/Awards2022'
+import Awards2023 from './pages/Awards2023'
 import Login from './pages/Login'
 import NotFound from './pages/NotFound'
 
@@ -32,6 +35,9 @@ function App() {
           <Route path = "/keynote" element= {<Keynote />}/>
           <Route path = "/previous-events" element= {<PreviousEvents />}/>
           <Route path = "/awards" element= {<Awards />}/>
+          <Route path = "/awards-2019" element= {<Awards2019 />}/>
+          <Route path = "/awards-2022" element= {<Awards2022 />}/>
+          <Route path = "/awards-2023" element={<Awards2023 />}/>
           <Route path = "/login" element= {<Login />}/>
           <Route path="*" element={<NotFound />} />
         </Routes>
