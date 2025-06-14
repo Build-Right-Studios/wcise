@@ -11,10 +11,10 @@ function Submissions() {
       </div>
 
       <div className='mt-4 text-center font-bold'>
-        <p className='mb-4 text-sm text-[#8f5d46]'>
+        <p className='mb-4 text-lg text-[#8f5d46]'>
           Authors are invited to submit paper through the Google form link</p>
-        <a className='mb-4 text-xl text-[#bc1823] ' href="#">Click here to submit your paper</a><br /><br />
-        <a className='mt-12 text-xl text-[#122e76] ' href="#">Click here to download the WCISE Template</a>
+        <a className='mb-4 text-xl text-[#bc1823] underline' href="#">Click here to submit your paper</a><br /><br />
+        <a className='mt-12 text-xl text-[#122e76] underline' href="#">Click here to download the WCISE Template</a>
       </div>
       <div className='mt-4 text-center relative'>
         <img className="absolute w-full lg:h-50" src=".\src\images\submissions1.png" alt="submissions" />
@@ -62,13 +62,13 @@ function Submissions() {
 
 
       <div>
-        <h4 className='ml-2 mb-2 text-xl font-bold text-[#1d3b58]'>ONLINE-VIRTUAL PRESENTATION</h4>
-        <p className='text-justify mt-2 mb-5 mx-5 text-[#1d3b58]'>The conference will be conducted in hybrid mode and virtual presentation is available for the individuals using a suitable online conference platform. Virtual Presentation permits contributors to submit abstract/full length papers for refereeing and publication in the conference publications, exactly like a regular paper. Virtual authors whose abstracts/full length papers are accepted (and who have paid registration fees) should submit a power point presentation (with video and/or audio), mp4, or any other multimedia file of their work as due to the different time zone, if they are not available for presentation at the scheduled time then their video presentation will be run as per the conference schedule. Virtual presentation duration of each author will last between 8 to 10 minutes. A high speed internet connection is recommended for live virtual presentations.
+        <h4 className='ml-2 lg:ml-4 mb-2 lg:mt-6 text-xl lg:text-2xl font-bold text-[#1d3b58]'>ONLINE-VIRTUAL PRESENTATION</h4>
+        <p className='text-justify mt-2 lg:mt-4 mb-5 lg:mb-10 mx-5 lg:mx-10 text-[#1d3b58]'>The conference will be conducted in hybrid mode and virtual presentation is available for the individuals using a suitable online conference platform. Virtual Presentation permits contributors to submit abstract/full length papers for refereeing and publication in the conference publications, exactly like a regular paper. Virtual authors whose abstracts/full length papers are accepted (and who have paid registration fees) should submit a power point presentation (with video and/or audio), mp4, or any other multimedia file of their work as due to the different time zone, if they are not available for presentation at the scheduled time then their video presentation will be run as per the conference schedule. Virtual presentation duration of each author will last between 8 to 10 minutes. A high speed internet connection is recommended for live virtual presentations.
         </p></div>
       <div className='mt-4 text-center relative'>
         <img className="absolute w-full h-80 lg:h-80" src=".\src\images\submission2.png" alt="submissions" />
         <h4 className='mt-4 mx-4 text-xl lg:text-3xl font-bold absolute lg:left-110 text-white ml-25 lg:ml-55'>Important Dates</h4>
-
+        <br />
         <div className='text-white absolute lg:left-110 mt-12 text-center'>
           <h5 className='text-lg lg:mt-5'>Last Date of Paper Submission :</h5>
           <p className='mb-2'>October 31, 2023</p>
@@ -80,11 +80,11 @@ function Submissions() {
           <p>December 29-30, 2023</p>
         </div>
         <div>
-          <div className='text-[#1d3b58] absolute lg:left-110 text-center mt-80'>
-            <p>For any query, feel free to Contact at Email : wcise.convenor@gmail.com
+          <div className='text-[#1d3b58] lg:left-100 text-center mt-80 lg:text-lg'>
+            <p className='md:tracking-wide'>For any query, feel free to Contact at <span className='font-bold'>Email : wcise.convenor@gmail.com</span>
             </p>
-          </div><br />
-          <p className='text-[#1d3b58] absolute lg:left-110 text-center mt-90'>Dr. Pensri Bangbon, Shinawatra University, Pathum Thani Province, Thailand
+          </div>
+          <p className='text-[#1d3b58] lg:left-110 text-center mt-2 lg:text-lg'>Dr. Pensri Bangbon, Shinawatra University, Pathum Thani Province, Thailand
             Dr. Deval Verma, Bennett University, Greater Noida, India</p>
         </div>
 
