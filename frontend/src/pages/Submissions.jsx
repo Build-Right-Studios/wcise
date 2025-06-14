@@ -81,7 +81,7 @@ function Submissions() {
         </div>
         <div>
           <div className='text-[#1d3b58] lg:left-100 text-center mt-80 lg:text-lg'>
-            <p className='md:tracking-wide'>For any query, feel free to Contact at <span className='font-bold'>Email : wcise.convenor@gmail.com</span>
+            <p className='md:tracking-wide'>For any query, feel free to Contact at <span className='font-bold '>Email : wcise.convenor@gmail.com</span>
             </p>
           </div>
           <p className='text-[#1d3b58] lg:left-110 text-center mt-2 lg:text-lg'>Dr. Pensri Bangbon, Shinawatra University, Pathum Thani Province, Thailand
