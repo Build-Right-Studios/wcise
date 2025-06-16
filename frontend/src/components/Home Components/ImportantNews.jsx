@@ -7,22 +7,22 @@ function ImportantNews() {
     <div className='ml-4 mr-4 mt-6 flex flex-col lg:flex-row gap-5 lg:items-center lg:justify-center'>
       <div className='flex flex-col border-4 h-full border-[#1d3b58] bg-[#f5fbf9] lg:w-1/5'>
 
-        <div className='text-center text-3xl pb-2 text-[#1d3b58] font-bold '>Important News</div>
+        <div className='text-center text-3xl pb-2 text-[#1d3b58] font-bold p-4'>Important News</div>
         <div className='relative h-60 mx-4 overflow-hidden text-xl'>
           <motion.div
             initial={{ y: "100%" }}
-            animate={{ y: "-100%" }}
+            animate={{ y: "-70%" }}
             transition={{
-              duration: 10,
+              duration: 8,
               repeat: Infinity,
               ease: "linear",
               repeatType: 'loop',
             }}
             className="absolute w-full text-center"
           >
-            <p>20th December 2023 will be conference tour to Kohlarn Island.</p> <br /> <br /> <br />
-            <p>25th December 2023 will be conference tour to Kohlarn Island.</p> <br /> <br /> <br />
-            <p>29th December 2023 will be conference tour to Kohlarn Island.</p> 
+            <p>20th December 2023 will be conference tour to Kohlarn Island.</p> <br /> <br /> <br /> <br />
+            <p>25th December 2023 will be conference tour to Kohlarn Island.</p> <br /> <br /> <br /> <br />
+            <p>29th December 2023 will be conference tour to Kohlarn Island.</p>  <br /> <br /> <br /> <br />
           </motion.div>
         </div>
       </div>
