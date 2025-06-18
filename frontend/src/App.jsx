@@ -18,6 +18,7 @@ import Awards2022 from './pages/Awards2022'
 import Awards2023 from './pages/Awards2023'
 import Login from './pages/Login'
 import NotFound from './pages/NotFound'
+import KeynoteAdmin from './pages/KeynoteAdmin'
 
 function App() {
 
@@ -39,7 +40,9 @@ function App() {
           <Route path = "/awards-2022" element= {<Awards2022 />}/>
           <Route path = "/awards-2023" element={<Awards2023 />}/>
           <Route path = "/login" element= {<Login />}/>
+          <Route path = "/KeynoteAdmin" element= {<KeynoteAdmin/>}/>
           <Route path="*" element={<NotFound />} />
+         
         </Routes>
       </div>
     </>
