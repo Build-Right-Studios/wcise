@@ -72,22 +72,22 @@ function TechnicalWorkshop() {
       <div className="flex justify-center px-4 mt-10">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
 
-          <div onClick={handleClickAndScroll} className=" md:shadow-md hover:shadow-lg hover:shadow-blue-900 cursor-pointer transition-all w-[400px] h-[300px] bg-white rounded-2xl shadow-lg border-10 border-[#0a0e3f] flex items-center justify-center">
+          <div onClick={handleClickAndScroll} className="cursor-pointer transition-all w-full sm:w-[300px] md:w-[400px] h-[240px] sm:h-[260px] md:h-[300px] bg-white rounded-2xl shadow-lg border-4 border-[#0a0e3f] flex items-center justify-center mx-auto hover:shadow-blue-900">
             <img src=".\src\images\embedded systems.png" alt="Embedded Systems"
               className="object-contain w-full h-full rounded-xl p-4" />
           </div>
 
-          <div onClick={handleClickAndScroll2} className=" md:shadow-md hover:shadow-lg hover:shadow-blue-900 cursor-pointer transition-all w-[400px] h-[300px] bg-white rounded-2xl shadow-lg border-10 border-[#0a0e3f] flex items-center justify-center">
+          <div onClick={handleClickAndScroll2} className=" cursor-pointer transition-all w-full sm:w-[300px] md:w-[400px] h-[240px] sm:h-[260px] md:h-[300px] bg-white rounded-2xl shadow-lg border-4 border-[#0a0e3f] flex items-center justify-center mx-auto hover:shadow-blue-900">
             <img src=".\src\images\IOT.png" alt="Internet of Things"
               className="object-contain w-full h-full rounded-xl p-4" />
           </div>
 
-          <div onClick={handleClickAndScroll4} className=" md:shadow-md hover:shadow-lg hover:shadow-blue-900 cursor-pointer transition-all w-[400px] h-[300px] bg-white rounded-2xl shadow-lg border-10 border-[#0a0e3f] flex items-center justify-center">
+          <div onClick={handleClickAndScroll4} className=" cursor-pointer transition-all w-full sm:w-[300px] md:w-[400px] h-[240px] sm:h-[260px] md:h-[300px] bg-white rounded-2xl shadow-lg border-4 border-[#0a0e3f] flex items-center justify-center mx-auto hover:shadow-blue-900">
             <img src=".\src\images\python and ml.png" alt="Python + ML"
               className="object-contain w-full h-full rounded-xl p-4" />
           </div>
 
-          <div onClick={handleClickAndScroll3} className=" md:shadow-md hover:shadow-lg hover:shadow-blue-900 cursor-pointer transition-all w-[400px] h-[300px] bg-white rounded-2xl shadow-lg border-10 border-[#0a0e3f] flex items-center justify-center">
+          <div onClick={handleClickAndScroll3} className="cursor-pointer transition-all w-full sm:w-[300px] md:w-[400px] h-[240px] sm:h-[260px] md:h-[300px] bg-white rounded-2xl shadow-lg border-4 border-[#0a0e3f] flex items-center justify-center mx-auto hover:shadow-blue-900">
             <img src='.\src\images\digital system design.png' alt='digital system design'
               className='object-contain w-full h-full rounded-xl p-4' />
           </div>
