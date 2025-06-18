@@ -116,7 +116,7 @@ function TechnicalWorkshop() {
 </div>
 
 <div className="mx-4 sm:mx-10 text-base sm:text-lg md:text-2xl">
-  <ul className="mt-3 text-justify font-bold list-disc ml-4 sm:ml-6 space-y-2">
+  <ul className="mt-3 text-left font-bold list-disc ml-4 sm:ml-6 space-y-2">
     <li>Email your choice at manoj.md.et@gmail.com or WhatsApp at +91 9667006019.</li>
     <li>Submit the registration fees at <a href="https://wcise.co.in/register" className="underline text-blue-300">wcise.co.in/register</a></li>
     <li>Fill the Google Form at <a href="https://forms.gle/m4JidARm6WEaWBMM6" className="underline text-blue-300">forms.gle/m4JidARm6WEaWBMM6</a></li>
