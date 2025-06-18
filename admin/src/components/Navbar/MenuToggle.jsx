@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 const Path = (props) => (
   <motion.path
     fill="transparent"
-    strokeWidth="2.5" // Slightly thinner stroke
+    strokeWidth="2.5" 
     stroke="#000"
     strokeLinecap="round"
     {...props}

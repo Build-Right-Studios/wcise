@@ -7,6 +7,7 @@ import PreviousEvents from "../../PreviousEvents";
 import Committiee from "../../committiee";
 import { useDimensions } from "./useDimensions";
 import { Navigation } from "./Navigation";
+import KeynoteAdmin from "../../PreviousEvents";
 import { MenuToggle } from "./MenuToggle";
 
 
@@ -121,8 +122,7 @@ const AnimatedSidebar = () => {
           <Route path="/awards" element={<Awards />} />
           <Route path="/events" element={<PreviousEvents />} />
           <Route path="/committiee" element={<Committiee />} />
-          <Route path="/keynotes" element={<div>Keynotes Component Coming Soon</div>} />
-          <Route path="*" element={<p className="text-gray-500">Page not found.</p>} />
+          <Route path="/keynotes" element={<KeynoteAdmin/>} />
         </Routes>
       </main>
     </div>
