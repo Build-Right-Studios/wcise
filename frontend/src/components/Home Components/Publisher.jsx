@@ -25,6 +25,11 @@ const scrollImageVariants = {
   },
 };
 
+const itemVariants = {
+  hidden: { opacity: 0, scale: 0.9, y: 50 },
+  visible: { opacity: 1, scale: 1, y: 0 }
+};
+
 function Publisher() {
   return (
     <div className="mt-10 ml-4 mr-4 mb-4">
@@ -38,25 +43,25 @@ function Publisher() {
           whileInView="visible"
           viewport={{ once: true, amount: 0.3 }}
         >
-          <motion.img src={img1} alt="" className="w-[190px] h-[190px] border-4 p-2" />
+          <motion.img src={img1} alt="" className="w-[190px] h-[190px] border-4 p-2" 
+          variants={itemVariants}
+          />
           <img src={img2} alt="" className="w-[190px] h-[190px] border-4 p-2" />
           <img src={img3} alt="" className="w-[190px] h-[190px] border-4 p-2" />
           <img src={img4} alt="" className="w-[190px] h-[190px] border-4 p-2" />
         </motion.div>
 
         <motion.div className="flex flex-col lg:flex-row gap-6"
-        
-          variants={scrollImageVariants}
+        variants={scrollImageVariants}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, amount: 0.3 }}
         >
-          <img src={img5} alt="" className="w-[190px] h-[190px] border-4 p-2" />
-          <img src={img6} alt="" className="w-[190px] h-[190px] border-4 p-2" />
-          <img src={img7} alt="" className="w-[190px] h-[190px] border-4 p-2" />
-          <img src={img8} alt="" className="w-[190px] h-[190px] border-4 p-2" />
+          <motion.img src={img5} alt="" className="w-[190px] h-[190px] border-4 p-2" />
+          <motion.img src={img6} alt="" className="w-[190px] h-[190px] border-4 p-2" />
+          <motion.img src={img7} alt="" className="w-[190px] h-[190px] border-4 p-2" />
+            <motion.img src={img8} alt="" className="w-[190px] h-[190px] border-4 p-2" />
         </motion.div>
-
         <div>
           <div className="text-4xl font-bold text-center my-8 text-[#1d3b58] lg:text-6xl">
             VENUE

@@ -13,7 +13,7 @@ const variants = {
 export const Navigation = ({ navItems, activeLink, setActiveLink, toggleOpen }) => (
   <motion.ul
     variants={variants}
-    className="absolute top-[80px] left-0 w-full p-6" // Adjust top position and width
+    className="absolute top-[80px] left-0 w-full p-6" 
   >
     {navItems.map((item) => (
       <MenuItem
@@ -22,7 +22,7 @@ export const Navigation = ({ navItems, activeLink, setActiveLink, toggleOpen }) 
         text={item.text}
         onClick={() => {
           setActiveLink(item.text);
-          toggleOpen(); // Close sidebar on link click
+          toggleOpen(); 
         }}
         isActive={activeLink === item.text}
       />
