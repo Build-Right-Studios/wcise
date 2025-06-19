@@ -1,11 +1,11 @@
+import { BrowserRouter as Router } from 'react-router-dom';
 import AnimatedSidebar from "./components/Navbar/AnimatedSidebar.jsx";
 
 function App() {
-
-  return(
-   
-    <AnimatedSidebar/>
-  
+  return (
+    <Router>
+      <AnimatedSidebar />
+    </Router>
   );
 }
 
