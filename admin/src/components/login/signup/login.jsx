@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 
-const Login = () => {
+const AuthForm = () => {
   const [isLogin, setIsLogin] = useState(true); // true for Login, false for Signup
   const [selectedRole, setSelectedRole] = useState("Author");
 
@@ -45,7 +45,7 @@ const Login = () => {
   return (
     // Outer container for the whole page, mimicking body/html styling
     <div
-      className={`min-h-screen w-screen p-4 flex items-center justify-center ${primaryGradientBg} font-inter`}
+      className={`min-h-screen w-screen flex items-center justify-center ${primaryGradientBg} font-inter`}
     >
       {/* Wrapper for the form card - Added Framer Motion */}
       <motion.div
@@ -354,4 +354,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default AuthForm;
