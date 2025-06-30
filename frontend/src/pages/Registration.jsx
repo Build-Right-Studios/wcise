@@ -178,32 +178,34 @@ function Registration() {
 
           <img
             src="./src/images/cash.png"
+
             alt="Cash Icon"
             className="w-28 sm:w-36 md:w-44 lg:w-56 xl:w-64"
           />
         </div>
       </div>
 
-      <div className="w-full p-0 bg-white text-[#1d3b58] text-justify">
-        <div className="max-w-4xl mx-auto">
-          <h2 className="text-3xl mt-15 sm:text-4xl font-bold mb-8">The Registration fee includes:</h2>
-          <ul className="space-y-2 text-lg leading-relaxed">
-            <li className="flex items-start"><span className="text-2xl mr-3">•</span>Access to all sessions including keynotes.</li>
-            <li className="flex items-start">
-              <span className="text-2xl mr-3">•</span>
-              <div>
-                Full length paper publication in the Peer Reviewed International Journals up to 8-10 pages.
-                <p className="mt-2 ml-4">Extra Pages Charges beyond 10 pages:</p>
-                <ul className="mt-2 ml-8 list-disc space-y-2 text-base">
-                  <li><strong>SCOPUS INDEXED Journal:</strong> INR 1500 / USD 20 per page</li>
-                  <li><strong>DOI Indexed & UGC approved Journals:</strong> INR 1000 / USD 10 per page</li>
-                </ul>
-              </div>
-            </li>
-            <li className="flex items-start"><span className="text-2xl mr-3">•</span>E-Certificate of presentation/attendance, hard copy on request.</li>
+<div className="w-full p-0 bg-white text-[#1d3b58] text-justify">
+  <div className="max-w-4xl mx-auto p-4">
+    <h2 className="text-3xl mt-15 sm:text-4xl font-bold mb-8">The Registration fee includes:</h2>
+    <ul className="space-y-2 text-lg leading-relaxed">
+      <li className="flex items-start"><span className="text-2xl mr-3">•</span>Access to all sessions including keynotes.</li>
+      <li className="flex items-start">
+        <span className="text-2xl mr-3">•</span>
+        <div>
+          Full length paper publication in the Peer Reviewed International Journals up to 8-10 pages.
+          <p className="mt-2 ml-4">Extra Pages Charges beyond 10 pages:</p>
+          <ul className="mt-2 ml-8 list-disc space-y-2 text-base">
+            <li><strong>SCOPUS INDEXED Journal:</strong> INR 1500 / USD 20 per page</li>
+            <li><strong>DOI Indexed & UGC approved Journals:</strong> INR 1000 / USD 10 per page</li>
           </ul>
         </div>
-      </div>
+      </li>
+      <li className="flex items-start"><span className="text-2xl mr-3">•</span>E-Certificate of presentation/attendance, hard copy on request.</li>
+    </ul>
+  </div>
+</div>
+
 
       {/* Note & Important */}
       <div className="w-auto px-6 sm:px-10 py-2 bg-white text-[#1d3b58]">
@@ -228,4 +230,6 @@ function Registration() {
   );
 }
 
+
 export default Registration;
+

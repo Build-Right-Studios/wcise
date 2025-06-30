@@ -35,10 +35,10 @@ function Navbar() {
                                 <span className="relative z-10 group-hover:text-blue-500 transition">REGISTRATION</span>
                                 <span className="absolute left-0 bottom-0 h-0.5 w-0 bg-blue-500 transition-all duration-300 group-hover:w-full rounded"></span>
                             </NavLink>
-                            <NavLink to="/technical-workshop" className="relative inline-block py-1 px-1 text-gray-800 font-semibold group">
+                            {/* <NavLink to="/technical-workshop" className="relative inline-block py-1 px-1 text-gray-800 font-semibold group">
                                 <span className="relative z-10 group-hover:text-blue-500 transition">TECHNICAL WORKSHOP</span>
                                 <span className="absolute left-0 bottom-0 h-0.5 w-0 bg-blue-500 transition-all duration-300 group-hover:w-full rounded"></span>
-                            </NavLink>
+                            </NavLink> */}
                             <NavLink to="/keynote" className="relative inline-block py-1 px-1 text-gray-800 font-semibold group">
                                 <span className="relative z-10 group-hover:text-blue-500 transition">KEYNOTE</span>
                                 <span className="absolute left-0 bottom-0 h-0.5 w-0 bg-blue-500 transition-all duration-300 group-hover:w-full rounded"></span>
