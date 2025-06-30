@@ -5,7 +5,7 @@ import './App.css'
 import Awards from './awards'
 import PreviousEvents from './PreviousEvents'
 import Committiee from './committiee';
-
+import Authorcomponent from '../../frontend/src/components/tracks/login components/Authorcomponent';
 function App() {
 
   return (
@@ -13,7 +13,7 @@ function App() {
     <Awards/>
     <PreviousEvents/>
     <Committiee/>
-    Admin
+   <Authorcomponent/>
    </div>
   )
 }
