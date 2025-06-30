@@ -41,29 +41,28 @@ const Login = () => {
     },
   };
 
-  //  Handle Login
   const handleLoginSubmit = (e) => {
-  e.preventDefault();
-  if (selectedRole === "Author") {
-    navigate("/dashboard");
-  } else if (selectedRole === "Editor") {
-    navigate("/editor-dashboard");
-  } else if (selectedRole === "Reviewer") {
-    navigate("/reviewer-dashboard"); // ✅ Not alert, direct navigate
-  }
-};
+    e.preventDefault();
+    if (selectedRole === "Author") {
+      navigate("/dashboard");
+    } else if (selectedRole === "Editor") {
+      navigate("/editor-dashboard");
+    } else if (selectedRole === "Reviewer") {
+      navigate("/reviewer-dashboard");
+    }
+  };
 
-  //  Handle Signup
   const handleSignupSubmit = (e) => {
-  e.preventDefault();
-  if (selectedRole === "Author") {
-    navigate("/dashboard");
-  } else if (selectedRole === "Editor") {
-    navigate("/editor-dashboard");
-  } else if (selectedRole === "Reviewer") {
-    navigate("/reviewer-dashboard");
-  }
-};
+    e.preventDefault();
+    if (selectedRole === "Author") {
+      navigate("/dashboard");
+    } else if (selectedRole === "Editor") {
+      navigate("/editor-dashboard");
+    } else if (selectedRole === "Reviewer") {
+      navigate("/reviewer-dashboard");
+    }
+  };
+
   return (
     <div
       className={`min-h-screen w-screen p-4 flex items-center justify-center ${primaryGradientBg} font-inter`}
@@ -74,6 +73,7 @@ const Login = () => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, ease: "easeOut" }}
       >
+        {/* Title */}
         <motion.div
           className="flex w-[200%] transition-transform duration-600 ease-[cubic-bezier(0.68,-0.55,0.265,1.55)]"
           style={{ transform: isLogin ? "translateX(0%)" : "translateX(-50%)" }}
@@ -93,7 +93,7 @@ const Login = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4, delay: 0.2 }}
         >
-          {["Author", "Editor", "Reviewer"].map((role, index) => (
+          {["Author", "Editor", "Reviewer"].map((role) => (
             <React.Fragment key={role}>
               <input
                 type="radio"
@@ -105,17 +105,17 @@ const Login = () => {
               />
               <label
                 htmlFor={role.toLowerCase()}
-                className={`slide h-full w-1/3 text-base font-medium text-center leading-[48px] cursor-pointer z-10 transition-colors duration-300 ${selectedRole === role
+                className={`slide h-full w-1/3 text-base font-medium text-center leading-[48px] cursor-pointer z-10 transition-colors duration-300 ${
+                  selectedRole === role
                     ? "text-white cursor-default select-none"
                     : "text-gray-700"
-                  }`}
+                }`}
                 onClick={() => setSelectedRole(role)}
               >
                 {role}
               </label>
             </React.Fragment>
           ))}
-
           <div
             className={`absolute h-full w-1/3 left-0 z-0 rounded-2xl ${primaryGradientBg} transition-transform duration-600 ease-[cubic-bezier(0.68,-0.55,0.265,1.55)]`}
             style={{
@@ -123,8 +123,8 @@ const Login = () => {
                 selectedRole === "Author"
                   ? "translateX(0%)"
                   : selectedRole === "Editor"
-                    ? "translateX(100%)"
-                    : "translateX(200%)",
+                  ? "translateX(100%)"
+                  : "translateX(200%)",
             }}
           ></div>
         </motion.div>
@@ -136,8 +136,10 @@ const Login = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4, delay: 0.3 }}
         >
-          {["Login", "Signup"].map((option, index) => {
-            const isSelected = (option === "Login" && isLogin) || (option === "Signup" && !isLogin);
+          {["Login", "Signup"].map((option) => {
+            const isSelected =
+              (option === "Login" && isLogin) ||
+              (option === "Signup" && !isLogin);
             return (
               <React.Fragment key={option}>
                 <input
@@ -150,17 +152,17 @@ const Login = () => {
                 />
                 <label
                   htmlFor={option.toLowerCase()}
-                  className={`slide h-full w-1/2 text-lg font-medium text-center leading-[48px] cursor-pointer z-10 transition-colors duration-600 ${isSelected
+                  className={`slide h-full w-1/2 text-lg font-medium text-center leading-[48px] cursor-pointer z-10 transition-colors duration-600 ${
+                    isSelected
                       ? "text-white cursor-default select-none"
                       : "text-gray-700"
-                    }`}
+                  }`}
                 >
                   {option}
                 </label>
               </React.Fragment>
             );
           })}
-
           <div
             className={`absolute h-full w-1/2 left-0 z-0 rounded-2xl ${primaryGradientBg} transition-transform duration-600 ease-[cubic-bezier(0.68,-0.55,0.265,1.55)]`}
             style={{
@@ -217,22 +219,6 @@ const Login = () => {
                 value="Login"
                 className="h-full w-full relative z-10 bg-transparent border-none text-white rounded-2xl text-xl font-medium cursor-pointer"
               />
-            </motion.div>
-            <motion.div
-              className="signup-link text-center mt-8 text-gray-600 text-sm"
-              variants={formItemVariants}
-            >
-              Not a member?{" "}
-              <a
-                href="#"
-                className="text-[#1a75ff] no-underline hover:underline"
-                onClick={(e) => {
-                  e.preventDefault();
-                  setIsLogin(false);
-                }}
-              >
-                Signup now
-              </a>
             </motion.div>
           </motion.form>
 
