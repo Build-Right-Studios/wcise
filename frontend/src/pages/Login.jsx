@@ -44,11 +44,11 @@ const Login = () => {
   const handleLoginSubmit = (e) => {
     e.preventDefault();
     if (selectedRole === "Author") {
-      navigate("/dashboard");
+      navigate("/author/dashboard");
     } else if (selectedRole === "Editor") {
-      navigate("/editor-dashboard");
+      navigate("/editor/dashboard");
     } else if (selectedRole === "Reviewer") {
-      navigate("/reviewer-dashboard");
+      navigate("/reviewer/dashboard");
     }
   };
 

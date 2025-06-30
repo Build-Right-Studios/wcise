@@ -53,14 +53,16 @@ function App() {
           <Route path="/keynote-admin" element={<KeynoteAdmin />} />
 
           {/* ✅ Tracks and Admin/Dashboard routes */}
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/author" element={<Authorcomponent />} />
-          <Route path="/paper-details" element={<PaperDetailsCard />} />
-          <Route path="/editor-signup" element={<EditorSignup />} />
-          <Route path="/editors-view-more" element={<EditorsViewMore />} />
-          <Route path="/reviewer-dashboard" element={<ReviewerDashboard />} />
-          <Route path="/reviewer-review" element={<ReviewerReviewForm />} />
-
+          <Route path="/author/dashboard" element={<Dashboard />} />
+          <Route path="/author/new-paper" element={<Authorcomponent />} />
+          <Route path="/author/paper-details" element={<PaperDetailsCard />} />
+          {/* /author/:id */}
+          <Route path="/editor/dashboard" element={<EditorSignup />} />
+          <Route path="/editor/view-more" element={<EditorsViewMore />} />
+          {/* /editor/:id */}
+          <Route path="/reviewer/dashboard" element={<ReviewerDashboard />} />
+          <Route path="/reviewer/review" element={<ReviewerReviewForm />} />
+          {/* /reviewer/:id */}
           <Route path="*" element={<NotFound />} />
         </Routes>
       </div>
