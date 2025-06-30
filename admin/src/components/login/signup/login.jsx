@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 
-const Login = () => {
+const AuthForm = () => {
   const [isLogin, setIsLogin] = useState(true); // true for Login, false for Signup
   const [selectedRole, setSelectedRole] = useState("Author");
 
@@ -45,7 +45,7 @@ const Login = () => {
   return (
     // Outer container for the whole page, mimicking body/html styling
     <div
-      className={`min-h-screen w-screen p-4 flex items-center justify-center ${primaryGradientBg} font-inter`}
+      className={`min-h-screen w-screen flex items-center justify-center ${primaryGradientBg} font-inter`}
     >
       {/* Wrapper for the form card - Added Framer Motion */}
       <motion.div
@@ -107,10 +107,11 @@ const Login = () => {
             {/* Author Label */}
             <label
               htmlFor="author"
-              className={`slide h-full w-1/3 text-base font-medium text-center leading-[48px] cursor-pointer z-10 transition-colors duration-300 ${selectedRole === "Author"
+              className={`slide h-full w-1/3 text-base font-medium text-center leading-[48px] cursor-pointer z-10 transition-colors duration-300 ${
+                selectedRole === "Author"
                   ? "text-white cursor-default select-none"
                   : "text-gray-700"
-                }`}
+              }`}
               onClick={() => setSelectedRole("Author")}
             >
               Author
@@ -118,10 +119,11 @@ const Login = () => {
             {/* Editor Label */}
             <label
               htmlFor="editor"
-              className={`slide h-full w-1/3 text-base font-medium text-center leading-[48px] cursor-pointer z-10 transition-colors duration-300 ${selectedRole === "Editor"
+              className={`slide h-full w-1/3 text-base font-medium text-center leading-[48px] cursor-pointer z-10 transition-colors duration-300 ${
+                selectedRole === "Editor"
                   ? "text-white cursor-default select-none"
                   : "text-gray-700"
-                }`}
+              }`}
               onClick={() => setSelectedRole("Editor")}
             >
               Editor
@@ -129,10 +131,11 @@ const Login = () => {
             {/* Reviewer Label */}
             <label
               htmlFor="reviewer"
-              className={`slide h-full w-1/3 text-base font-medium text-center leading-[48px] cursor-pointer z-10 transition-colors duration-300 ${selectedRole === "Reviewer"
+              className={`slide h-full w-1/3 text-base font-medium text-center leading-[48px] cursor-pointer z-10 transition-colors duration-300 ${
+                selectedRole === "Reviewer"
                   ? "text-white cursor-default select-none"
                   : "text-gray-700"
-                }`}
+              }`}
               onClick={() => setSelectedRole("Reviewer")}
             >
               Reviewer
@@ -145,8 +148,8 @@ const Login = () => {
                   selectedRole === "Author"
                     ? "translateX(0%)"
                     : selectedRole === "Editor"
-                      ? "translateX(100%)"
-                      : "translateX(200%)",
+                    ? "translateX(100%)"
+                    : "translateX(200%)",
               }}
             ></div>
           </motion.div>
@@ -178,10 +181,11 @@ const Login = () => {
             {/* Login Label */}
             <label
               htmlFor="login"
-              className={`slide h-full w-1/2 text-lg font-medium text-center leading-[48px] cursor-pointer z-10 transition-colors duration-600 ${isLogin
+              className={`slide h-full w-1/2 text-lg font-medium text-center leading-[48px] cursor-pointer z-10 transition-colors duration-600 ${
+                isLogin
                   ? "text-white cursor-default select-none"
                   : "text-gray-700"
-                }`}
+              }`}
               onClick={() => setIsLogin(true)}
             >
               Login
@@ -189,10 +193,11 @@ const Login = () => {
             {/* Signup Label */}
             <label
               htmlFor="signup"
-              className={`slide h-full w-1/2 text-lg font-medium text-center leading-[48px] cursor-pointer z-10 transition-colors duration-600 ${!isLogin
+              className={`slide h-full w-1/2 text-lg font-medium text-center leading-[48px] cursor-pointer z-10 transition-colors duration-600 ${
+                !isLogin
                   ? "text-white cursor-default select-none"
                   : "text-gray-700"
-                }`}
+              }`}
               onClick={() => setIsLogin(false)}
             >
               Signup
@@ -349,4 +354,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default AuthForm;

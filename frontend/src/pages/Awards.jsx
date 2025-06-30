@@ -1,4 +1,4 @@
-import React from 'react'; 
+import React from 'react';
 import { Link } from 'react-router-dom';
 import img1 from '../images/graphic1.png';
 import img2 from '../images/graphic2.png';
@@ -19,7 +19,7 @@ function Awards() {
       />
 
       <h1 className="text-center mb-12 text-3xl font-bold text-white tracking-wide roboto-wcise z-10">
-        Click below to explore Awards 
+        Click below to explore Awards
       </h1>
 
       <div className="flex flex-col sm:flex-row gap-6 z-10">
