@@ -7,7 +7,7 @@ import PreviousEvents from "../../PreviousEvents";
 import Committiee from "../../committiee";
 import { useDimensions } from "./useDimensions";
 import { Navigation } from "./Navigation";
-import KeynoteAdmin from "../../PreviousEvents";
+import KeynoteAdmin from "../../KeynoteAdmin";
 import { MenuToggle } from "./MenuToggle";
 
 
