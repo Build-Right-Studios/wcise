@@ -1,157 +1,165 @@
-const express = require("express");
-const multer = require("multer");
-const fs = require("fs");
-const path = require("path");
-const cors = require("cors");
-require("dotenv").config();
+const express = require('express');
+const cors = require('cors');
+const multer = require('multer');
+const fs = require('fs');
+const path = require('path');
+require('dotenv').config();
+const cloudinary = require('cloudinary').v2;
 
-const cloudinary = require("cloudinary").v2;
+const loginRoute = require('./routes/login');
+const signupRoute = require('./routes/signup');
+const editorRoute = require('./routes/editor');
+const reviewerRoute = require('./routes/reviewer');
 
 const app = express();
+
+// Middlewares
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
+// Dummy users (can move to database later)
+const users = [
+  {
+    id: 1,
+    name: 'Aryan',
+    email: 'aryan@gmail.com',
+    password: '12345',
+    role: 'Reviewer'
+  },
+  {
+    id: 2,
+    name: 'Kittu',
+    email: 'kittu@gmail.com',
+    password: '54321',
+    role: 'Author'
+  }
+];
 
+app.locals.users = users;
+
+// Cloudinary Configuration
 cloudinary.config({
-    cloud_name: process.env.CLOUD_NAME,
-    api_key: process.env.API_KEY,
-    api_secret: process.env.API_SECRET,
+  cloud_name: process.env.CLOUD_NAME,
+  api_key: process.env.API_KEY,
+  api_secret: process.env.API_SECRET,
 });
 
+// Multer Storage
 const storage = multer.diskStorage({
-    destination: (req, file, cb) => cb(null, "uploads/"),
-    filename: (req, file, cb) => cb(null, Date.now() + "-" + file.originalname),
+  destination: (req, file, cb) => cb(null, 'uploads/'),
+  filename: (req, file, cb) => cb(null, Date.now() + '-' + file.originalname),
 });
-
 const upload = multer({ storage });
 
-app.post("/upload", upload.single("file"), async (req, res) => {
-    try {
-        const file = req.file;
-        if (!file) {
-            return res.status(400).send("No file uploaded.");
-        }
+// Routes
+app.use('/login', loginRoute);
+app.use('/signup', signupRoute);
+app.use('/editor', editorRoute);
+app.use('/reviewer', reviewerRoute);
 
-        const filePath = req.file.path;
+// Get all users
+app.get('/users', (req, res) => {
+  res.json(app.locals.users);
+});
 
-        // Upload to Cloudinary
-        const result = await cloudinary.uploader.upload(filePath, {
-            folder: "uploads/",
-            resource_type: "raw",
-            use_filename: true,
-            unique_filename: false,
-        });
-
-        // Delete local file after upload
-        fs.unlinkSync(filePath);
-
-        res.send({
-            message: "PDF uploaded successfully!",
-            filename: file.filename,
-            originalName: file.originalname,
-            cloud_url: result.secure_url,
-        });
-    } catch (err) {
-        console.error("Upload Error:", err);
-        res.status(500).send("Upload failed");
+// File Upload Route
+app.post('/upload', upload.single('file'), async (req, res) => {
+  try {
+    const file = req.file;
+    if (!file) {
+      return res.status(400).send('No file uploaded.');
     }
+
+    const filePath = file.path;
+
+    const result = await cloudinary.uploader.upload(filePath, {
+      folder: 'uploads/',
+      resource_type: 'raw',
+      use_filename: true,
+      unique_filename: false,
+    });
+
+    fs.unlinkSync(filePath);
+
+    res.send({
+      message: 'PDF uploaded successfully!',
+      filename: file.filename,
+      originalName: file.originalname,
+      cloud_url: result.secure_url,
+    });
+  } catch (err) {
+    console.error('Upload Error:', err);
+    res.status(500).send('Upload failed');
+  }
 });
 
-app.get("/", (req, res) => {
-    res.send("Hello from server.");
-});
+// Author: Upload New Paper
+app.post('/author/new-paper', upload.single('pdf'), (req, res) => {
+  try {
+    const { title, abstract, selectkeytags } = req.body;
+    const pdfUrl = req.file ? req.file.path : null;
 
-app.post("/author/new-paper", upload.single("pdf"), (req, res) => {
-    try {
-        const { title, abstract, selectkeytags } = req.body;
-        const pdfUrl = req.file.path;
-
-        console.log("Title:", title);
-        console.log("Abstract:", abstract);
-        console.log("Key Tags:", selectkeytags);
-        console.log("PDF URL:", pdfUrl);
-
-        if (title && abstract && selectkeytags && pdfUrl) {
-            return res.status(200).json({
-                success: true,
-                message: "New paper uploaded successfully!",
-                data: { title, abstract, selectkeytags, pdf: pdfUrl },
-            });
-        } else {
-            return res.status(400).json({
-                success: false,
-                message: "Missing required fields (title, abstract, key tags, or PDF).",
-            });
-        }
-    } catch (err) {
-        console.error("ERROR in /author/new-paper:", err);
-        res.status(500).json({
-            success: false,
-            message: "Server error during new paper upload",
-            error: err.message,
-        });
+    if (title && abstract && selectkeytags && pdfUrl) {
+      return res.status(200).json({
+        success: true,
+        message: 'New paper uploaded successfully!',
+        data: { title, abstract, selectkeytags, pdf: pdfUrl },
+      });
+    } else {
+      return res.status(400).json({
+        success: false,
+        message: 'Missing required fields (title, abstract, key tags, or PDF).',
+      });
     }
+  } catch (err) {
+    console.error('ERROR in /author/new-paper:', err);
+    res.status(500).json({
+      success: false,
+      message: 'Server error during new paper upload',
+      error: err.message,
+    });
+  }
 });
 
-app.post("/author/paper-details", upload.single("pdf"), async (req, res) => {
-    try {
-        console.log("Received req.body:", req.body);
-        console.log("Received req.file:", req.file);
+// Author: Paper Details Upload
+app.post('/author/paper-details', upload.single('pdf'), async (req, res) => {
+  try {
+    const { abstract } = req.body;
+    const pdfUrl = req.file ? req.file.path : null;
 
-        if (Object.keys(req.body).length === 0 && !req.file) {
-            console.error("ERROR: req.body is empty and no file received.");
-            return res.status(400).json({
-                success: false,
-                message:
-                    "No data or file received. Please check your client-side form submission.",
-            });
-        }
+    if (abstract && pdfUrl) {
+      return res.status(200).json({
+        success: true,
+        message: 'Paper details uploaded successfully!',
+        data: { abstract, pdf: pdfUrl },
+      });
+    } else {
+      let missingFields = [];
+      if (!abstract) missingFields.push('abstract');
+      if (!pdfUrl) missingFields.push('PDF');
 
-        const { abstract } = req.body;
-        const pdfUrl = req.file.path; // 🔥 Already uploaded by multer-storage-cloudinary
-
-        // console.log("Abstract:", abstract);
-        // console.log("PDF URL:", pdfUrl);
-
-        if (abstract && pdfUrl) {
-            return res.status(200).json({
-                success: true,
-                message: "Paper details uploaded successfully!",
-                data: { abstract, pdf: pdfUrl },
-            });
-        } else {
-            let missingFields = [];
-            if (!abstract) missingFields.push("abstract");
-            if (!pdfUrl) missingFields.push("PDF");
-
-            return res.status(400).json({
-                success: false,
-                message: `Missing required fields: ${missingFields
-                    .join(" and ")
-                    .replace(" and PDF", " or PDF")}.`,
-                details: {
-                    receivedBody: req.body,
-                    receivedFile: req.file
-                        ? {
-                            originalname: req.file.originalname,
-                            mimetype: req.file.mimetype,
-                            size: req.file.size,
-                        }
-                        : null,
-                },
-            });
-        }
-    } catch (err) {
-        console.error("ERROR in /author/paper-details:", err);
-        res.status(500).json({
-            success: false,
-            message: "Server error during paper details upload",
-            error: err.message,
-        });
+      return res.status(400).json({
+        success: false,
+        message: `Missing required fields: ${missingFields.join(' or ')}.`,
+      });
     }
+  } catch (err) {
+    console.error('ERROR in /author/paper-details:', err);
+    res.status(500).json({
+      success: false,
+      message: 'Server error during paper details upload',
+      error: err.message,
+    });
+  }
 });
 
+// Root Route
+app.get('/', (req, res) => {
+  res.send('Server is running successfully.');
+});
+
+// Start Server
 app.listen(8000, () => {
-    console.log("Server Running on http://localhost:8000");
+  console.log('Server running on http://localhost:8000');
 });
