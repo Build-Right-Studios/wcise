@@ -58,7 +58,7 @@ const Dashboard = () => {
           {/* ➕ New Paper Button */}
           <div
             className="bg-white p-4 rounded-lg shadow-sm border hover:shadow-md transition flex items-center justify-center cursor-pointer text-[#4267B2] font-semibold"
-            onClick={() => navigate('/new-paper')}  // ✅ Open Authorcomponent in a new page
+            onClick={() => navigate('/author/new-paper')}  // ✅ Open Authorcomponent in a new page
           >
             + New Paper
           </div>

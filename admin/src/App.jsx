@@ -1,13 +1,10 @@
-import { useState } from 'react';
-import reactLogo from './assets/react.svg';
-import viteLogo from '/vite.svg';
+import { BrowserRouter as Router } from "react-router-dom";
 import './App.css';
 
 import Awards from './awards';
 import PreviousEvents from './PreviousEvents';
 import Committiee from './committiee';
-import Authorcomponent from '../../frontend/src/components/tracks/login components/Authorcomponent';
-import { BrowserRouter as Router } from 'react-router-dom';
+import Authorcomponent from './components/tracks/login components/Authorcomponent';
 import AnimatedSidebar from "./components/Navbar/AnimatedSidebar.jsx";
 
 function App() {
