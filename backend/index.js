@@ -3,6 +3,7 @@ const cors = require('cors');
 const multer = require('multer');
 const fs = require('fs');
 const path = require('path');
+const mongoose = require('mongoose');
 require('dotenv').config();
 const cloudinary = require('cloudinary').v2;
 
@@ -37,6 +38,10 @@ const users = [
 ];
 
 app.locals.users = users;
+
+mongoose.connect(process.env.MONGODB_URI)
+    .then(() => console.log("Connected to MongoDB successfully."))
+    .catch((err) => console.log("MongoDB connection error:", err.message));
 
 // Cloudinary Configuration
 cloudinary.config({
