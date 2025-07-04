@@ -1,11 +1,9 @@
 const express = require('express');
 const cors = require('cors');
-const multer = require('multer');
 const fs = require('fs');
 const path = require('path');
 const mongoose = require('mongoose');
 require('dotenv').config();
-const cloudinary = require('cloudinary').v2;
 
 const loginRoute = require('./routes/login');
 const signupRoute = require('./routes/signup');
@@ -45,18 +43,7 @@ mongoose.connect(process.env.MONGODB_URI)
     .catch((err) => console.log("MongoDB connection error:", err.message));
 
 // Cloudinary Configuration
-cloudinary.config({
-  cloud_name: process.env.CLOUD_NAME,
-  api_key: process.env.API_KEY,
-  api_secret: process.env.API_SECRET,
-});
 
-// Multer Storage
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => cb(null, 'uploads/'),
-  filename: (req, file, cb) => cb(null, Date.now() + '-' + file.originalname),
-});
-const upload = multer({ storage });
 
 // Routes
 app.use('/login', loginRoute);
@@ -71,35 +58,35 @@ app.get('/users', (req, res) => {
 });
 
 // File Upload Route
-app.post('/upload', upload.single('file'), async (req, res) => {
-  try {
-    const file = req.file;
-    if (!file) {
-      return res.status(400).send('No file uploaded.');
-    }
+// app.post('/upload', upload.single('file'), async (req, res) => {
+//   try {
+//     const file = req.file;
+//     if (!file) {
+//       return res.status(400).send('No file uploaded.');
+//     }
 
-    const filePath = file.path;
+//     const filePath = file.path;
 
-    const result = await cloudinary.uploader.upload(filePath, {
-      folder: 'uploads/',
-      resource_type: 'raw',
-      use_filename: true,
-      unique_filename: false,
-    });
+//     const result = await cloudinary.uploader.upload(filePath, {
+//       folder: 'uploads/',
+//       resource_type: 'raw',
+//       use_filename: true,
+//       unique_filename: false,
+//     });
 
-    fs.unlinkSync(filePath);
+//     fs.unlinkSync(filePath);
 
-    res.send({
-      message: 'PDF uploaded successfully!',
-      filename: file.filename,
-      originalName: file.originalname,
-      cloud_url: result.secure_url,
-    });
-  } catch (err) {
-    console.error('Upload Error:', err);
-    res.status(500).send('Upload failed');
-  }
-});
+//     res.send({
+//       message: 'PDF uploaded successfully!',
+//       filename: file.filename,
+//       originalName: file.originalname,
+//       cloud_url: result.secure_url,
+//     });
+//   } catch (err) {
+//     console.error('Upload Error:', err);
+//     res.status(500).send('Upload failed');
+//   }
+// });
 
 // Root Route
 app.get('/', (req, res) => {
