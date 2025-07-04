@@ -50,7 +50,7 @@ app.use('/login', loginRoute);
 app.use('/signup', signupRoute);
 app.use('/editor', editorRoute);
 app.use('/reviewer', reviewerRoute);
-app.use('/author', upload.single('file'), authorRoute);
+app.use('/author', authorRoute);
 
 // Get all users
 app.get('/users', (req, res) => {
