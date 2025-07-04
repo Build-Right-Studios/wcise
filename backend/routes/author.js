@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 // Author: Upload New Paper
-router.post('/author/new-paper', upload.single('pdf'), (req, res) => {
+router.post('/author/new-paper', (req, res) => {
   try {
     const { title, abstract, selectkeytags } = req.body;
     const pdfUrl = req.file ? req.file.path : null;
@@ -30,7 +30,7 @@ router.post('/author/new-paper', upload.single('pdf'), (req, res) => {
 });
 
 // Author: Paper Details Upload
-router.post('/author/paper-details', upload.single('pdf'), async (req, res) => {
+router.post('/author/paper-details', async (req, res) => {
   try {
     const { abstract } = req.body;
     const pdfUrl = req.file ? req.file.path : null;

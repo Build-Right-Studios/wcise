@@ -1,20 +1,27 @@
 const express = require('express');
+const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const User = require('../models/user.model.js')
 
 const router = express.Router();
-const SECRET_KEY = 'your_super_secret_key';
+const SECRET_KEY = process.env.JWT_SECRET || 'your_super_secret_key';
 
-router.post('/', (req, res) => {
-  const { email, password } = req.body;
-  const users = req.app.locals.users;
+router.post('/', async (req, res) => {
+  try {
+    const { email, password, role } = req.body;
 
-  const user = users.find(
-    (u) => u.email === email && u.password === password
-  );
+    const user = await User.findOne({ email, role });
+    if (!user) {
+      return res.status(401).json({ message: 'User not found' });
+    }
 
-  if (user) {
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(401).json({ message: 'Invalid password' });
+    }
+
     const token = jwt.sign(
-      { id: user.id, email: user.email, role: user.role },
+      { id: user._id, email: user.email, role: user.role },
       SECRET_KEY,
       { expiresIn: '6h' }
     );
@@ -23,14 +30,16 @@ router.post('/', (req, res) => {
       message: 'Login successful!',
       token,
       user: {
-        id: user.id,
+        id: user._id,
         name: user.name,
         email: user.email,
         role: user.role
       }
     });
-  } else {
-    res.status(401).json({ message: 'Invalid email or password' });
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server error' });
   }
 });
 
