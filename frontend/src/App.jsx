@@ -29,6 +29,7 @@ import ReviewerDashboard from './components/tracks/login components/ReviewerDash
 import ReviewerReviewForm from './components/tracks/ReviewerReviewForm';
 
 function App() {
+  
   return (
     <>
       <div className="overflow-x-hidden">
@@ -53,12 +54,15 @@ function App() {
           <Route path="/author/dashboard" element={<Dashboard />} />
           <Route path="/author/new-paper" element={<Authorcomponent />} />
           <Route path="/author/paper-details" element={<PaperDetailsCard />} />
+          <Route path="/paper-details/:id" element={<PaperDetailsCard />} />
+
           {/* /author/:id */}
           <Route path="/editor/dashboard" element={<EditorSignup />} />
           <Route path="/editor/view-more" element={<EditorsViewMore />} />
           {/* /editor/:id */}
-          <Route path="/reviewer/dashboard" element={<ReviewerDashboard />} />
-          <Route path="/reviewer/review" element={<ReviewerReviewForm />} />
+         <Route path="/reviewer/dashboard" element={<ReviewerDashboard />} />
+         <Route path="/reviewer/dashboard/:paperId" element={<ReviewerDashboard />} />
+          
           {/* /reviewer/:id */}
           <Route path="*" element={<NotFound />} />
         </Routes>

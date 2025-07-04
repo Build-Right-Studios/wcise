@@ -15,7 +15,7 @@ const EditorsPapercard = ({ paper }) => {
 
       <div className="mt-3 flex justify-between items-center">
         <button
-          onClick={() => navigate('/editorsviewmore')}
+          onClick={() => navigate('/editor/view-more')}
           className="bg-[#4267B2] text-white px-4 py-1 rounded hover:bg-[#365899] transition"
         >
           View More

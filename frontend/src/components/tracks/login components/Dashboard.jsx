@@ -13,10 +13,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     setProfile({
-      name: 'Melissa',
-      email: 'melissa@example.com',
-      phone: '9222000055',
-      photo: '/assets/default-avatar.png',
+     
     });
 
     setPapers([
@@ -55,7 +52,7 @@ const Dashboard = () => {
       <div className="flex justify-center">
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 w-full max-w-6xl">
 
-          {/* ➕ New Paper Button */}
+          {/* New Paper Button */}
           <div
             className="bg-white p-4 rounded-lg shadow-sm border hover:shadow-md transition flex items-center justify-center cursor-pointer text-[#4267B2] font-semibold"
             onClick={() => navigate('/author/new-paper')}  // ✅ Open Authorcomponent in a new page
@@ -68,7 +65,7 @@ const Dashboard = () => {
             <PaperCard
   key={paper.id}
   paper={paper}
-  onViewMore={() => navigate('/paper-details')}   //  Navigates to details page
+  onViewMore={() => navigate(`/paper-details/${paper.id}`)}   //  Navigates to details page
 />
           ))}
         </div>
