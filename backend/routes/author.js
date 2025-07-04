@@ -1,24 +1,74 @@
 const express = require('express');
 const router = express.Router();
+const cloudinary = require('cloudinary').v2;
+const multer = require('multer');
+const fs = require('fs');
+const Paper = require('../models/paper.js');
+
+cloudinary.config({
+  cloud_name: process.env.CLOUD_NAME,
+  api_key: process.env.API_KEY,
+  api_secret: process.env.API_SECRET,
+});
+
+// Multer Storage (kept for temporary local storage before uploading to Cloudinary)
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => cb(null, 'uploads/'),
+  filename: (req, file, cb) => cb(null, Date.now() + '-' + file.originalname),
+});
+const upload = multer({ storage });
 
 // Author: Upload New Paper
-router.post('/author/new-paper', (req, res) => {
+router.post('/author/new-paper', upload.single('file'), async (req, res) => {
   try {
-    const { title, abstract, selectkeytags } = req.body;
-    const pdfUrl = req.file ? req.file.path : null;
+    const { title, abstract } = req.body;
+    let keywords = req.body.keywords;
 
-    if (title && abstract && selectkeytags && pdfUrl) {
-      return res.status(200).json({
-        success: true,
-        message: 'New paper uploaded successfully!',
-        data: { title, abstract, selectkeytags, pdf: pdfUrl },
-      });
-    } else {
+    // Ensure keywords is an array
+    if (typeof keywords === 'string') {
+      keywords = [keywords];
+    }
+
+    if (!req.file) {
       return res.status(400).json({
         success: false,
-        message: 'Missing required fields (title, abstract, key tags, or PDF).',
+        message: 'PDF file is required.',
       });
     }
+
+    const filePath = req.file.path;
+
+    // Upload PDF to Cloudinary
+    const result = await cloudinary.uploader.upload(filePath, {
+      folder: 'uploads/',
+      resource_type: 'raw',
+      use_filename: true,
+      unique_filename: false,
+    });
+
+    // Delete file from server after upload
+    fs.unlinkSync(filePath);
+
+    // Save paper to database 
+    const newPaper = new Paper({
+      title,
+      abstract,
+      keywords,
+      pdfUrl: result.secure_url,
+    });
+
+    await newPaper.save();
+
+    return res.status(200).json({
+      success: true,
+      message: 'New paper uploaded successfully!',
+      data: {
+        title,
+        abstract,
+        keywords,
+        pdf: result.secure_url,
+      },
+    });
   } catch (err) {
     console.error('ERROR in /author/new-paper:', err);
     res.status(500).json({
@@ -29,7 +79,7 @@ router.post('/author/new-paper', (req, res) => {
   }
 });
 
-// Author: Paper Details Upload
+// Author: Paper Details Upload 
 router.post('/author/paper-details', async (req, res) => {
   try {
     const { abstract } = req.body;
@@ -61,4 +111,4 @@ router.post('/author/paper-details', async (req, res) => {
   }
 });
 
-module.exports = router;
+module.exports = router; 

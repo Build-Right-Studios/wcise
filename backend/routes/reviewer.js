@@ -1,10 +1,8 @@
 const express = require('express');
 const router = express.Router();
 
-// In-memory storage for reviews
 const reviews = [];
 
-// ✅ Submit a review
 router.post('/submit', (req, res) => {
   const { paperId, title, date, tags, pdfName, comments } = req.body;
 
@@ -30,12 +28,9 @@ router.post('/submit', (req, res) => {
   });
 });
 
-// ✅ Get all reviews
 router.get('/reviews', (req, res) => {
   res.json(reviews);
 });
-
-// ✅ Get review by paper ID
 router.get('/:paperId', (req, res) => {
   const { paperId } = req.params;
   const review = reviews.find(r => r.paperId === paperId);
