@@ -1,16 +1,10 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import axios from "axios";
 
 const Login = () => {
   const [isLogin, setIsLogin] = useState(true);
   const [selectedRole, setSelectedRole] = useState("Author");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [name, setName] = useState("");
-
   const navigate = useNavigate();
 
   const primaryGradientBg =
@@ -47,51 +41,25 @@ const Login = () => {
     },
   };
 
-  const handleLoginSubmit = async (e) => {
+  const handleLoginSubmit = (e) => {
     e.preventDefault();
-    try {
-      const response = await axios.post("http://localhost:8000/login", {
-        email,
-        password,
-        role: selectedRole,
-      });
-
-      alert(response.data.message);
-
-      if (selectedRole === "Author") {
-        navigate("/author/dashboard");
-      } else if (selectedRole === "Editor") {
-        navigate("/editor/dashboard");
-      } else if (selectedRole === "Reviewer") {
-        navigate("/reviewer/dashboard");
-      }
-    } catch (error) {
-      alert(error.response?.data?.message || "Login failed");
+    if (selectedRole === "Author") {
+      navigate("/author/dashboard");
+    } else if (selectedRole === "Editor") {
+      navigate("/editor/dashboard");
+    } else if (selectedRole === "Reviewer") {
+      navigate("/reviewer/dashboard");
     }
   };
 
-  const handleSignupSubmit = async (e) => {
+  const handleSignupSubmit = (e) => {
     e.preventDefault();
-    try {
-      const response = await axios.post("http://localhost:8000/signup", {
-        name,
-        email,
-        password,
-        confirmPassword,
-        role: selectedRole,
-      });
-
-      alert(response.data.message);
-
-      if (selectedRole === "Author") {
-        navigate("/dashboard");
-      } else if (selectedRole === "Editor") {
-        navigate("/editor-dashboard");
-      } else if (selectedRole === "Reviewer") {
-        navigate("/reviewer-dashboard");
-      }
-    } catch (error) {
-      alert(error.response?.data?.message || "Signup failed");
+    if (selectedRole === "Author") {
+      navigate("/dashboard");
+    } else if (selectedRole === "Editor") {
+      navigate("/editor-dashboard");
+    } else if (selectedRole === "Reviewer") {
+      navigate("/reviewer-dashboard");
     }
   };
 
@@ -105,6 +73,7 @@ const Login = () => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, ease: "easeOut" }}
       >
+        {/* Title */}
         <motion.div
           className="flex w-[200%] transition-transform duration-600 ease-[cubic-bezier(0.68,-0.55,0.265,1.55)]"
           style={{ transform: isLogin ? "translateX(0%)" : "translateX(-50%)" }}
@@ -117,6 +86,7 @@ const Login = () => {
           </div>
         </motion.div>
 
+        {/* Role Selection */}
         <motion.div
           className="relative flex h-12 w-full mt-6 mb-4 justify-between border border-gray-300 rounded-2xl overflow-hidden"
           initial={{ opacity: 0, y: 20 }}
@@ -140,6 +110,7 @@ const Login = () => {
                     ? "text-white cursor-default select-none"
                     : "text-gray-700"
                 }`}
+                onClick={() => setSelectedRole(role)}
               >
                 {role}
               </label>
@@ -158,6 +129,7 @@ const Login = () => {
           ></div>
         </motion.div>
 
+        {/* Login/Signup Toggle */}
         <motion.div
           className="relative flex h-12 w-full mt-4 mb-2 justify-between border border-gray-300 rounded-2xl overflow-hidden"
           initial={{ opacity: 0, y: 20 }}
@@ -199,10 +171,14 @@ const Login = () => {
           ></div>
         </motion.div>
 
+        {/* Forms */}
         <motion.div
           className="flex w-[200%] transition-transform duration-600 ease-[cubic-bezier(0.68,-0.55,0.265,1.55)]"
-          style={{ transform: isLogin ? "translateX(0%)" : "translateX(-50%)" }}
+          style={{
+            transform: isLogin ? "translateX(0%)" : "translateX(-50%)",
+          }}
         >
+          {/* Login Form */}
           <motion.form
             onSubmit={handleLoginSubmit}
             className="w-1/2 px-2 py-4"
@@ -214,8 +190,6 @@ const Login = () => {
               <input
                 type="text"
                 placeholder="Email Address"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
                 required
                 className="h-full w-full outline-none pl-4 rounded-2xl border border-gray-300 border-b-2 text-base transition-all duration-300 focus:border-[#1a75ff] placeholder:text-gray-500 focus:placeholder:text-[#1a75ff]"
               />
@@ -224,8 +198,6 @@ const Login = () => {
               <input
                 type="password"
                 placeholder="Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
                 required
                 className="h-full w-full outline-none pl-4 rounded-2xl border border-gray-300 border-b-2 text-base transition-all duration-300 focus:border-[#1a75ff] placeholder:text-gray-500 focus:placeholder:text-[#1a75ff]"
               />
@@ -250,6 +222,7 @@ const Login = () => {
             </motion.div>
           </motion.form>
 
+          {/* Signup Form */}
           <motion.form
             onSubmit={handleSignupSubmit}
             className="w-1/2 px-2 py-4"
@@ -260,19 +233,7 @@ const Login = () => {
             <motion.div className="field h-12 w-full mt-5" variants={formItemVariants}>
               <input
                 type="text"
-                placeholder="Full Name"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                required
-                className="h-full w-full outline-none pl-4 rounded-2xl border border-gray-300 border-b-2 text-base transition-all duration-300 focus:border-[#1a75ff] placeholder:text-gray-500 focus:placeholder:text-[#1a75ff]"
-              />
-            </motion.div>
-            <motion.div className="field h-12 w-full mt-5" variants={formItemVariants}>
-              <input
-                type="text"
                 placeholder="Email Address"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
                 required
                 className="h-full w-full outline-none pl-4 rounded-2xl border border-gray-300 border-b-2 text-base transition-all duration-300 focus:border-[#1a75ff] placeholder:text-gray-500 focus:placeholder:text-[#1a75ff]"
               />
@@ -281,8 +242,6 @@ const Login = () => {
               <input
                 type="password"
                 placeholder="Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
                 required
                 className="h-full w-full outline-none pl-4 rounded-2xl border border-gray-300 border-b-2 text-base transition-all duration-300 focus:border-[#1a75ff] placeholder:text-gray-500 focus:placeholder:text-[#1a75ff]"
               />
@@ -290,9 +249,7 @@ const Login = () => {
             <motion.div className="field h-12 w-full mt-5" variants={formItemVariants}>
               <input
                 type="password"
-                placeholder="Confirm Password"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
+                placeholder="Confirm password"
                 required
                 className="h-full w-full outline-none pl-4 rounded-2xl border border-gray-300 border-b-2 text-base transition-all duration-300 focus:border-[#1a75ff] placeholder:text-gray-500 focus:placeholder:text-[#1a75ff]"
               />

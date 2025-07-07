@@ -8,4 +8,4 @@ const paperSchema = new mongoose.Schema({
   submittedAt: { type: Date, default: Date.now },
 });
 
-module.exports = mongoose.model('Paper', paperSchema);
+module.exports = mongoose.model('Papers', paperSchema);

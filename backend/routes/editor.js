@@ -1,50 +1,58 @@
 const express = require('express');
 const router = express.Router();
+const Paper = require('../models/editor.paper');
 
-// In-memory paper storage
-const papers = [];
+//  Add new paper (with database)
+router.post('/upload', async (req, res) => {
+  try {
+    const { title, paperId, tags, pdfName, status, date } = req.body;
 
-// ✅ Add new paper
-router.post('/upload', (req, res) => {
-  const { title, paperId, tags, pdfName, status, date } = req.body;
+    if (!title || !paperId || !tags || !pdfName || !status || !date) {
+      return res.status(400).json({ message: 'All fields are required' });
+    }
 
-  if (!title || !paperId || !tags || !pdfName || !status || !date) {
-    return res.status(400).json({ message: 'All fields are required' });
+    const paper = new Paper({
+      title,
+      paperId,
+      tags: Array.isArray(tags) ? tags : tags.split(',').map(tag => tag.trim()),
+      pdfName,
+      status,
+      date,
+    });
+
+    const savedPaper = await paper.save();
+
+    res.status(201).json({
+      message: 'Paper uploaded successfully',
+      paper: savedPaper,
+    });
+  } catch (err) {
+    console.error('Error uploading paper:', err);
+    res.status(500).json({ message: 'Server error' });
   }
-
-  const newPaper = {
-    id: papers.length + 1,
-    title,
-    paperId,
-    tags: Array.isArray(tags) ? tags : tags.split(',').map(tag => tag.trim()),
-    pdfName,
-    status,
-    date
-  };
-
-  papers.push(newPaper);
-
-  res.json({
-    message: 'Paper uploaded successfully',
-    paper: newPaper
-  });
 });
 
-// ✅ Get all papers
-router.get('/papers', (req, res) => {
-  res.json(papers);
+//  Get all papers (from database)
+router.get('/papers', async (req, res) => {
+  try {
+    const papers = await Paper.find();
+    res.json(papers);
+  } catch (err) {
+    res.status(500).json({ message: 'Failed to fetch papers' });
+  }
 });
 
-// ✅ Get a specific paper by ID
-router.get('/:id', (req, res) => {
-  const { id } = req.params;
-  const paper = papers.find(p => p.id === parseInt(id));
-
-  if (!paper) {
-    return res.status(404).json({ message: 'Paper not found' });
+// ✅ Get paper by ID
+router.get('/:id', async (req, res) => {
+  try {
+    const paper = await Paper.findById(req.params.id);
+    if (!paper) {
+      return res.status(404).json({ message: 'Paper not found' });
+    }
+    res.json(paper);
+  } catch (err) {
+    res.status(500).json({ message: 'Error fetching paper' });
   }
-
-  res.json(paper);
 });
 
 module.exports = router;

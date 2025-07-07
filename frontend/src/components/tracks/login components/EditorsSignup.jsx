@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import axios from 'axios'; 
 import ProfileHeader from './Profileheader';
 import EditorsPapercard from './EditorsPapercard';
 
@@ -14,32 +15,15 @@ const EditorSignup = () => {
       photo: '/assets/default-avatar.png',
     });
 
-    setPapers([
-      {
-        id: 'P101',
-        title: 'New Era of Deep Learning',
-        keyTags: 'ML, AI, Deep Learning, Python',
-        pdf: 'deep-learning.pdf',
-        status: 'Under Review',
-        date: 'June 2, 2025',
-      },
-      {
-        id: 'P102',
-        title: 'AI in Finance',
-        keyTags: 'AI, Finance, Data Science',
-        pdf: 'ai-finance.pdf',
-        status: 'Accepted',
-        date: 'May 28, 2025',
-      },
-      {
-        id: 'P103',
-        title: 'IoT in Smart Cities',
-        keyTags: 'IoT, Smart Cities, Networks',
-        pdf: 'iot-smartcities.pdf',
-        status: 'Pending',
-        date: 'June 10, 2025',
-      },
-    ]);
+    // Axios call to fetch papers from backend
+    axios.get('http://localhost:8000/editor/papers')
+      .then(response => {
+        setPapers(response.data);
+      })
+      .catch(error => {
+        console.error('Error fetching papers:', error);
+      });
+
   }, []);
 
   return (
@@ -50,7 +34,7 @@ const EditorSignup = () => {
       <div className="flex justify-center">
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 w-full max-w-6xl">
           {papers.map((paper) => (
-            <EditorsPapercard key={paper.id} paper={paper} />
+            <EditorsPapercard key={paper._id || paper.id} paper={paper} />
           ))}
         </div>
       </div>
