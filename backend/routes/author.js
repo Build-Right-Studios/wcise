@@ -19,10 +19,11 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 // Author: Upload New Paper
-router.post('/author/new-paper', upload.single('file'), async (req, res) => {
+router.post('/new-paper', upload.single('file'), async (req, res) => {
   try {
     const { title, abstract } = req.body;
     let keywords = req.body.keywords;
+    const file = req.file
 
     // Ensure keywords is an array
     if (typeof keywords === 'string') {
@@ -36,7 +37,7 @@ router.post('/author/new-paper', upload.single('file'), async (req, res) => {
       });
     }
 
-    const filePath = req.file.path;
+    const filePath = file.path;
 
     // Upload PDF to Cloudinary
     const result = await cloudinary.uploader.upload(filePath, {
@@ -54,7 +55,7 @@ router.post('/author/new-paper', upload.single('file'), async (req, res) => {
       title,
       abstract,
       keywords,
-      pdfUrl: result.secure_url,
+      pdf: result.secure_url,
     });
 
     await newPaper.save();
@@ -80,7 +81,7 @@ router.post('/author/new-paper', upload.single('file'), async (req, res) => {
 });
 
 // Author: Paper Details Upload 
-router.post('/author/paper-details', async (req, res) => {
+router.post('/paper-details', async (req, res) => {
   try {
     const { abstract } = req.body;
     const pdfUrl = req.file ? req.file.path : null;
