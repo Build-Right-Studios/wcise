@@ -3,6 +3,7 @@ const cors = require('cors');
 const multer = require('multer');
 const fs = require('fs');
 const path = require('path');
+const mongoose = require('mongoose');
 require('dotenv').config();
 const cloudinary = require('cloudinary').v2;
 
@@ -44,6 +45,10 @@ cloudinary.config({
   api_key: process.env.API_KEY,
   api_secret: process.env.API_SECRET,
 });
+
+mongoose.connect(process.env.MONGO_URI)
+    .then(() => console.log("Connected to MongoDB successfully."))
+    .catch((err) => console.log("MongoDB connection error:", err.message));
 
 // Multer Storage
 const storage = multer.diskStorage({
