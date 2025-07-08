@@ -72,7 +72,7 @@ function Authorcomponent() {
       });
 
       alert(response.data.message || 'Paper submitted successfully!');
-      navigate('/author/dashboard');  // ✅ Redirect to Dashboard after success
+      navigate('/author/dashboard');  // Redirect to Dashboard after success
 
     } catch (error) {
       console.error(error);
