@@ -1,48 +1,40 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';   // ✅ Import navigate
+import { useNavigate } from 'react-router-dom';
 import ProfileHeader from './Profileheader';
 import PaperCard from './PaperCard';
 import PaperDetailsCard from '../PaperDetailsCard';
+import axios from 'axios';
 
 const Dashboard = () => {
   const [profile, setProfile] = useState(null);
   const [papers, setPapers] = useState([]);
   const [selectedPaper, setSelectedPaper] = useState(null);
-
-  const navigate = useNavigate();  // ✅ Hook for navigation
+  const navigate = useNavigate();
 
   useEffect(() => {
-    setProfile({
-     
-    });
+    const fetchPapers = async () => {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        alert('Please login first');
+        navigate('/login');
+        return;
+      }
 
-    setPapers([
-      {
-        id: 'P101',
-        title: 'New Era of Deep Learning',
-        keyTags: 'ML, AI, Deep Learning, Python',
-        pdf: 'deep-learning.pdf',
-        status: 'Under Review',
-        date: 'June 2, 2025',
-      },
-      {
-        id: 'P102',
-        title: 'AI in Finance',
-        keyTags: 'AI, Finance, Data Science',
-        pdf: 'ai-finance.pdf',
-        status: 'Accepted',
-        date: 'May 28, 2025',
-      },
-      {
-        id: 'P103',
-        title: 'IoT in Smart Cities',
-        keyTags: 'IoT, Smart Cities, Networks',
-        pdf: 'iot-smartcities.pdf',
-        status: 'Pending',
-        date: 'June 10, 2025',
-      },
-    ]);
-  }, []);
+      try {
+        const response = await axios.get('http://localhost:8000/api/author/my-papers', {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+
+        setProfile(response.data.user);
+        setPapers(response.data.papers);
+      } catch (error) {
+        console.error('Error fetching papers:', error);
+        alert('Failed to load papers');
+      }
+    };
+
+    fetchPapers();
+  }, [navigate]);
 
   return (
     <div className="min-h-screen bg-[#f6f9fc] p-6 relative">
@@ -52,26 +44,30 @@ const Dashboard = () => {
       <div className="flex justify-center">
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 w-full max-w-6xl">
 
-          {/* New Paper Button */}
           <div
             className="bg-white p-4 rounded-lg shadow-sm border hover:shadow-md transition flex items-center justify-center cursor-pointer text-[#4267B2] font-semibold"
-            onClick={() => navigate('/author/new-paper')}  // ✅ Open Authorcomponent in a new page
+            onClick={() => navigate('/author/new-paper')}
           >
             + New Paper
           </div>
 
-          {/* Paper Cards */}
           {papers.map((paper) => (
             <PaperCard
-  key={paper.id}
-  paper={paper}
-  onViewMore={() => navigate(`/paper-details/${paper.id}`)}   //  Navigates to details page
-/>
+              key={paper._id}
+              paper={{
+                id: paper._id,
+                title: paper.title,
+                keyTags: paper.keywords.join(', '),
+                pdf: paper.pdf,
+                status: 'Under Review',   
+                date: new Date(paper.submittedAt).toLocaleDateString(),
+              }}
+              onViewMore={() => navigate(`/paper-details/${paper._id}`)}
+            />
           ))}
         </div>
       </div>
 
-      {/* Paper Details Popup */}
       {selectedPaper && (
         <div className="fixed inset-0 bg-black bg-opacity-40 z-50 flex items-center justify-center p-4">
           <div className="bg-white rounded-lg shadow-lg w-full max-w-3xl relative p-4">
