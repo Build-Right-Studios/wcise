@@ -7,7 +7,7 @@ const ReviewerReviewForm = () => {
   const paper = location.state?.paper;
 
   const [comments, setComments] = useState('');
-  const [pdfFile, setPdfFile] = useState(paper?.pdf || '');
+  const [pdfFile] = useState(paper?.pdf || '');
 
   const handleDownloadPdf = () => {
     if (pdfFile) {

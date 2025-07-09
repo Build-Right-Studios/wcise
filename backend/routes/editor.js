@@ -1,50 +1,70 @@
 const express = require('express');
 const router = express.Router();
+const Paper = require('../models/Paper');
 
-// In-memory paper storage
-const papers = [];
-
-// ✅ Add new paper
-router.post('/upload', (req, res) => {
+// ✅ Upload a new paper
+router.post('/upload', async (req, res) => {
   const { title, paperId, tags, pdfName, status, date } = req.body;
 
+  // Validate required fields
   if (!title || !paperId || !tags || !pdfName || !status || !date) {
     return res.status(400).json({ message: 'All fields are required' });
   }
 
-  const newPaper = {
-    id: papers.length + 1,
-    title,
-    paperId,
-    tags: Array.isArray(tags) ? tags : tags.split(',').map(tag => tag.trim()),
-    pdfName,
-    status,
-    date
-  };
+  try {
+    // Parse tags
+    const parsedTags = Array.isArray(tags)
+      ? tags.map(tag => tag.trim())
+      : tags.split(',').map(tag => tag.trim());
 
-  papers.push(newPaper);
+    const newPaper = new Paper({
+      title,
+      paperId,
+      tags: parsedTags,
+      pdfName,
+      status,
+      date
+    });
 
-  res.json({
-    message: 'Paper uploaded successfully',
-    paper: newPaper
-  });
+    await newPaper.save();
+
+    res.status(201).json({
+      message: 'Paper uploaded successfully to MongoDB',
+      paper: newPaper
+    });
+  } catch (error) {
+    console.error('Error saving paper:', error);
+    res.status(500).json({ message: 'Server error while uploading paper' });
+  }
 });
 
 // ✅ Get all papers
-router.get('/papers', (req, res) => {
-  res.json(papers);
+router.get('/papers', async (req, res) => {
+  try {
+    const papers = await Paper.find();
+    res.status(200).json(papers);
+  } catch (error) {
+    console.error('Error fetching papers:', error);
+    res.status(500).json({ message: 'Server error while fetching papers' });
+  }
 });
 
-// ✅ Get a specific paper by ID
-router.get('/:id', (req, res) => {
-  const { id } = req.params;
-  const paper = papers.find(p => p.id === parseInt(id));
+// ✅ Get a paper by paperId
+router.get('/:paperId', async (req, res) => {
+  const { paperId } = req.params;
 
-  if (!paper) {
-    return res.status(404).json({ message: 'Paper not found' });
+  try {
+    const paper = await Paper.findOne({ paperId });
+
+    if (!paper) {
+      return res.status(404).json({ message: 'Paper not found' });
+    }
+
+    res.status(200).json(paper);
+  } catch (error) {
+    console.error('Error fetching paper:', error);
+    res.status(500).json({ message: 'Server error while fetching paper' });
   }
-
-  res.json(paper);
 });
 
 module.exports = router;
