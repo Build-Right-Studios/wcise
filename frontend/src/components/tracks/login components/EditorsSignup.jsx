@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import ProfileHeader from './Profileheader';
-import EditorsPapercard from './EditorsPapercard';
+import EditorsPapercard from './EditorsPaperCard';
 
 const EditorSignup = () => {
   const [profile, setProfile] = useState(null);
