@@ -105,9 +105,21 @@ router.get('/my-papers', authenticationToken, async (req, res) => {
   }
 });
 
-/**
- * (Optional) Upload Paper Details - You can remove this if unused
- */
+// GET: Get paper by ID
+router.get('/paper/:id', authenticationToken, async (req, res) => {
+  try {
+    const paper = await Paper.findById(req.params.id);
+    if (!paper) {
+      return res.status(404).json({ success: false, message: 'Paper not found' });
+    }
+    res.status(200).json({ success: true, paper });
+  } catch (error) {
+    console.error('Error fetching paper by ID:', error);
+    res.status(500).json({ success: false, message: 'Server error' });
+  }
+});
+
+
 router.post('/paper-details', async (req, res) => {
   try {
     const { abstract } = req.body;
