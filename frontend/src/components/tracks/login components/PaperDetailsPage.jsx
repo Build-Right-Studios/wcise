@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import PaperDetailsCard from '../components/tracks/login components/PaperDetailsCard';
+// import PaperDetailsCard from '../components/tracks/login components/PaperDetailsCard';
+import PaperDetailsCard from '../PaperDetailsCard';
 
 const PaperDetailsPage = () => {
   const { id } = useParams();
