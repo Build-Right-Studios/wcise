@@ -1,69 +1,57 @@
 const express = require('express');
 const router = express.Router();
-const Paper = require('../models/Paper');
+const Paper = require('../models/editor.paper');
 
-// ✅ Upload a new paper
+//  Add new paper (with database)
 router.post('/upload', async (req, res) => {
-  const { title, paperId, tags, pdfName, status, date } = req.body;
-
-  // Validate required fields
-  if (!title || !paperId || !tags || !pdfName || !status || !date) {
-    return res.status(400).json({ message: 'All fields are required' });
-  }
-
   try {
-    // Parse tags
-    const parsedTags = Array.isArray(tags)
-      ? tags.map(tag => tag.trim())
-      : tags.split(',').map(tag => tag.trim());
+    const { title, paperId, tags, pdfName, status, date } = req.body;
 
-    const newPaper = new Paper({
+    if ( !title || !paperId || !tags || !pdfName || !status || !date ) {
+      return res.status(400).json({ message: 'All fields are required' });
+    }
+
+    const paper = new Paper({
       title,
       paperId,
-      tags: parsedTags,
+      tags: Array.isArray(tags) ? tags : tags.split(',').map(tag => tag.trim()),
       pdfName,
       status,
-      date
+      date,
     });
 
-    await newPaper.save();
+    const savedPaper = await paper.save();
 
     res.status(201).json({
-      message: 'Paper uploaded successfully to MongoDB',
-      paper: newPaper
+      message: 'Paper uploaded successfully',
+      paper: savedPaper,
     });
-  } catch (error) {
-    console.error('Error saving paper:', error);
-    res.status(500).json({ message: 'Server error while uploading paper' });
+  } catch (err) {
+    console.error('Error uploading paper:', err);
+    res.status(500).json({ message: 'Server error' });
   }
 });
 
-// ✅ Get all papers
+//  Get all papers (from database)
 router.get('/papers', async (req, res) => {
   try {
     const papers = await Paper.find();
-    res.status(200).json(papers);
-  } catch (error) {
-    console.error('Error fetching papers:', error);
-    res.status(500).json({ message: 'Server error while fetching papers' });
+    res.json(papers);
+  } catch (err) {
+    res.status(500).json({ message: 'Failed to fetch papers' });
   }
 });
 
-// ✅ Get a paper by paperId
-router.get('/:paperId', async (req, res) => {
-  const { paperId } = req.params;
-
+// ✅ Get paper by ID
+router.get('/:id', async (req, res) => {
   try {
-    const paper = await Paper.findOne({ paperId });
-
+    const paper = await Paper.findById(req.params.id);
     if (!paper) {
       return res.status(404).json({ message: 'Paper not found' });
     }
-
-    res.status(200).json(paper);
-  } catch (error) {
-    console.error('Error fetching paper:', error);
-    res.status(500).json({ message: 'Server error while fetching paper' });
+    res.json(paper);
+  } catch (err) {
+    res.status(500).json({ message: 'Error fetching paper' });
   }
 });
 

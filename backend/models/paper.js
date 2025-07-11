@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 
 const paperSchema = new mongoose.Schema({
+  author: { type: String, required: true },
   title: { type: String, required: true },
   abstract: { type: String, required: true },
   keywords: { type: [String], required: true },
@@ -8,4 +9,4 @@ const paperSchema = new mongoose.Schema({
   submittedAt: { type: Date, default: Date.now },
 });
 
-module.exports = mongoose.models.Paper || mongoose.model('Paper', paperSchema);
+module.exports = mongoose.model('Papers', paperSchema);

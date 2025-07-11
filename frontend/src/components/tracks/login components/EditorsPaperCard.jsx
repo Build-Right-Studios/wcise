@@ -12,7 +12,7 @@ const EditorsPaperCard = () => {
   useEffect(() => {
     const fetchPaperDetails = async () => {
       try {
-        const response = await axios.get(`http://localhost:8000/api/paper/${id}`);
+        const response = await axios.get(`http://localhost:8000/editor/paper/${id}`);
         console.log(response.data);
         // setPaper(response.data);
       } catch (error) {

@@ -25,10 +25,9 @@ import Authorcomponent from './components/tracks/login components/Authorcomponen
 import PaperDetailsCard from './components/tracks/PaperDetailsCard';
 import EditorSignup from './components/tracks/login components/EditorsSignup';
 import EditorsViewMore from './components/tracks/login components/EditorsViewMore';
-import EditorsPaperCard from './components/tracks/login components/EditorsPaperCard';
-
 import ReviewerDashboard from './components/tracks/login components/ReviewerDashboard';
 import ReviewerReviewForm from './components/tracks/ReviewerReviewForm';
+import PaperDetailsPage from './components/tracks/login components/PaperDetailsPage';
 
 function App() {
   
@@ -56,11 +55,11 @@ function App() {
           <Route path="/author/dashboard" element={<Dashboard />} />
           <Route path="/author/new-paper" element={<Authorcomponent />} />
           <Route path="/author/paper-details" element={<PaperDetailsCard />} />
-          <Route path="/paper-details/:id" element={<PaperDetailsCard />} />
+          <Route path="/paper-details/:id" element={<PaperDetailsPage />} />
 
           {/* /author/:id */}
           <Route path="/editor/dashboard" element={<EditorSignup />} />
-          <Route path="/editor/:id" element={<EditorsPaperCard/>} />
+          <Route path="/editor/view-more" element={<EditorsViewMore />} />
           {/* /editor/:id */}
          <Route path="/reviewer/dashboard" element={<ReviewerDashboard />} />
          <Route path="/reviewer/dashboard/:paperId" element={<ReviewerDashboard />} />

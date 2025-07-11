@@ -1,10 +1,40 @@
-import React from 'react';
-import PaperDetailsCard from '../components/tracks/login components/PaperDetailsCard';
+import React, { useEffect, useState } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import axios from 'axios';
+// import PaperDetailsCard from '../components/tracks/login components/PaperDetailsCard';
+import PaperDetailsCard from '../PaperDetailsCard';
 
 const PaperDetailsPage = () => {
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const [paper, setPaper] = useState(null);
+
+  useEffect(() => {
+    const fetchPaper = async () => {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        alert('Please login first');
+        navigate('/login');
+        return;
+      }
+
+      try {
+        const response = await axios.get(`http://localhost:8000/author/paper/${id}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setPaper(response.data.paper);
+      } catch (error) {
+        console.error('Error fetching paper:', error);
+        alert('Failed to load paper details');
+      }
+    };
+
+    fetchPaper();
+  }, [id, navigate]);
+
   return (
     <div className="min-h-screen bg-[#f6f9fc] p-6">
-      <PaperDetailsCard />
+      {paper ? <PaperDetailsCard paper={paper} /> : <p className="text-center">Loading...</p>}
     </div>
   );
 };

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const predefinedTags = [
   'AI', 'Machine Learning', 'Deep Learning', 'NLP', 'Data Science',
@@ -21,6 +22,9 @@ function Authorcomponent() {
     keywords: [],
     file: null,
   });
+
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const toggleKeyword = (tag) => {
     setFormData((prev) => {
@@ -46,6 +50,12 @@ function Authorcomponent() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    const token = localStorage.getItem('token');
+    if (!token) {
+      alert('Please login first');
+      return;
+    }
+
     const formPayload = new FormData();
     formPayload.append('title', formData.title);
     formPayload.append('abstract', formData.abstract);
@@ -53,15 +63,22 @@ function Authorcomponent() {
     formPayload.append('file', formData.file);
 
     try {
+      setLoading(true);
       const response = await axios.post('http://localhost:8000/author/new-paper', formPayload, {
-        headers: { 'Content-Type': 'multipart/form-data' },
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          Authorization: `Bearer ${token}`,
+        },
       });
 
-      alert(response.data.message);
-      console.log(response.data.data);
+      alert(response.data.message || 'Paper submitted successfully!');
+      navigate('/author/dashboard');  // Redirect to Dashboard after success
+
     } catch (error) {
       console.error(error);
-      alert(error.response?.data?.message || 'Submission failed');
+      alert(error.response?.data?.message || 'Submission failed. Please try again.');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -123,9 +140,12 @@ function Authorcomponent() {
           </div>
           <button
             type="submit"
-            className="w-full bg-[#1d3b58] hover:bg-[#163048] text-white py-3 rounded-lg font-semibold transition-all"
+            disabled={loading}
+            className={`w-full ${
+              loading ? 'bg-gray-400 cursor-not-allowed' : 'bg-[#1d3b58] hover:bg-[#163048]'
+            } text-white py-3 rounded-lg font-semibold transition-all`}
           >
-            Submit Paper
+            {loading ? 'Submitting...' : 'Submit Paper'}
           </button>
         </form>
       </div>

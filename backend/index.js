@@ -10,7 +10,6 @@ const signupRoute = require('./routes/signup');
 const editorRoute = require('./routes/editor');
 const reviewerRoute = require('./routes/reviewer');
 const authorRoute = require('./routes/author');
-// const paperRoutes = require('./routes/paper');
 
 const app = express();
 

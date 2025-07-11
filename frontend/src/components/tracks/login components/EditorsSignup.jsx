@@ -1,16 +1,13 @@
 import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 import ProfileHeader from './Profileheader';
 import EditorsPapercard from './EditorsPaperCard';
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
 
 const EditorSignup = () => {
   const [profile, setProfile] = useState(null);
   const [papers, setPapers] = useState([]);
-  const navigate = useNavigate();
 
   useEffect(() => {
-    // Static profile (can be dynamic later)
     setProfile({
       name: 'Melissa',
       email: 'melissa@example.com',
@@ -18,17 +15,21 @@ const EditorSignup = () => {
       photo: '/assets/default-avatar.png',
     });
 
-    // Fetch papers from MongoDB backend
-    const fetchPapers = async () => {
-      try {
-        const response = await axios.get('http://localhost:8000/api/paper/papers');
-        setPapers(response.data);
-      } catch (error) {
+    axios.get('http://localhost:8000/editor/papers')
+      .then(response => {
+        const fetchedPapers = response.data.map(paper => ({
+          id: paper.paperId || paper._id,       // Fallback if paperId is missing
+          title: paper.title,
+          keyTags: Array.isArray(paper.tags) ? paper.tags.join(', ') : paper.tags,
+          pdf: paper.pdfName,
+          status: paper.status,
+          date: paper.date,
+        }));
+        setPapers(fetchedPapers);
+      })
+      .catch(error => {
         console.error('Error fetching papers:', error);
-      }
-    };
-
-    fetchPapers();
+      });
   }, []);
 
   return (
@@ -38,17 +39,9 @@ const EditorSignup = () => {
 
       <div className="flex justify-center">
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 w-full max-w-6xl">
-          {papers.length > 0 ? (
-            papers.map((paper) => (
-              <EditorsPapercard
-                key={paper.paperId}
-                paper={paper}
-                onViewMore={() => navigate(`/editor/${paper.paperId}`)}
-              />
-            ))
-          ) : (
-            <p className="text-center col-span-3">Paper not found.</p>
-          )}
+          {papers.map((paper) => (
+            <EditorsPapercard key={paper.id} paper={paper} />
+          ))}
         </div>
       </div>
     </div>
