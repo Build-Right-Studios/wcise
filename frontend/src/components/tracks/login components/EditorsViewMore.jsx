@@ -1,28 +1,25 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 import ProfileHeader from './Profileheader';
 
 const EditorsViewMore = () => {
-  const reviewers = [
-    {
-      reviewerId: 'R101',
-      name: 'Hrithik Roshan',
-      role: 'PROFESSOR',
-      tags: 'ML, Deep Learning, Python, AI',
-      paperId: 'P301',
-    },
-    {
-      reviewerId: 'R102',
-      name: 'Sanjay Dutt',
-      role: 'RESEARCHER',
-      tags: 'ML, Deep Learning, Python, AI',
-      paperId: 'P302',
-    },
-    // Add more reviewers as needed
-  ];
+  const [reviewers, setReviewers] = useState([]);
+
+  useEffect(() => {
+    const fetchReviewers = async () => {
+      try {
+        const response = await axios.get('http://localhost:8000/editor/suggested-reviewers');
+        setReviewers(response.data);
+      } catch (error) {
+        console.error('Error fetching reviewers:', error);
+      }
+    };
+
+    fetchReviewers();
+  }, []);
 
   return (
     <div className="min-h-screen bg-[#f5f7fa] px-4 py-6">
-
       <h2 className="text-3xl font-bold text-center text-[#1d3b58] mt-6 mb-8">
         SUGGESTED REVIEWERS
       </h2>

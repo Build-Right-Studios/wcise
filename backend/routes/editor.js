@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Paper = require('../models/editor.paper');
 
-//  Add new paper (with database)
+// Add new paper
 router.post('/upload', async (req, res) => {
   try {
     const { title, paperId, tags, pdfName, status, date } = req.body;
@@ -32,7 +32,7 @@ router.post('/upload', async (req, res) => {
   }
 });
 
-//  Get all papers (from database)
+// Get all papers
 router.get('/papers', async (req, res) => {
   try {
     const papers = await Paper.find();
@@ -42,7 +42,7 @@ router.get('/papers', async (req, res) => {
   }
 });
 
-// ✅ Get paper by ID
+// Get paper by ID
 router.get('/:id', async (req, res) => {
   try {
     const paper = await Paper.findById(req.params.id);
@@ -52,6 +52,33 @@ router.get('/:id', async (req, res) => {
     res.json(paper);
   } catch (err) {
     res.status(500).json({ message: 'Error fetching paper' });
+  }
+});
+
+// Get suggested reviewers
+router.get('/suggested-reviewers', async (req, res) => {
+  try {
+    const suggestedReviewers = [
+      {
+        reviewerId: 'R101',
+        name: 'Hrithik Roshan',
+        role: 'PROFESSOR',
+        tags: 'ML, Deep Learning, Python, AI',
+        paperId: 'P301',
+      },
+      {
+        reviewerId: 'R102',
+        name: 'Sanjay Dutt',
+        role: 'RESEARCHER',
+        tags: 'ML, Deep Learning, Python, AI',
+        paperId: 'P302',
+      },
+    ];
+
+    res.status(200).json(suggestedReviewers);
+  } catch (err) {
+    console.error('Error fetching reviewers:', err);
+    res.status(500).json({ message: 'Failed to fetch reviewers' });
   }
 });
 
