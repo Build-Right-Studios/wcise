@@ -1,26 +1,60 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import ProfileHeader from './Profileheader';  // Optional, you can remove if not needed
+import { useLocation } from 'react-router-dom';
+import ProfileHeader from './Profileheader';
+
+// Function to find best matching reviewers based on tags
+const getTopReviewer = (paperTags, reviewers) => {
+  const paperTagSet = new Set(paperTags.map(tag => tag.trim().toLowerCase()));
+  let maxMatchCount = 0;
+  let bestReviewers = [];
+
+  for (const reviewer of reviewers) {
+    const reviewerTags = (reviewer.tags || []).map(tag => tag.trim().toLowerCase());
+    let matchCount = 0;
+
+    for (const tag of reviewerTags) {
+      if (paperTagSet.has(tag)) {
+        matchCount++;
+      }
+    }
+
+    if (matchCount > maxMatchCount) {
+      maxMatchCount = matchCount;
+      bestReviewers = [reviewer];
+    } else if (matchCount === maxMatchCount && matchCount > 0) {
+      bestReviewers.push(reviewer);
+    }
+  }
+
+  return bestReviewers;
+};
 
 const EditorsViewMore = () => {
+  const location = useLocation();
+  const paper = location.state?.paper;
   const [reviewers, setReviewers] = useState([]);
 
   useEffect(() => {
     const fetchReviewers = async () => {
       try {
         const response = await axios.get('http://localhost:8000/editor/suggested-reviewers');
-        setReviewers(response.data);
+        const allReviewers = response.data;
+
+        const paperTags = paper?.keyTags?.split(',').map(tag => tag.trim()) || [];
+        const matchedReviewers = getTopReviewer(paperTags, allReviewers);
+
+        setReviewers(matchedReviewers);
       } catch (error) {
         console.error('Error fetching reviewers:', error);
       }
     };
 
     fetchReviewers();
-  }, []);
+  }, [paper]);
 
   return (
     <div className="min-h-screen bg-[#f5f7fa] px-4 py-6">
-      {/* Optional profile header */}
       <ProfileHeader profile={{ name: 'Editor', email: '', phone: '', photo: '' }} />
 
       <h2 className="text-3xl font-bold text-center text-[#1d3b58] mt-6 mb-8">
@@ -29,9 +63,9 @@ const EditorsViewMore = () => {
 
       <div className="grid sm:grid-cols-2 gap-6 max-w-6xl mx-auto">
         {reviewers.length > 0 ? (
-          reviewers.map((rev, idx) => (
+          reviewers.map((rev) => (
             <div
-              key={rev._id || idx}
+              key={rev._id}
               className="bg-[#e9ecef] p-6 rounded-2xl shadow-md flex items-start gap-4"
             >
               <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center text-xl font-bold text-[#1d3b58]">
@@ -51,7 +85,7 @@ const EditorsViewMore = () => {
             </div>
           ))
         ) : (
-          <p className="text-center text-gray-600">No reviewers found.</p>
+          <p className="text-center text-gray-600">No matching reviewers found.</p>
         )}
       </div>
     </div>
