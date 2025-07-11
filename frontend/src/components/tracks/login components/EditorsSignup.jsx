@@ -18,12 +18,12 @@ const EditorSignup = () => {
     axios.get('http://localhost:8000/editor/papers')
       .then(response => {
         const fetchedPapers = response.data.map(paper => ({
-          id: paper.paperId || paper._id,       // Fallback if paperId is missing
+          id: paper._id,
           title: paper.title,
-          keyTags: Array.isArray(paper.tags) ? paper.tags.join(', ') : paper.tags,
-          pdf: paper.pdfName,
-          status: paper.status,
-          date: paper.date,
+          keyTags: Array.isArray(paper.keywords) ? paper.keywords.join(', ') : paper.keywords,
+          pdf: paper.pdf,
+          status: 'Pending Review',
+          date: new Date(paper.submittedAt).toLocaleDateString(),
         }));
         setPapers(fetchedPapers);
       })
