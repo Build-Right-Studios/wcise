@@ -34,6 +34,7 @@ const EditorsViewMore = () => {
   const location = useLocation();
   const paper = location.state?.paper;
   const [reviewers, setReviewers] = useState([]);
+  const [statusMap, setStatusMap] = useState({});
 
   useEffect(() => {
     const fetchReviewers = async () => {
@@ -45,6 +46,13 @@ const EditorsViewMore = () => {
         const matchedReviewers = getTopReviewer(paperTags, allReviewers);
 
         setReviewers(matchedReviewers);
+
+        const initialStatus = {};
+        matchedReviewers.forEach(rev => {
+          initialStatus[rev._id] = 'Waiting';
+        });
+        setStatusMap(initialStatus);
+
       } catch (error) {
         console.error('Error fetching reviewers:', error);
       }
@@ -52,6 +60,16 @@ const EditorsViewMore = () => {
 
     fetchReviewers();
   }, [paper]);
+
+  const handleSendMail = (rev) => {
+    alert(`Mail sent to ${rev.email} (placeholder action)`);
+  };
+
+  const handleSendPaper = (rev) => {
+    alert(`Paper sent to ${rev.name} (placeholder action)`);
+    // Optional: Change status on click:
+    setStatusMap(prev => ({ ...prev, [rev._id]: 'Sent' }));
+  };
 
   return (
     <div className="min-h-screen bg-[#f5f7fa] px-4 py-6">
@@ -66,7 +84,7 @@ const EditorsViewMore = () => {
           reviewers.map((rev) => (
             <div
               key={rev._id}
-              className="bg-[#e9ecef] p-6 rounded-2xl shadow-md flex items-start gap-4"
+              className="bg-[#e9ecef] p-6 rounded-2xl shadow-md flex gap-4"
             >
               <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center text-xl font-bold text-[#1d3b58]">
                 {rev.name?.charAt(0).toUpperCase() || 'R'}
@@ -81,6 +99,29 @@ const EditorsViewMore = () => {
 
                 <p className="mt-2 font-bold text-sm text-[#1d3b58]">Reviewer ID:</p>
                 <p className="text-sm break-words text-gray-800">{rev._id}</p>
+              </div>
+
+              <div className="flex flex-col gap-4 items-end justify-start mt-2">
+                <button
+                  onClick={() => handleSendMail(rev)}
+                  className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 text-sm"
+                >
+                  Send Mail
+                </button>
+
+                <button
+                  disabled
+                  className="bg-yellow-500 text-white px-4 py-2 rounded text-sm cursor-default"
+                >
+                  {statusMap[rev._id]}
+                </button>
+
+                <button
+                  onClick={() => handleSendPaper(rev)}
+                  className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 text-sm"
+                >
+                  Send Paper
+                </button>
               </div>
             </div>
           ))
