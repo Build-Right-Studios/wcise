@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const Paper = require('../models/editor.paper');
+const Paper = require('../models/paper');
+const Reviewer = require('../models/reviewer.model');
 
 // Add new paper
 router.post('/upload', async (req, res) => {
@@ -38,10 +39,19 @@ router.get('/papers', async (req, res) => {
     const papers = await Paper.find();
     res.json(papers);
   } catch (err) {
+    console.error('Error fetching papers:', err);
     res.status(500).json({ message: 'Failed to fetch papers' });
   }
 });
-
+router.get('/suggested-reviewers', async (req, res) => {
+  try {
+    const reviewers = await Reviewer.find();
+    res.json(reviewers);
+  } catch (err) {
+    console.error('Error fetching reviewers:', err);
+    res.status(500).json({ message: 'Failed to fetch reviewers' });
+  }
+});
 // Get paper by ID
 router.get('/:id', async (req, res) => {
   try {
@@ -51,35 +61,12 @@ router.get('/:id', async (req, res) => {
     }
     res.json(paper);
   } catch (err) {
+    console.error('Error fetching paper by ID:', err);
     res.status(500).json({ message: 'Error fetching paper' });
   }
 });
 
-// Get suggested reviewers
-router.get('/suggested-reviewers', async (req, res) => {
-  try {
-    const suggestedReviewers = [
-      {
-        reviewerId: 'R101',
-        name: 'Hrithik Roshan',
-        role: 'PROFESSOR',
-        tags: 'ML, Deep Learning, Python, AI',
-        paperId: 'P301',
-      },
-      {
-        reviewerId: 'R102',
-        name: 'Sanjay Dutt',
-        role: 'RESEARCHER',
-        tags: 'ML, Deep Learning, Python, AI',
-        paperId: 'P302',
-      },
-    ];
+// ✅ Get suggested reviewers (fixed to use Reviewer model)
 
-    res.status(200).json(suggestedReviewers);
-  } catch (err) {
-    console.error('Error fetching reviewers:', err);
-    res.status(500).json({ message: 'Failed to fetch reviewers' });
-  }
-});
 
 module.exports = router;

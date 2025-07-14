@@ -42,7 +42,7 @@ const Dashboard = () => {
       <h2 className="text-2xl font-bold mt-6 mb-4 text-center">My Research Papers</h2>
 
       <div className="flex justify-center">
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 w-auto gap-4 w-full max-w-6xl">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 w-full max-w-6xl">
 
           <div
             className="bg-white p-4 rounded-lg shadow-sm border hover:shadow-md transition flex items-center justify-center cursor-pointer text-[#4267B2] font-semibold"
@@ -52,16 +52,16 @@ const Dashboard = () => {
           </div>
 
           {papers.map((paper) => (
-            <PaperCard 
+            <PaperCard
               key={paper._id}
               paper={{
                 id: paper._id,
                 title: paper.title,
                 keyTags: paper.keywords.join(', '),
-                pdf: <p className="break-words overflow-hidden text-sm text-gray-700">
-  {paper.pdf}
-</p>,
-                status: 'Under Review',   
+                pdf: <span className="block max-w-full overflow-hidden text-ellipsis break-all">
+                  {paper.pdf}
+                </span>,
+                status: 'Under Review',
                 date: new Date(paper.submittedAt).toLocaleDateString(),
               }}
               onViewMore={() => navigate(`/paper-details/${paper._id}`)}
@@ -71,7 +71,7 @@ const Dashboard = () => {
       </div>
 
       {selectedPaper && (
-        <div className=" inset-0 bg-black bg-opacity-40 z-50 flex items-center justify-center p-4">
+        <div className="fixed inset-0 bg-black bg-opacity-40 z-50 flex items-center justify-center p-4">
           <div className="bg-white rounded-lg shadow-lg w-full max-w-3xl relative p-4">
             <PaperDetailsCard course={selectedPaper} />
             <button
