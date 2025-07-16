@@ -3,7 +3,6 @@ import axios from 'axios';
 import { useLocation } from 'react-router-dom';
 import ProfileHeader from './Profileheader';
 
-// Function to find best matching reviewers based on tags
 const getTopReviewer = (paperTags, reviewers) => {
   const paperTagSet = new Set(paperTags.map(tag => tag.trim().toLowerCase()));
   let maxMatchCount = 0;
@@ -61,13 +60,26 @@ const EditorsViewMore = () => {
     fetchReviewers();
   }, [paper]);
 
-  const handleSendMail = (rev) => {
-    alert(`Mail sent to ${rev.email} (placeholder action)`);
+  const handleSendMail = async (rev) => {
+    try {
+      const response = await axios.post(
+        `http://localhost:8000/send-mail/${encodeURIComponent(rev.email)}`,
+        {
+          name: rev.name,
+          paperTitle: paper?.title || 'Paper',
+          paperId: paper?.id || ''
+        }
+      );
+      console.log(paper);
+      alert(`Mail successfully sent to ${rev.email}`);
+    } catch (error) {
+      console.error('Failed to send mail:', error);
+      alert(`Failed to send mail to ${rev.email}`);
+    }
   };
 
   const handleSendPaper = (rev) => {
-    alert(`Paper sent to ${rev.name} (placeholder action)`);
-    // Optional: Change status on click:
+    alert(`Paper sent to ${rev.name}`);
     setStatusMap(prev => ({ ...prev, [rev._id]: 'Sent' }));
   };
 
