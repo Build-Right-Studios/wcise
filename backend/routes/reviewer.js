@@ -1,39 +1,27 @@
 const express = require('express');
 const router = express.Router();
 const Review = require('../models/review.model');
+const Paper = require('../models/paper');
 
-//  Submit Review (Save to MongoDB)
-router.post('/submit', async (req, res) => {
+// save comments 
+router.post('/add-comment/:paperId', async (req, res) => {
+  const { paperId } = req.params;
+  const { reviewerId, comment } = req.body;
+
   try {
-    const { paperId, title, date, tags, pdfName, comments } = req.body;
+    const paper = await Paper.findById(paperId);
+    if (!paper) return res.status(404).json({ message: 'Paper not found' });
 
-    if (!paperId || !title || !date || !tags || !pdfName || !comments) {
-      return res.status(400).json({ message: 'All fields are required' });
-    }
+    paper.comments.push({ reviewerId, text: comment });
+    await paper.save();
 
-    const newReview = new Review({
-      paperId,
-      title,
-      date,
-      tags: Array.isArray(tags) ? tags : tags.split(',').map(tag => tag.trim()),
-      pdfName,
-      comments
-    });
-
-    await newReview.save();
-
-    res.json({
-      message: 'Review submitted successfully',
-      review: newReview
-    });
-
-  } catch (error) {
-    console.error('Error submitting review:', error);
-    res.status(500).json({ message: 'Server error' });
+    res.status(200).json({ message: 'Comment added successfully', latestComment: paper.comments.at(-1) });
+  } catch (err) {
+    res.status(500).json({ message: 'Failed to add comment', error: err.message });
   }
 });
 
-//  Get All Reviews from MongoDB
+// ✅ Get all submitted reviews
 router.get('/reviews', async (req, res) => {
   try {
     const reviews = await Review.find();
@@ -44,7 +32,18 @@ router.get('/reviews', async (req, res) => {
   }
 });
 
-//  Get Single Review by paperId
+// ✅ Get papers assigned to a specific reviewer
+router.get('/assigned-papers/:id', async (req, res) => {
+  try {
+    const reviewerId = req.params.id;
+    const papers = await Paper.find({ assignedReviewers: reviewerId });
+    res.status(200).json(papers);
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching papers', error });
+  }
+});
+
+// ✅ Get review details by paper ID
 router.get('/:paperId', async (req, res) => {
   try {
     const { paperId } = req.params;

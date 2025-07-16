@@ -9,7 +9,8 @@ const EditorsPapercard = ({ paper }) => {
       <h3 className="text-lg font-semibold mb-1">{paper.title}</h3>
       <p><strong>Paper ID:</strong> {paper.id}</p>
       <p><strong>Tags:</strong> {paper.keyTags}</p>
-      <p><strong>PDF:</strong> <span className="block max-w-full overflow-hidden text-ellipsis break-all">
+      <p><strong>PDF:</strong> <span className="block max-w-full overflow-hidden 
+      text-ellipsis break-all">
         {paper.pdf}
       </span></p>
       <p><strong>Status:</strong> {paper.status}</p>

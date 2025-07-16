@@ -52,6 +52,39 @@ router.get('/suggested-reviewers', async (req, res) => {
     res.status(500).json({ message: 'Failed to fetch reviewers' });
   }
 });
+// editor.js
+
+/// Assign reviewer to paper
+router.post('/assign-reviewer', async (req, res) => {
+  try {
+    const { paperId, reviewerId } = req.body;
+
+    if (!paperId || !reviewerId) {
+      return res.status(400).json({ message: 'paperId and reviewerId are required' });
+    }
+
+    const paper = await Paper.findById(paperId);
+    if (!paper) {
+      return res.status(404).json({ message: 'Paper not found' });
+    }
+
+    // ✅ Use correct field: assignedReviewers
+ const mongoose = require('mongoose'); // make sure this is imported
+const reviewerObjectId = mongoose.Types.ObjectId.createFromHexString(reviewerId);
+
+if (!paper.assignedReviewers.some(id => id.equals(reviewerObjectId))) {
+  paper.assignedReviewers.push(reviewerObjectId);
+  await paper.save();
+}
+
+
+    res.status(200).json({ message: 'Reviewer assigned to paper successfully', paper });
+  } catch (err) {
+    console.error('Error assigning reviewer:', err);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
 // Get paper by ID
 router.get('/:id', async (req, res) => {
   try {
@@ -66,7 +99,7 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-// ✅ Get suggested reviewers (fixed to use Reviewer model)
+
 
 
 module.exports = router;
