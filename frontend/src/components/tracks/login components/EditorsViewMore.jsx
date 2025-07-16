@@ -65,10 +65,19 @@ const EditorsViewMore = () => {
     alert(`Mail sent to ${rev.email} (placeholder action)`);
   };
 
-  const handleSendPaper = (rev) => {
-    alert(`Paper sent to ${rev.name} (placeholder action)`);
-    // Optional: Change status on click:
-    setStatusMap(prev => ({ ...prev, [rev._id]: 'Sent' }));
+  const handleSendPaper = async (rev) => {
+    try {
+      await axios.post('http://localhost:8000/editor/assign-reviewer', {
+        paperId: paper.id || paper._id,
+        reviewerId: rev._id
+      });
+
+      setStatusMap(prev => ({ ...prev, [rev._id]: 'Sent' }));
+      alert(`Paper sent to ${rev.name} and reviewer assigned.`);
+    } catch (error) {
+      console.error('Error sending paper:', error);
+      alert('Failed to send paper.');
+    }
   };
 
   return (
@@ -84,7 +93,7 @@ const EditorsViewMore = () => {
           reviewers.map((rev) => (
             <div
               key={rev._id}
-              className="bg-[#e9ecef] p-6 rounded-2xl shadow-md flex gap-4"
+              className="bg-[#e9ecef] p-6 rounded-2xl shadow-md flex gap-6"
             >
               <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center text-xl font-bold text-[#1d3b58]">
                 {rev.name?.charAt(0).toUpperCase() || 'R'}
