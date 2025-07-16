@@ -47,9 +47,15 @@ const Login = () => {
       alert(response.data.message);
       localStorage.setItem('token', response.data.token);
 
-      if (selectedRole === "Author") navigate("/author/dashboard");
-      else if (selectedRole === "Editor") navigate("/editor/dashboard");
-      else if (selectedRole === "Reviewer") navigate("/reviewer/dashboard");
+// Store reviewer object if role is Reviewer
+if (selectedRole === "Reviewer") {
+  localStorage.setItem('reviewer', JSON.stringify(response.data.user));
+}
+
+if (selectedRole === "Author") navigate("/author/dashboard");
+else if (selectedRole === "Editor") navigate("/editor/dashboard");
+else if (selectedRole === "Reviewer") navigate("/reviewer/dashboard");
+
 
     } catch (error) {
       console.error(error);
