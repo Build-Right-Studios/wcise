@@ -3,11 +3,11 @@ const mongoose = require('mongoose');
 const router = express.Router();
 const Review = require('../models/review.model');
 const Paper = require('../models/paper');
+const User = require('../models/user.model');
 
-// ✅ Save comment on a paper
 router.post('/add-comment/:paperId', async (req, res) => {
   const { paperId } = req.params;
-  const { reviewerId, comment } = req.body;
+  const { reviewerId, text } = req.body;
 
   // ✅ Log input values
   console.log('➡️ Incoming request:');
@@ -30,30 +30,33 @@ router.post('/add-comment/:paperId', async (req, res) => {
     // ✅ Find the review document for that paper & reviewer
     const review = await Review.findOne({ paperId, reviewerId });
 
-    if (!review) {
-      console.error('❌ Review not found for this paper ID and reviewer ID');
-      return res.status(404).json({ message: 'Review not found for this paper ID' });
+    // Add comment to paper
+    const commentObj = { reviewerId, text };
+    paper.comments.push(commentObj);
+    await paper.save();
+
+    // Add comment to author (user)
+    const author = await User.findById(paper.author);
+    if (author) {
+      author.comments = author.comments || [];
+      author.comments.push({
+  paperId,
+  comment: text,
+  commentedAt: new Date()
+});
+
+
+      await author.save();
     }
 
-    // ✅ Log found review
-    console.log('✅ Review found:', review._id);
-
-    // ✅ Update the comment
-    review.comments = comment;
-    await review.save();
-
-    // ✅ Success response
-    console.log('✅ Comment added successfully');
-    res.status(200).json({
-      message: 'Comment added successfully',
-      reviewId: review._id,
-      updatedComment: review.comments,
-    });
+    res.status(200).json({ message: 'Comment added successfully', latestComment: commentObj });
   } catch (err) {
-    console.error('🔥 Error while adding comment:', err);
+    console.error(err);
     res.status(500).json({ message: 'Failed to add comment', error: err.message });
   }
 });
+
+
 
 // ✅ Get all submitted reviews
 router.get('/reviews', async (req, res) => {

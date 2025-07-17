@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 
-const PaperDetailsCard = ({ paper }) => {
+const PaperDetailsCard = ({ paper, latestComment }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [abstract, setAbstract] = useState('');
   const [status, setStatus] = useState('Under Review');
@@ -26,10 +26,12 @@ const PaperDetailsCard = ({ paper }) => {
 
   return (
     <div className="max-w-3xl mx-auto p-4 bg-white shadow-lg rounded-md font-sans">
+      {/* Title */}
       <div className="bg-[#0A2B6C] text-white text-center py-3 rounded-t-md text-lg font-semibold">
         Title: <span className="font-normal">{paper.title}</span>
       </div>
 
+      {/* Details */}
       <div className="flex justify-between bg-[#f3f6fb] p-4 rounded-b-md flex-wrap gap-y-4">
         <div className="flex flex-col text-left text-sm font-medium gap-2 w-full sm:w-[45%]">
           <div><span className="font-semibold">Paper ID :</span><br />{paper._id}</div>
@@ -41,6 +43,7 @@ const PaperDetailsCard = ({ paper }) => {
         </div>
       </div>
 
+      {/* Abstract */}
       <div className="bg-[#f3f6fb] mt-4 p-4 rounded-md">
         <label className="font-semibold block mb-2">Abstract :</label>
         <textarea
@@ -51,6 +54,7 @@ const PaperDetailsCard = ({ paper }) => {
         />
       </div>
 
+      {/* Upload PDF */}
       <div
         onClick={() => isEditing && fileInputRef.current.click()}
         className={`mt-4 p-4 rounded-md text-center text-gray-700 border border-dotted border-gray-600 ${isEditing ? 'cursor-pointer hover:bg-gray-100' : 'cursor-not-allowed bg-gray-100'}`}
@@ -67,6 +71,7 @@ const PaperDetailsCard = ({ paper }) => {
         {pdfFile && <p className="text-sm mt-2 text-green-600">{pdfFile.name}</p>}
       </div>
 
+      {/* Status */}
       <div className="bg-[#f3f6fb] mt-4 p-4 rounded-md">
         <label className="font-bold text-lg">Status :</label>
         <input
@@ -78,6 +83,22 @@ const PaperDetailsCard = ({ paper }) => {
         />
       </div>
 
+      {/* ✅ Comment Section */}
+      <div className="bg-[#f3f6fb] mt-4 p-4 rounded-md">
+        <label className="font-bold text-lg block mb-1">Latest Reviewer Comment:</label>
+        {latestComment && latestComment.comment ? (
+          <>
+            <p className="text-sm text-gray-800 mt-1 italic">"{latestComment.comment}"</p>
+            <p className="text-xs text-gray-500 text-right mt-2">
+              — {new Date(latestComment.commentedAt).toLocaleString()}
+            </p>
+          </>
+        ) : (
+          <p className="text-gray-500 italic mt-1">No comment available yet.</p>
+        )}
+      </div>
+
+      {/* Buttons */}
       <div className="flex justify-end gap-4 mt-4">
         <button
           onClick={handleEdit}
