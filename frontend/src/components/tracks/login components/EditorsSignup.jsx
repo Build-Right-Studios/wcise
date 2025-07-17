@@ -11,7 +11,6 @@ const EditorSignup = () => {
     setProfile({
       name: 'Melissa',
       email: 'melissa@example.com',
-      phone: '9222000055',
       photo: '/assets/default-avatar.png',
     });
 

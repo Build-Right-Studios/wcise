@@ -3,9 +3,11 @@ const router = express.Router();
 const cloudinary = require('cloudinary').v2;
 const multer = require('multer');
 const fs = require('fs');
+const mongoose = require('mongoose');
 const Paper = require('../models/paper.js');
-const { authenticationToken } = require('../utilities/utilities.js');
 
+const { authenticationToken } = require('../utilities/utilities.js');
+const User = require('../models/user.model');
 // Cloudinary Config
 cloudinary.config({
   cloud_name: process.env.CLOUD_NAME,
@@ -20,7 +22,7 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage });
 
-/* Upload New Paper (Author Only)*/
+/* Upload New Paper (Author Only) */
 router.post('/new-paper', upload.single('file'), authenticationToken, async (req, res) => {
   try {
     const { title, abstract } = req.body;
@@ -49,7 +51,7 @@ router.post('/new-paper', upload.single('file'), authenticationToken, async (req
       unique_filename: false,
     });
 
-    fs.unlinkSync(filePath);  // Cleanup local file
+    fs.unlinkSync(filePath); // Cleanup local file
 
     const newPaper = new Paper({
       author: user.id,
@@ -70,7 +72,7 @@ router.post('/new-paper', upload.single('file'), authenticationToken, async (req
         keywords,
         pdf: result.secure_url,
       },
-      user: user
+      user: user,
     });
 
   } catch (err) {
@@ -92,7 +94,7 @@ router.get('/my-papers', authenticationToken, async (req, res) => {
 
     res.json({
       success: true,
-      papers
+      papers,
     });
 
   } catch (error) {
@@ -105,14 +107,29 @@ router.get('/my-papers', authenticationToken, async (req, res) => {
   }
 });
 
-// GET: Get paper by ID
+/* Get Paper by ID */
 router.get('/paper/:id', authenticationToken, async (req, res) => {
   try {
     const paper = await Paper.findById(req.params.id);
     if (!paper) {
       return res.status(404).json({ success: false, message: 'Paper not found' });
     }
-    res.status(200).json({ success: true, paper });
+
+    // Fetch all users who commented on this paper
+    const users = await User.find({ 'comments.paperId': paper._id });
+
+    let latestComment = null;
+
+    for (const user of users) {
+      const comments = user.comments.filter(c => c.paperId.toString() === paper._id.toString());
+      for (const c of comments) {
+        if (!latestComment || new Date(c.commentedAt) > new Date(latestComment.commentedAt)) {
+          latestComment = c;
+        }
+      }
+    }
+
+    res.status(200).json({ success: true, paper, latestComment });
   } catch (error) {
     console.error('Error fetching paper by ID:', error);
     res.status(500).json({ success: false, message: 'Server error' });

@@ -4,22 +4,43 @@ const Review = require('../models/review.model');
 const Paper = require('../models/paper');
 
 // save comments 
+const User = require('../models/user.model');
+
 router.post('/add-comment/:paperId', async (req, res) => {
   const { paperId } = req.params;
-  const { reviewerId, comment } = req.body;
+  const { reviewerId, text } = req.body;
 
   try {
     const paper = await Paper.findById(paperId);
     if (!paper) return res.status(404).json({ message: 'Paper not found' });
 
-    paper.comments.push({ reviewerId, text: comment });
+    // Add comment to paper
+    const commentObj = { reviewerId, text };
+    paper.comments.push(commentObj);
     await paper.save();
 
-    res.status(200).json({ message: 'Comment added successfully', latestComment: paper.comments.at(-1) });
+    // Add comment to author (user)
+    const author = await User.findById(paper.author);
+    if (author) {
+      author.comments = author.comments || [];
+      author.comments.push({
+  paperId,
+  comment: text,
+  commentedAt: new Date()
+});
+
+
+      await author.save();
+    }
+
+    res.status(200).json({ message: 'Comment added successfully', latestComment: commentObj });
   } catch (err) {
+    console.error(err);
     res.status(500).json({ message: 'Failed to add comment', error: err.message });
   }
 });
+
+
 
 // ✅ Get all submitted reviews
 router.get('/reviews', async (req, res) => {

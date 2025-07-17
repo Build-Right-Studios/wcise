@@ -157,12 +157,15 @@ const ReviewerDashboard = () => {
               Accept
             </button>
 
-            <button
-              onClick={handleSendComments}
-              className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition w-full"
-            >
-              Send Comments
-            </button>
+            
+  <button
+    onClick={handleSendComments}
+    className="bg-blue-600 text-white text-sm sm:text-base px-4 py-2 rounded hover:bg-blue-700 transition w-full max-w-xs sm:max-w-md md:max-w-lg mx-auto block"
+  >
+    Send Comments
+  </button>
+
+
 
             <button
               onClick={() => alert('Paper Declined!')}

@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-// import PaperDetailsCard from '../components/tracks/login components/PaperDetailsCard';
 import PaperDetailsCard from '../PaperDetailsCard';
 
 const PaperDetailsPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [paper, setPaper] = useState(null);
+  const [latestComment, setLatestComment] = useState(null);
 
   useEffect(() => {
     const fetchPaper = async () => {
@@ -23,6 +23,8 @@ const PaperDetailsPage = () => {
           headers: { Authorization: `Bearer ${token}` },
         });
         setPaper(response.data.paper);
+        setLatestComment(response.data.latestComment || null);
+        console.log("✅ Latest comment received:", response.data.latestComment);
       } catch (error) {
         console.error('Error fetching paper:', error);
         alert('Failed to load paper details');
@@ -34,7 +36,11 @@ const PaperDetailsPage = () => {
 
   return (
     <div className="min-h-screen bg-[#f6f9fc] p-6">
-      {paper ? <PaperDetailsCard paper={paper} /> : <p className="text-center">Loading...</p>}
+      {paper ? (
+        <PaperDetailsCard paper={paper} latestComment={latestComment} />
+      ) : (
+        <p className="text-center">Loading...</p>
+      )}
     </div>
   );
 };
