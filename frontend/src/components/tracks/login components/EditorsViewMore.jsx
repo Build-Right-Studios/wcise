@@ -3,7 +3,6 @@ import axios from 'axios';
 import { useLocation } from 'react-router-dom';
 import ProfileHeader from './Profileheader';
 
-// Function to find best matching reviewers based on tags
 const getTopReviewer = (paperTags, reviewers) => {
   const paperTagSet = new Set(paperTags.map(tag => tag.trim().toLowerCase()));
   let maxMatchCount = 0;
@@ -61,23 +60,27 @@ const EditorsViewMore = () => {
     fetchReviewers();
   }, [paper]);
 
-  const handleSendMail = (rev) => {
-    alert(`Mail sent to ${rev.email} (placeholder action)`);
+  const handleSendMail = async (rev) => {
+    try {
+      const response = await axios.post(
+        `http://localhost:8000/send-mail/${encodeURIComponent(rev.email)}`,
+        {
+          name: rev.name,
+          paperTitle: paper?.title || 'Paper',
+          paperId: paper?.id || ''
+        }
+      );
+      console.log(paper);
+      alert(`Mail successfully sent to ${rev.email}`);
+    } catch (error) {
+      console.error('Failed to send mail:', error);
+      alert(`Failed to send mail to ${rev.email}`);
+    }
   };
 
-  const handleSendPaper = async (rev) => {
-    try {
-      await axios.post('http://localhost:8000/editor/assign-reviewer', {
-        paperId: paper.id || paper._id,
-        reviewerId: rev._id
-      });
-
-      setStatusMap(prev => ({ ...prev, [rev._id]: 'Sent' }));
-      alert(`Paper sent to ${rev.name} and reviewer assigned.`);
-    } catch (error) {
-      console.error('Error sending paper:', error);
-      alert('Failed to send paper.');
-    }
+  const handleSendPaper = (rev) => {
+    alert(`Paper sent to ${rev.name}`);
+    setStatusMap(prev => ({ ...prev, [rev._id]: 'Sent' }));
   };
 
   return (
@@ -93,7 +96,7 @@ const EditorsViewMore = () => {
           reviewers.map((rev) => (
             <div
               key={rev._id}
-              className="bg-[#e9ecef] p-6 rounded-2xl shadow-md flex gap-6"
+              className="bg-[#e9ecef] p-6 rounded-2xl shadow-md flex gap-4"
             >
               <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center text-xl font-bold text-[#1d3b58]">
                 {rev.name?.charAt(0).toUpperCase() || 'R'}

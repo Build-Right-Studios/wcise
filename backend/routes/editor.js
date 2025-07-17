@@ -8,7 +8,7 @@ router.post('/upload', async (req, res) => {
   try {
     const { title, paperId, tags, pdfName, status, date } = req.body;
 
-    if (!title || !paperId || !tags || !pdfName || !status || !date) {
+    if ( !title || !paperId || !tags || !pdfName || !status || !date ) {
       return res.status(400).json({ message: 'All fields are required' });
     }
 
