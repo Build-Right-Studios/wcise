@@ -50,7 +50,7 @@ app.use('/signup', signupRoute);
 app.use('/editor', editorRoute);
 app.use('/reviewer', reviewerRoute);
 app.use('/author', authorRoute);
-app.use('/', mailRoute); // includes POST /send-mail/:email
+app.use('/send-mail', mailRoute); // includes POST /send-mail/:email
 
 // Get all dummy users
 app.get('/users', (req, res) => {
