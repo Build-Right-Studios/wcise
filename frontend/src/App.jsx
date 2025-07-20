@@ -59,7 +59,6 @@ function App() {
 
           {/* /author/:id */}
           <Route path="/editor/dashboard" element={<EditorSignup />} />
-          <Route path="/editor/view-more" element={<EditorsViewMore />} />
           <Route path="/editor/view-more/:paperId" element={<EditorsViewMore />} />
           {/* /editor/:id */}
          <Route path="/reviewer/dashboard" element={<ReviewerDashboard />} />

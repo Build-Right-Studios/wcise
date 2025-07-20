@@ -29,7 +29,8 @@ router.post('/add-comment/:paperId', async (req, res) => {
   try {
     // ✅ Find the review document for that paper & reviewer
     const paper = await Paper.findById(paperId);
-
+    console.log(paper);
+    
     // Add comment to paper
     const commentObj = { reviewerId, text };
     paper.comments = paper.comments || [];
@@ -185,5 +186,38 @@ router.post('/assign/:paperId', async (req, res) => {
     res.status(500).json({ message: "Server error: " + err.message });
   }
 });
+
+router.get('/respond/:paperId', async (req, res) => {
+  const { paperId } = req.params;
+  const { reviewerId, status } = req.query;
+
+  try {
+    if (!reviewerId || !status) {
+      return res.status(400).send("Missing reviewerId or status.");
+    }
+
+    if (!mongoose.Types.ObjectId.isValid(reviewerId)) {
+      return res.status(400).send("Invalid reviewerId.");
+    }
+
+    const paper = await Paper.findById(paperId);
+    if (!paper) {
+      return res.status(404).send("Paper not found.");
+    }
+
+    if (status === 'Accepted') {
+      if (!paper.assignedReviewers.includes(reviewerId)) {
+        paper.assignedReviewers.push(reviewerId);
+        await paper.save();
+      }
+    }
+
+    res.send(`<h2>✅ You have ${status} the review invitation.</h2>`);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Something went wrong.");
+  }
+});
+
 
 module.exports = router;

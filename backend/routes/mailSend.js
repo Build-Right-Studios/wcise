@@ -2,9 +2,13 @@ const express = require('express');
 const router = express.Router();
 const nodemailer = require('nodemailer');
 
+// POST /invite/:email
 router.post('/:email', async (req, res) => {
   const { name, paperTitle, paperId, reviewerId } = req.body;
   const email = req.params.email;
+
+  const acceptUrl = `http://localhost:8000/reviewer/respond/${paperId}?reviewerId=${reviewerId}&status=Accepted`;
+  const declineUrl = `http://localhost:8000/reviewer/respond/${paperId}?reviewerId=${reviewerId}&status=Declined`;
 
   const transporter = nodemailer.createTransport({
     host: 'smtp.gmail.com',
@@ -12,7 +16,7 @@ router.post('/:email', async (req, res) => {
     secure: false,
     auth: {
       user: 'dhratikaushik05@gmail.com',
-      pass: 'halz xnfy kxbp ehym'
+      pass: 'mpcw nwsk izhc wcvy' // Use app password only!
     },
     tls: {
       rejectUnauthorized: false
@@ -29,65 +33,21 @@ router.post('/:email', async (req, res) => {
     <p>Please choose one of the options below:</p>
 
     <div style="margin: 20px 0;">
-      <button 
-        onclick="acceptReviewer('${paperId}', '${reviewerId}')" 
-        style="background-color:#28a745;color:white;padding:10px 20px;border:none;border-radius:5px;margin-right:10px;cursor:pointer;">
-        Accept
-      </button>
+      <a href="${acceptUrl}" style="background-color:#28a745;color:white;padding:10px 20px;border-radius:5px;text-decoration:none;margin-right:10px;">
+        ✅ Accept
+      </a>
 
-      <button 
-        onclick="declineReviewer('${email}', '${paperId}')" 
-        style="background-color:#dc3545;color:white;padding:10px 20px;border:none;border-radius:5px;cursor:pointer;">
-        Decline
-      </button>
+      <a href="${declineUrl}" style="background-color:#dc3545;color:white;padding:10px 20px;border-radius:5px;text-decoration:none;">
+        ❌ Decline
+      </a>
     </div>
-
-    <script>
-      async function acceptReviewer(paperId, reviewerId) {
-        try {
-          const response = await fetch('http://localhost:8000/reviewer/assign/' + paperId, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ reviewerId, status: "Accepted" })
-          });
-          const data = await response.json();
-          if (response.ok) {
-            alert("Accepted review invitation!");
-          } else {
-            alert("Error: " + data.message);
-          }
-        } catch (err) {
-          alert("Failed to accept.");
-          console.error(err);
-        }
-      }
-
-      async function declineReviewer(email, paperId) {
-        try {
-          const response = await fetch('http://localhost:8000/reviewer/assign/' + paperId, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ reviewerId, status: "Decline" })
-          });
-          const data = await response.json();
-          if (response.ok) {
-            alert("Declined review invitation.");
-          } else {
-            alert("Error: " + data.message);
-          }
-        } catch (err) {
-          alert("Failed to decline.");
-          console.error(err);
-        }
-      }
-    </script>
 
     <p>Regards,<br/>Editorial Team</p>
   `;
 
   try {
     const info = await transporter.sendMail({
-      from: '"Editorial Board"',
+      from: '"Editorial Board" <dhratikaushik05@gmail.com>',
       to: email,
       subject,
       html: message
