@@ -212,7 +212,7 @@ router.get('/respond/:paperId', async (req, res) => {
       }
     }
 
-    res.send(`<h2>✅ You have ${status} the review invitation.</h2>`);
+    res.send(`<h2>✅ You have ${status} the review invitation. Visit your dashboard for further details.</h2>`);
   } catch (err) {
     console.error(err);
     res.status(500).send("Something went wrong.");
