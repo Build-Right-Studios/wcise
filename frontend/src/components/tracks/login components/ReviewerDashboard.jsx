@@ -17,7 +17,19 @@ const ReviewerDashboard = () => {
   const navigate = useNavigate();
   const { paperId } = useParams();
 
-  const selectedPaper = papers.find((paper) => paper._id === paperId);
+  const isValidObjectId = (id) => /^[0-9a-fA-F]{24}$/.test(id);
+
+  const fetchPapers = async (reviewerId) => {
+    const response = await axios.get(`http://localhost:8000/reviewer/assigned-papers/${reviewerId}`);
+    setPapers(response.data);
+
+    if (paperId) {
+      const selected = response.data.find((paper) => (paper._id?.toString?.() || paper.id) === paperId);
+      if (selected?.comments?.length > 0) {
+        setLatestComment(selected.comments[selected.comments.length - 1].text);
+      }
+    }
+  };
 
   useEffect(() => {
     const fetchReviewerDataAndPapers = async () => {
@@ -25,25 +37,10 @@ const ReviewerDashboard = () => {
         const reviewerData = JSON.parse(localStorage.getItem('reviewer')) || {};
         setReviewer(reviewerData);
 
-        if (!reviewerData.id) {
-          console.warn('Reviewer ID missing');
-          return;
-        }
+        const reviewerId = reviewerData.id || reviewerData._id;
+        if (!reviewerId) return;
 
-        const response = await axios.get(
-          `http://localhost:8000/reviewer/assigned-papers/${reviewerData.id}`
-        );
-
-        setPapers(response.data);
-
-        // Set latest comment if paper selected
-        if (paperId) {
-          const selected = response.data.find((paper) => paper._id === paperId);
-          if (selected?.comments?.length > 0) {
-            setLatestComment(selected.comments[selected.comments.length - 1].text);
-          }
-        }
-
+        await fetchPapers(reviewerId);
       } catch (error) {
         console.error('Error fetching assigned papers:', error);
       }
@@ -51,6 +48,10 @@ const ReviewerDashboard = () => {
 
     fetchReviewerDataAndPapers();
   }, [paperId]);
+
+  const selectedPaper = papers.find(
+    (paper) => (paper._id?.toString?.() || paper.id) === paperId
+  );
 
   const handlePhotoUpload = (e) => {
     const file = e.target.files[0];
@@ -74,14 +75,17 @@ const ReviewerDashboard = () => {
   const handleSendComments = async () => {
     if (!comments.trim()) return alert('Please write a comment.');
 
+    const targetPaperId = selectedPaper._id || selectedPaper.id;
+    if (!isValidObjectId(targetPaperId)) {
+      alert('Invalid paper ID format');
+      return;
+    }
+
     try {
-      await axios.post(
-        `http://localhost:8000/reviewer/add-comment/${selectedPaper._id}`,
-        {
-          reviewerId: reviewer._id,
-          text: comments
-        }
-      );
+      await axios.post(`http://localhost:8000/reviewer/add-comment/${targetPaperId}`, {
+        reviewerId: reviewer._id,
+        text: comments,
+      });
       alert('Comment saved!');
       setLatestComment(comments);
       setComments('');
@@ -91,9 +95,30 @@ const ReviewerDashboard = () => {
     }
   };
 
+  const handleResponse = async (status) => {
+    const targetPaperId = selectedPaper._id || selectedPaper.id;
+    if (!isValidObjectId(targetPaperId)) {
+      alert('Invalid paper ID format');
+      return;
+    }
+
+    try {
+      await axios.post('http://localhost:8000/reviewer/respond', {
+        paperId: targetPaperId,
+        email: reviewer.email,
+        status,
+      });
+
+      alert(`Paper ${status}!`);
+      await fetchPapers(reviewer._id);
+    } catch (err) {
+      console.error(`Failed to update status to ${status}:`, err);
+      alert('Error updating status');
+    }
+  };
+
   return (
     <div className="min-h-screen bg-[#f6f9fc] p-4">
-      {/* Reviewer Header */}
       <div className="bg-[#4267B2] text-white p-4 flex items-center gap-4 rounded-t-md">
         <label className="cursor-pointer">
           <img
@@ -110,18 +135,22 @@ const ReviewerDashboard = () => {
         </div>
       </div>
 
-      {/* Selected Paper Details + Review Form */}
       {selectedPaper ? (
         <div className="bg-white shadow-md rounded-md p-6 mt-6 max-w-3xl mx-auto">
           <h2 className="text-xl font-bold mb-2">{selectedPaper.title}</h2>
-          <p><strong>Paper ID:</strong> {selectedPaper._id}</p>
+          <p><strong>Paper ID:</strong> {selectedPaper._id || selectedPaper.id}</p>
           <p><strong>Keywords:</strong> {selectedPaper.keywords?.join(', ') || 'N/A'}</p>
           <p><strong>PDF:</strong>
             <span className="block max-w-full overflow-hidden text-ellipsis break-all">{selectedPaper.pdf}</span>
           </p>
           <p><strong>Abstract:</strong> {selectedPaper.abstract}</p>
 
-          {/* PDF Download Box */}
+          {selectedPaper.reviewResponses?.[reviewer.email] && (
+            <p className="mt-2 font-semibold text-green-600">
+               Status: {selectedPaper.reviewResponses[reviewer.email]}
+            </p>
+          )}
+
           <div
             onClick={handleDownloadPdf}
             className="border border-dashed border-black rounded-md text-center mt-4 py-3 text-gray-700 cursor-pointer hover:bg-gray-200 transition"
@@ -129,7 +158,6 @@ const ReviewerDashboard = () => {
             Click here to load PDF
           </div>
 
-          {/* Comments Section */}
           <div className="mt-4">
             <label className="block font-semibold mb-1">Comments:</label>
             <textarea
@@ -141,17 +169,15 @@ const ReviewerDashboard = () => {
             ></textarea>
           </div>
 
-          {/* Latest Comment */}
           {latestComment && (
             <div className="mt-2 text-sm text-gray-700 italic">
               <strong>Latest comment:</strong> {latestComment}
             </div>
           )}
 
-          {/* Accept / Send Comments / Decline Buttons */}
           <div className="grid grid-cols-3 gap-4 mt-4">
             <button
-              onClick={() => alert('Paper Accepted!')}
+              onClick={() => handleResponse('Accepted')}
               className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition w-full"
             >
               Accept
@@ -168,7 +194,7 @@ const ReviewerDashboard = () => {
 
 
             <button
-              onClick={() => alert('Paper Declined!')}
+              onClick={() => handleResponse('Declined')}
               className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 transition w-full"
             >
               Decline
@@ -176,26 +202,24 @@ const ReviewerDashboard = () => {
           </div>
         </div>
       ) : (
-        // Paper Cards
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-6">
           {papers.map((paper) => (
             <div
-              key={paper._id}
+              key={paper._id || paper.id}
               className="bg-white p-4 rounded-lg shadow-sm border hover:shadow-md transition relative"
             >
               <h3 className="font-semibold text-lg mb-1">{paper.title}</h3>
+              <p className="text-sm text-gray-600 mb-1">Paper ID: {paper._id || paper.id}</p>
+              <p className="text-sm text-gray-600 mb-1">Keywords: {paper.keywords?.join(', ') || 'N/A'}</p>
               <p className="text-sm text-gray-600 mb-1">
-                Paper ID: {paper._id}
-              </p>
-              <p className="text-sm text-gray-600 mb-1">
-                Keywords: {paper.keywords?.join(', ') || 'N/A'}
+                Status: {paper.reviewResponses?.[reviewer.email] || 'Pending'}
               </p>
               <p className="text-sm text-gray-600 mb-2">
                 PDF: <span className="block max-w-full overflow-hidden text-ellipsis break-all">{paper.pdf}</span>
               </p>
               <div className="flex justify-end">
                 <button
-                  onClick={() => navigate(`/reviewer/dashboard/${paper._id}`)}
+                  onClick={() => navigate(`/reviewer/dashboard/${paper._id || paper.id}`)}
                   className="bg-[#4267B2] text-white text-sm px-4 py-1 rounded-full hover:bg-[#365899]"
                 >
                   View More

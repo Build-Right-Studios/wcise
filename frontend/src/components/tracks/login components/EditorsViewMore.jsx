@@ -67,7 +67,8 @@ const EditorsViewMore = () => {
         {
           name: rev.name,
           paperTitle: paper?.title || 'Paper',
-          paperId: paper?.id || ''
+          paperId: paper?.id || '',
+          reviewerId: rev._id
         }
       );
       console.log(paper);
