@@ -1,4 +1,5 @@
 import React from 'react';
+import axios from 'axios';
 
 function Registration() {
   const data = [
@@ -9,6 +10,22 @@ function Registration() {
       price: 'USD 200',
     },
   ];
+
+  const handleCCAvenuePay = async () => {
+    try {
+      const response = await axios.post('http://localhost:8000/ccavenue/pay', {
+        amount: 200,
+        name: 'John Doe',
+        email: 'john@example.com',
+      });
+
+      const newWindow = window.open('', '_blank');
+      newWindow.document.write(response.data);
+    } catch (err) {
+      alert('Something went wrong. Please try again later.');
+      console.error(err);
+    }
+  };
 
   return (
     <div className="w-full">
@@ -167,18 +184,18 @@ function Registration() {
                 <p className="text-[#1d3b58] text-base leading-relaxed mb-4 text-justify">
                   For payment & registration, click CCAvenue.
                 </p>
-                <button className="px-8 py-4 border-2 border-[#1d3b58] font-bold bg-[#1d3b58] text-white text-xs hover:bg-[#3e5f81] hover:text-[#e0e7ef] hover:text-xl transition-all w-full max-w-xs cursor-pointer">
-  PAY WITH CCAVENUE
-</button>
-
-
+                <button
+                  onClick={handleCCAvenuePay}
+                  className="px-8 py-4 border-2 border-[#1d3b58] font-bold bg-[#1d3b58] text-white text-xs hover:bg-[#3e5f81] hover:text-[#e0e7ef] hover:text-xl transition-all w-full max-w-xs cursor-pointer"
+                >
+                  PAY WITH CCAVENUE
+                </button>
               </div>
             </div>
           </div>
 
           <img
             src="./src/images/cash.png"
-
             alt="Cash Icon"
             className="w-28 sm:w-36 md:w-44 lg:w-56 xl:w-64"
           />

@@ -3,15 +3,23 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 require('dotenv').config();
 
+
+
 const loginRoute = require('./routes/login');
 const signupRoute = require('./routes/signup');
 const editorRoute = require('./routes/editor');
 const reviewerRoute = require('./routes/reviewer');
 const authorRoute = require('./routes/author');
-// const mailRoute = require('./routes/mailSend');
+const mailRoute = require('./routes/mailSend');
 
 const app = express();
-
+app.use(cors({
+  origin: 'http://localhost:3000', // React frontend
+  credentials: true
+}));
+// payment gateway 
+const ccavenueRoute = require('./routes/ccavenue');
+app.use('/ccavenue', ccavenueRoute);
 // Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
