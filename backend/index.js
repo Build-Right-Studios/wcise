@@ -8,7 +8,7 @@ const signupRoute = require('./routes/signup');
 const editorRoute = require('./routes/editor');
 const reviewerRoute = require('./routes/reviewer');
 const authorRoute = require('./routes/author');
-const mailRoute = require('./routes/mailSend');
+// const mailRoute = require('./routes/mailSend');
 
 const app = express();
 
@@ -50,7 +50,7 @@ app.use('/signup', signupRoute);
 app.use('/editor', editorRoute);
 app.use('/reviewer', reviewerRoute);
 app.use('/author', authorRoute);
-app.use('/', mailRoute); // includes POST /send-mail/:email
+// app.use('/', mailRoute); // includes POST /send-mail/:email
 
 // Get all dummy users
 app.get('/users', (req, res) => {
