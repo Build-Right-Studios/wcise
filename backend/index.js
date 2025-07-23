@@ -3,8 +3,6 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 require('dotenv').config();
 
-
-
 const loginRoute = require('./routes/login');
 const signupRoute = require('./routes/signup');
 const editorRoute = require('./routes/editor');
@@ -13,18 +11,16 @@ const authorRoute = require('./routes/author');
 const mailRoute = require('./routes/mailSend');
 
 const app = express();
-app.use(cors({
-  origin: 'http://localhost:3000', // React frontend
-  credentials: true
-}));
-// payment gateway 
-const ccavenueRoute = require('./routes/ccavenue');
+const ccavenueRoute = require('./routes/ccavenue'); 
 app.use('/ccavenue', ccavenueRoute);
+const paymentRoute = require('./routes/payment');
+app.use('/api', paymentRoute);
+
 // Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cors());
 
+app.use(cors({ origin: "http://localhost:3000" }));
 // MongoDB Connection
 mongoose.connect(process.env.MONGODB_URI, {
   useNewUrlParser: true,
