@@ -11,12 +11,16 @@ const authorRoute = require('./routes/author');
 const mailRoute = require('./routes/mailSend');
 
 const app = express();
+const ccavenueRoute = require('./routes/ccavenue'); 
+app.use('/ccavenue', ccavenueRoute);
+const paymentRoute = require('./routes/payment');
+app.use('/api', paymentRoute);
 
 // Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cors());
 
+app.use(cors({ origin: "http://localhost:3000" }));
 // MongoDB Connection
 mongoose.connect(process.env.MONGODB_URI, {
   useNewUrlParser: true,
@@ -50,7 +54,7 @@ app.use('/signup', signupRoute);
 app.use('/editor', editorRoute);
 app.use('/reviewer', reviewerRoute);
 app.use('/author', authorRoute);
-app.use('/send-mail', mailRoute); // includes POST /send-mail/:email
+app.use('/', mailRoute); // includes POST /send-mail/:email
 
 // Get all dummy users
 app.get('/users', (req, res) => {

@@ -1,6 +1,15 @@
 import React from 'react';
-
+import { useState } from 'react';
 function Registration() {
+    const [showCcavenueForm, setShowCcavenueForm] = useState(false);
+    const [formData, setFormData] = useState({
+  name: '',
+  email: '',
+  currency: '',
+  amount: '',
+  paperId: ''
+});
+
   const data = [
     { label: 'Attending The Conference', price: 'USD 200' },
     { label: 'Accompanying Person', price: 'USD 200' },
@@ -9,6 +18,30 @@ function Registration() {
       price: 'USD 200',
     },
   ];
+const handlePaymentSubmit = async (e) => {
+  e.preventDefault();
+
+  try {
+    const response = await fetch("http://localhost:8000/ccavenue/pay", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(formData),
+    });
+
+    const html = await response.text();
+
+    // Open the payment form in same tab
+    const blob = new Blob([html], { type: "text/html" });
+const url = URL.createObjectURL(blob);
+window.location.href = url;  // Replace current page with the form
+
+  } catch (err) {
+    console.error("Payment error:", err);
+  }
+
+};
 
   return (
     <div className="w-full">
@@ -167,9 +200,71 @@ function Registration() {
                 <p className="text-[#1d3b58] text-base leading-relaxed mb-4 text-justify">
                   For payment & registration, click CCAvenue.
                 </p>
-                <button className="px-8 py-4 border-2 border-[#1d3b58] font-bold bg-[#1d3b58] text-white text-xs hover:bg-[#3e5f81] hover:text-[#e0e7ef] hover:text-xl transition-all w-full max-w-xs cursor-pointer">
+                <button className="px-8 py-4 border-2 border-[#1d3b58] font-bold bg-[#1d3b58] text-white text-xs hover:bg-[#3e5f81] hover:text-[#e0e7ef] hover:text-xl transition-all w-full max-w-xs cursor-pointer" onClick={() => setShowCcavenueForm(true)}>
   PAY WITH CCAVENUE
 </button>
+{showCcavenueForm && (
+  <div className="mt-8 border p-6 rounded-lg shadow-md bg-gray-50 w-full">
+    <h3 className="text-xl font-bold mb-4 text-[#1d3b58]">Payment Details</h3>
+
+    <form
+        onSubmit={handlePaymentSubmit}
+        className="max-w-lg mx-auto bg-white p-6 rounded shadow-md space-y-4"
+      >
+        <h2 className="text-xl font-semibold text-center mb-4">Conference Registration</h2>
+
+        <input
+          type="text"
+          placeholder="Enter your name"
+          className="w-full border px-4 py-2"
+          value={formData.name}
+          onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+          required
+        />
+
+        <input
+          type="email"
+          placeholder="Enter your email"
+          className="w-full border px-4 py-2"
+          value={formData.email}
+          onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+          required
+        />
+
+        <select
+          className="w-full border px-4 py-2"
+          value={formData.currency}
+          onChange={(e) => setFormData({ ...formData, currency: e.target.value })}
+        >
+          <option value="INR">INR</option>
+          <option value="USD">USD</option>
+        </select>
+
+        <input
+          type="number"
+          placeholder="Enter amount"
+          className="w-full border px-4 py-2"
+          value={formData.amount}
+          onChange={(e) => setFormData({ ...formData, amount: e.target.value })}
+        />
+
+        <input
+          type="text"
+          placeholder="Paper ID"
+          className="w-full border px-4 py-2"
+          value={formData.paperId}
+          onChange={(e) => setFormData({ ...formData, paperId: e.target.value })}
+        />
+
+        <button
+          type="submit"
+          className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition"
+        >
+          Proceed to Pay
+        </button>
+      </form>
+  </div>
+)}
 
 
               </div>
@@ -232,4 +327,3 @@ function Registration() {
 
 
 export default Registration;
-
