@@ -206,16 +206,32 @@ router.get('/respond/:paperId', async (req, res) => {
     }
 
     if (status === 'Accepted') {
+
       if (!paper.assignedReviewers.includes(reviewerId)) {
         paper.assignedReviewers.push(reviewerId);
         await paper.save();
       }
-    }
 
+      await Review.findOneAndUpdate(
+        { paperId, reviewerId },
+        { status},
+        { new: true }
+      );
+    }
     res.send(`<h2>✅ You have ${status} the review invitation. Visit your dashboard for further details.</h2>`);
   } catch (err) {
     console.error(err);
     res.status(500).send("Something went wrong.");
+  }
+});
+
+router.get('/status/:paperId', async (req, res) => {
+  const { paperId } = req.params;
+  try {
+    const reviews = await Review.find({ paperId });
+    res.json(reviews);
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to fetch review statuses' });
   }
 });
 
