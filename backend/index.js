@@ -13,14 +13,13 @@ const mailRoute = require('./routes/mailSend');
 const app = express();
 const ccavenueRoute = require('./routes/ccavenue'); 
 app.use('/ccavenue', ccavenueRoute);
-const paymentRoute = require('./routes/payment');
-app.use('/api', paymentRoute);
+
 
 // Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use(cors({ origin: "http://localhost:3000" }));
+app.use(cors({ origin: "http://localhost:5173", credentials: true }));
 // MongoDB Connection
 mongoose.connect(process.env.MONGODB_URI, {
   useNewUrlParser: true,
