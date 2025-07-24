@@ -32,7 +32,7 @@ router.post('/pay', (req, res) => {
 function encrypt(plainText, workingKey) {
   const iv = Buffer.from('0123456789abcdef'); // Fixed 16-byte IV
   const key = Buffer.from(workingKey, 'utf8');
-  const cipher = crypto.createCipheriv('aes-128-cbc', key, iv);
+  const cipher = crypto.createCipheriv('aes-256-cbc', key, iv);
   let encrypted = cipher.update(plainText, 'utf8', 'hex');
   encrypted += cipher.final('hex');
   return encrypted;

@@ -9,11 +9,9 @@ const editorRoute = require('./routes/editor');
 const reviewerRoute = require('./routes/reviewer');
 const authorRoute = require('./routes/author');
 const mailRoute = require('./routes/mailSend');
+const ccavenueRoute = require('./routes/ccavenue'); 
 
 const app = express();
-const ccavenueRoute = require('./routes/ccavenue'); 
-app.use('/ccavenue', ccavenueRoute);
-
 
 // Middleware
 app.use(express.json());
@@ -54,6 +52,8 @@ app.use('/editor', editorRoute);
 app.use('/reviewer', reviewerRoute);
 app.use('/author', authorRoute);
 app.use('/', mailRoute); // includes POST /send-mail/:email
+app.use('/ccavenue', ccavenueRoute);
+
 
 // Get all dummy users
 app.get('/users', (req, res) => {
