@@ -62,7 +62,7 @@ app.use('/reviewer', reviewerRoute);
 app.use('/author', authorRoute);
 app.use('/ccavenue', ccavenueRoute);  // ✅ moved here
 app.use('/', mailRoute); // includes POST /send-mail/:email
-app.use('/ccavenue', ccavenueRoute);
+// app.use('/ccavenue', ccavenueRoute);
 
 
 // Get all dummy users
