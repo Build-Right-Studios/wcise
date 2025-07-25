@@ -20,27 +20,46 @@ function Registration() {
   ];
 const handlePaymentSubmit = async (e) => {
   e.preventDefault();
-
   try {
-    const response = await fetch("http://localhost:8000/ccavenue/pay", {
+    const res = await fetch("http://localhost:8000/ccavenue/pay", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(formData),
     });
 
-    const html = await response.text();
+    const contentType = res.headers.get("content-type");
+    if (!res.ok || !contentType || !contentType.includes("application/json")) {
+      throw new Error("Invalid server response");
+    }
 
-    // Open the payment form in same tab
-    const blob = new Blob([html], { type: "text/html" });
-const url = URL.createObjectURL(blob);
-window.location.href = url;  // Replace current page with the form
+    const { encRequest, access_code } = await res.json();
 
+    if (!encRequest || !access_code) {
+      throw new Error("Incomplete payment data");
+    }
+
+    const form = document.createElement('form');
+    form.method = 'POST';
+    form.action = 'https://secure.ccavenue.com/transaction/transaction.do?command=initiateTransaction';
+
+    const encInput = document.createElement('input');
+    encInput.type = 'hidden';
+    encInput.name = 'encRequest';
+    encInput.value = encRequest;
+
+    const codeInput = document.createElement('input');
+    codeInput.type = 'hidden';
+    codeInput.name = 'access_code';
+    codeInput.value = access_code;
+
+    form.appendChild(encInput);
+    form.appendChild(codeInput);
+    document.body.appendChild(form);
+    form.submit();
   } catch (err) {
     console.error("Payment error:", err);
+    alert("Payment failed. Please try again.");
   }
-
 };
 
   return (
