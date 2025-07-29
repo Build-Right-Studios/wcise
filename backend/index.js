@@ -7,11 +7,7 @@ const bodyParser = require('body-parser');
 
 const app = express();
  // Allow requests from your frontend origin
-app.use(cors({
-  origin: 'http://localhost:5173',
-  methods: ['GET', 'POST'],
-  credentials: true,
-}));
+app.use(cors());
 
 
 
