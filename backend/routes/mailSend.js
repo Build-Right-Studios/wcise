@@ -51,10 +51,18 @@ router.post('/:email', async (req, res) => {
       to: email,
       subject,
       html: message
+
     });
 
     console.log("Mail sent:", info.response);
-    res.status(200).json({ success: true, message: "Mail sent" });
+
+    await Review.findOneAndUpdate(
+    { paperId, reviewerId },
+    { status: "Paper sent" },
+    { new: true }
+  );
+
+    res.status(200).json({ success: true, message: "Mail sent", status: "Paper sent" });
   } catch (error) {
     console.error("Mail failed:", error);
     res.status(500).json({ success: false, message: error.message });
