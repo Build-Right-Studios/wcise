@@ -9,20 +9,17 @@ const Paper = require('../models/paper.js');
 const { authenticationToken } = require('../utilities/utilities.js');
 const User = require('../models/user.model');
 // Cloudinary Config
+
+// Cloudinary Config
 cloudinary.config({
   cloud_name: process.env.CLOUD_NAME,
   api_key: process.env.API_KEY,
   api_secret: process.env.API_SECRET,
 });
 
-// Multer Storage (temporary before Cloudinary upload)
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => cb(null, 'uploads/'),
-  filename: (req, file, cb) => cb(null, Date.now() + '-' + file.originalname),
-});
-const upload = multer({ storage });
+// Use memory storage for multer (no disk write)
+const upload = multer({ storage: multer.memoryStorage() });
 
-/* Upload New Paper (Author Only) */
 router.post('/new-paper', upload.single('file'), authenticationToken, async (req, res) => {
   try {
     const { title, abstract } = req.body;
@@ -41,36 +38,46 @@ router.post('/new-paper', upload.single('file'), authenticationToken, async (req
       keywords = [keywords];
     }
 
-    const filePath = file.path;
+    // Upload buffer to Cloudinary using stream
+    const streamUpload = () => {
+      return new Promise((resolve, reject) => {
+        const stream = cloudinary.uploader.upload_stream(
+          {
+            folder: 'uploads/',
+            resource_type: 'raw',
+            use_filename: true,
+            unique_filename: false,
+          },
+          (error, result) => {
+            if (result) resolve(result);
+            else reject(error);
+          }
+        );
 
-    // Upload to Cloudinary as raw file
-    const result = await cloudinary.uploader.upload(filePath, {
-      folder: 'uploads/',
-      resource_type: 'raw',
-      use_filename: true,
-      unique_filename: false,
-    });
+        streamifier.createReadStream(file.buffer).pipe(stream);
+      });
+    };
 
-    fs.unlinkSync(filePath); // Cleanup local file
+    const cloudinaryResult = await streamUpload();
 
     const newPaper = new Paper({
       author: user.id,
       title,
       abstract,
       keywords,
-      pdf: result.secure_url,
+      pdf: cloudinaryResult.secure_url,
     });
 
     await newPaper.save();
 
-    return res.status(200).json({
+    res.status(200).json({
       success: true,
       message: 'New paper uploaded successfully!',
       data: {
         title,
         abstract,
         keywords,
-        pdf: result.secure_url,
+        pdf: cloudinaryResult.secure_url,
       },
       user: user,
     });
