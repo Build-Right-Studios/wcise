@@ -1,5 +1,6 @@
 import React from 'react';
 import { useState } from 'react';
+import FormModal from '../components/FormModal';
 function Registration() {
     const [showCcavenueForm, setShowCcavenueForm] = useState(false);
     const [formData, setFormData] = useState({
@@ -18,49 +19,29 @@ function Registration() {
       price: 'USD 200',
     },
   ];
-const handlePaymentSubmit = async (e) => {
+const handlePayUMoney = async (e) => {
   e.preventDefault();
-  try {
-    const res = await fetch("http://localhost:8000/ccavenue/pay", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(formData),
-    });
+  const payload = {
+    name: formData.name,
+    email: formData.email,
+    phone: '9999999999', // Optional, dummy in test mode
+    amount: formData.amount,
+    productinfo: formData.paperId || "Conference Registration"
+  };
 
-    const contentType = res.headers.get("content-type");
-    if (!res.ok || !contentType || !contentType.includes("application/json")) {
-      throw new Error("Invalid server response");
-    }
+  const res = await fetch('http://localhost:8000/payu/initiate', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload)
+  });
 
-    const { encRequest, access_code } = await res.json();
-
-    if (!encRequest || !access_code) {
-      throw new Error("Incomplete payment data");
-    }
-
-    const form = document.createElement('form');
-    form.method = 'POST';
-    form.action = 'https://secure.ccavenue.com/transaction/transaction.do?command=initiateTransaction';
-
-    const encInput = document.createElement('input');
-    encInput.type = 'hidden';
-    encInput.name = 'encRequest';
-    encInput.value = encRequest;
-
-    const codeInput = document.createElement('input');
-    codeInput.type = 'hidden';
-    codeInput.name = 'access_code';
-    codeInput.value = access_code;
-
-    form.appendChild(encInput);
-    form.appendChild(codeInput);
-    document.body.appendChild(form);
-    form.submit();
-  } catch (err) {
-    console.error("Payment error:", err);
-    alert("Payment failed. Please try again.");
-  }
+  const html = await res.text();
+  const newWindow = window.open();
+  newWindow.document.open();
+  newWindow.document.write(html);
+  newWindow.document.close();
 };
+
 
   return (
     <div className="w-full">
@@ -213,77 +194,71 @@ const handlePaymentSubmit = async (e) => {
 
               <div className="flex flex-col items-center md:items-start w-full text-lg">
                 <div className="bg-[#1d3b58] text-white px-10 py-4 rounded-full font-semibold text-2xl mb-4 text-center">
-                  Payment with CCAvenue
+                  Payment with PayUMoney
                 </div>
                 <p className="text-[#1d3b58] font-semibold text-xl mb-1">(Payment in USD/INR)</p>
                 <p className="text-[#1d3b58] text-base leading-relaxed mb-4 text-justify">
-                  For payment & registration, click CCAvenue.
+                  For payment & registration, click PayUMoney.
                 </p>
                 <button className="px-8 py-4 border-2 border-[#1d3b58] font-bold bg-[#1d3b58] text-white text-xs hover:bg-[#3e5f81] hover:text-[#e0e7ef] hover:text-xl transition-all w-full max-w-xs cursor-pointer" onClick={() => setShowCcavenueForm(true)}>
-  PAY WITH CCAVENUE
+  PAY WITH PAYU MONEY
 </button>
 {showCcavenueForm && (
-  <div className="mt-8 border p-6 rounded-lg shadow-md bg-gray-50 w-full">
-    <h3 className="text-xl font-bold mb-4 text-[#1d3b58]">Payment Details</h3>
+  <FormModal show={showCcavenueForm} onClose={() => setShowCcavenueForm(false)}>
+    <div className="flex flex-col gap-4">
+      <input
+        type="text"
+        placeholder="Enter your name"
+        className="border-2 border-gray-400 px-4 py-2"
+        value={formData.name}
+        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+        required
+      />
 
-    <form
-        onSubmit={handlePaymentSubmit}
-        className="max-w-lg mx-auto bg-white p-6 rounded shadow-md space-y-4"
+      <input
+        type="email"
+        placeholder="Enter your email"
+        className="border-2 border-gray-400 px-4 py-2"
+        value={formData.email}
+        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+        required
+      />
+
+      <select
+        className="border-2 border-gray-400 px-4 py-2"
+        value={formData.currency}
+        onChange={(e) => setFormData({ ...formData, currency: e.target.value })}
       >
-        <h2 className="text-xl font-semibold text-center mb-4">Conference Registration</h2>
+        <option value="">Select Currency</option>
+        <option value="INR">INR</option>
+      </select>
 
-        <input
-          type="text"
-          placeholder="Enter your name"
-          className="w-full border px-4 py-2"
-          value={formData.name}
-          onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-          required
-        />
+      <input
+        type="number"
+        placeholder="Enter amount"
+        className="border-2 border-gray-400 px-4 py-2"
+        value={formData.amount}
+        onChange={(e) => setFormData({ ...formData, amount: e.target.value })}
+      />
 
-        <input
-          type="email"
-          placeholder="Enter your email"
-          className="w-full border px-4 py-2"
-          value={formData.email}
-          onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-          required
-        />
+      <input
+        type="text"
+        placeholder="Paper ID"
+        className="border-2 border-gray-400 px-4 py-2"
+        value={formData.paperId}
+        onChange={(e) => setFormData({ ...formData, paperId: e.target.value })}
+      />
 
-        <select
-          className="w-full border px-4 py-2"
-          value={formData.currency}
-          onChange={(e) => setFormData({ ...formData, currency: e.target.value })}
-        >
-          <option value="INR">INR</option>
-          <option value="USD">USD</option>
-        </select>
-
-        <input
-          type="number"
-          placeholder="Enter amount"
-          className="w-full border px-4 py-2"
-          value={formData.amount}
-          onChange={(e) => setFormData({ ...formData, amount: e.target.value })}
-        />
-
-        <input
-          type="text"
-          placeholder="Paper ID"
-          className="w-full border px-4 py-2"
-          value={formData.paperId}
-          onChange={(e) => setFormData({ ...formData, paperId: e.target.value })}
-        />
-
-        <button
-          type="submit"
-          className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition"
-        >
-          Proceed to Pay
-        </button>
-      </form>
-  </div>
+      <button
+        onClick={handlePayUMoney}
+        className="bg-[#1d3b58] text-white px-4 py-2 font-bold hover:bg-[#3e5f81]"
+      >
+        Proceed to Pay
+      </button>
+    </div>
+  </FormModal>
 )}
+
 
 
               </div>

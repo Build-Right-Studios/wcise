@@ -26,7 +26,9 @@ const editorRoute = require('./routes/editor');
 const reviewerRoute = require('./routes/reviewer');
 const authorRoute = require('./routes/author');
 const mailRoute = require('./routes/mailSend');
-const ccavenueRoute = require('./routes/ccavenue'); 
+const payuRoute = require('./routes/payu');
+
+
 // ✅ Connect to MongoDB
 mongoose.connect(process.env.MONGODB_URI, {
   useNewUrlParser: true,
@@ -60,9 +62,9 @@ app.use('/signup', signupRoute);
 app.use('/editor', editorRoute);
 app.use('/reviewer', reviewerRoute);
 app.use('/author', authorRoute);
-app.use('/ccavenue', ccavenueRoute);  // ✅ moved here
+app.use('/payu', payuRoute);
+
 app.use('/', mailRoute); // includes POST /send-mail/:email
-// app.use('/ccavenue', ccavenueRoute);
 
 
 // Get all dummy users
