@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const nodemailer = require('nodemailer');
+const Review = require('../models/review.model')
 
 // POST /invite/:email
 router.post('/:email', async (req, res) => {
@@ -57,12 +58,12 @@ router.post('/:email', async (req, res) => {
     console.log("Mail sent:", info.response);
 
     await Review.findOneAndUpdate(
-    { paperId, reviewerId },
-    { status: "Paper sent" },
-    { new: true }
-  );
+      { paperId, reviewerId },
+      { paperId, reviewerId, status: 'Mail Sent',},
+      { upsert: true, new: true }
+    );
 
-    res.status(200).json({ success: true, message: "Mail sent", status: "Paper sent" });
+    res.status(200).json({ success: true, message: "Mail sent" });
   } catch (error) {
     console.error("Mail failed:", error);
     res.status(500).json({ success: false, message: error.message });

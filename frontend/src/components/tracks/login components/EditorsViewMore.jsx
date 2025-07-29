@@ -36,29 +36,33 @@ const EditorsViewMore = () => {
   const [statusMap, setStatusMap] = useState({});
 
   useEffect(() => {
-    const fetchReviewers = async () => {
-      try {
-        const response = await axios.get('http://localhost:8000/editor/suggested-reviewers');
-        const allReviewers = response.data;
+  const fetchReviewers = async () => {
+    try {
+      const response = await axios.get('http://localhost:8000/editor/suggested-reviewers');
+      const allReviewers = response.data;
 
-        const paperTags = paper?.keyTags?.split(',').map(tag => tag.trim()) || [];
-        const matchedReviewers = getTopReviewer(paperTags, allReviewers);
+      const paperTags = paper?.keyTags?.split(',').map(tag => tag.trim()) || [];
+      const matchedReviewers = getTopReviewer(paperTags, allReviewers);
+      setReviewers(matchedReviewers);
 
-        setReviewers(matchedReviewers);
+      const statusResponse = await axios.get(`http://localhost:8000/reviewer/status/${paper?.id}`);
+      const allStatuses = statusResponse.data;
 
-        const initialStatus = {};
-        matchedReviewers.forEach(rev => {
-          initialStatus[rev._id] = 'Waiting';
-        });
-        setStatusMap(initialStatus);
+      const statusMap = {};
+      matchedReviewers.forEach(rev => {
+        const match = allStatuses.find(r => r.reviewerId === rev._id);
+        statusMap[rev._id] = match?.status || 'Waiting';
+      });
 
-      } catch (error) {
-        console.error('Error fetching reviewers:', error);
-      }
-    };
+      setStatusMap(statusMap);
+    } catch (error) {
+      console.error('Error fetching reviewers:', error);
+    }
+  };
 
-    fetchReviewers();
-  }, [paper]);
+  fetchReviewers();
+}, [paper]);
+
 
   const handleSendMail = async (rev) => {
     try {
@@ -123,11 +127,19 @@ const EditorsViewMore = () => {
                 </button>
 
                 <button
-                  disabled
-                  className="bg-yellow-500 text-white px-4 py-2 rounded text-sm cursor-default"
-                >
-                  {statusMap[rev._id]}
-                </button>
+  disabled
+  className={`px-4 py-2 rounded text-sm cursor-default text-white ${
+    statusMap[rev._id] === 'Accepted'
+      ? 'bg-green-500'
+      : statusMap[rev._id] === 'Declined'
+      ? 'bg-red-500'
+      : statusMap[rev._id] === 'Mail Sent'
+      ? 'bg-yellow-500'
+      : 'bg-gray-500'
+  }`}
+>
+  {statusMap[rev._id]}
+</button>
 
                 <button
                   onClick={() => handleSendPaper(rev)}

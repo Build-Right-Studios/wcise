@@ -1,6 +1,16 @@
 import React from 'react';
-
+import { useState } from 'react';
+import FormModal from '../components/FormModal';
 function Registration() {
+    const [showCcavenueForm, setShowCcavenueForm] = useState(false);
+    const [formData, setFormData] = useState({
+  name: '',
+  email: '',
+  currency: '',
+  amount: '',
+  paperId: ''
+});
+
   const data = [
     { label: 'Attending The Conference', price: 'USD 200' },
     { label: 'Accompanying Person', price: 'USD 200' },
@@ -9,6 +19,29 @@ function Registration() {
       price: 'USD 200',
     },
   ];
+const handlePayUMoney = async (e) => {
+  e.preventDefault();
+  const payload = {
+    name: formData.name,
+    email: formData.email,
+    phone: '9999999999', // Optional, dummy in test mode
+    amount: formData.amount,
+    productinfo: formData.paperId || "Conference Registration"
+  };
+
+  const res = await fetch('http://localhost:8000/payu/initiate', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload)
+  });
+
+  const html = await res.text();
+  const newWindow = window.open();
+  newWindow.document.open();
+  newWindow.document.write(html);
+  newWindow.document.close();
+};
+
 
   return (
     <div className="w-full">
@@ -161,15 +194,71 @@ function Registration() {
 
               <div className="flex flex-col items-center md:items-start w-full text-lg">
                 <div className="bg-[#1d3b58] text-white px-10 py-4 rounded-full font-semibold text-2xl mb-4 text-center">
-                  Payment with CCAvenue
+                  Payment with PayUMoney
                 </div>
                 <p className="text-[#1d3b58] font-semibold text-xl mb-1">(Payment in USD/INR)</p>
                 <p className="text-[#1d3b58] text-base leading-relaxed mb-4 text-justify">
-                  For payment & registration, click CCAvenue.
+                  For payment & registration, click PayUMoney.
                 </p>
-                <button className="px-8 py-4 border-2 border-[#1d3b58] font-bold bg-[#1d3b58] text-white text-xs hover:bg-[#3e5f81] hover:text-[#e0e7ef] hover:text-xl transition-all w-full max-w-xs cursor-pointer">
-  PAY WITH CCAVENUE
+                <button className="px-8 py-4 border-2 border-[#1d3b58] font-bold bg-[#1d3b58] text-white text-xs hover:bg-[#3e5f81] hover:text-[#e0e7ef] hover:text-xl transition-all w-full max-w-xs cursor-pointer" onClick={() => setShowCcavenueForm(true)}>
+  PAY WITH PAYU MONEY
 </button>
+{showCcavenueForm && (
+  <FormModal show={showCcavenueForm} onClose={() => setShowCcavenueForm(false)}>
+    <div className="flex flex-col gap-4">
+      <input
+        type="text"
+        placeholder="Enter your name"
+        className="border-2 border-gray-400 px-4 py-2"
+        value={formData.name}
+        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+        required
+      />
+
+      <input
+        type="email"
+        placeholder="Enter your email"
+        className="border-2 border-gray-400 px-4 py-2"
+        value={formData.email}
+        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+        required
+      />
+
+      <select
+        className="border-2 border-gray-400 px-4 py-2"
+        value={formData.currency}
+        onChange={(e) => setFormData({ ...formData, currency: e.target.value })}
+      >
+        <option value="">Select Currency</option>
+        <option value="INR">INR</option>
+      </select>
+
+      <input
+        type="number"
+        placeholder="Enter amount"
+        className="border-2 border-gray-400 px-4 py-2"
+        value={formData.amount}
+        onChange={(e) => setFormData({ ...formData, amount: e.target.value })}
+      />
+
+      <input
+        type="text"
+        placeholder="Paper ID"
+        className="border-2 border-gray-400 px-4 py-2"
+        value={formData.paperId}
+        onChange={(e) => setFormData({ ...formData, paperId: e.target.value })}
+      />
+
+      <button
+        onClick={handlePayUMoney}
+        className="bg-[#1d3b58] text-white px-4 py-2 font-bold hover:bg-[#3e5f81]"
+      >
+        Proceed to Pay
+      </button>
+    </div>
+  </FormModal>
+)}
+
 
 
               </div>
@@ -232,4 +321,3 @@ function Registration() {
 
 
 export default Registration;
-
