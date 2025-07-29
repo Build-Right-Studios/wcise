@@ -52,6 +52,7 @@ router.post('/:email', async (req, res) => {
       to: email,
       subject,
       html: message
+
     });
 
     console.log("Mail sent:", info.response);

@@ -64,7 +64,7 @@ function Authorcomponent() {
 
     try {
       setLoading(true);
-      const response = await axios.post('http://localhost:8000/author/new-paper', formPayload, {
+      const response = await axios.post('https://wcise-vaxw.vercel.app/author/new-paper', formPayload, {
         headers: {
           'Content-Type': 'multipart/form-data',
           Authorization: `Bearer ${token}`,
