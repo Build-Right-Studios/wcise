@@ -71,7 +71,7 @@ const EditorsViewMore = () => {
           reviewerId: rev._id
         }
       );
-      console.log(paper);
+      console.log(response.data);
       alert(`Mail successfully sent to ${rev.email}`);
     } catch (error) {
       console.error('Failed to send mail:', error);
