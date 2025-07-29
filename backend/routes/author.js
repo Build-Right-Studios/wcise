@@ -3,6 +3,7 @@ const router = express.Router();
 const cloudinary = require('cloudinary').v2;
 const multer = require('multer');
 const fs = require('fs');
+const streamifier = require('streamifier');
 const mongoose = require('mongoose');
 const Paper = require('../models/paper.js');
 
