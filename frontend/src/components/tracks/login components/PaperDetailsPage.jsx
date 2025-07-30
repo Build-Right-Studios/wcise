@@ -19,7 +19,7 @@ const PaperDetailsPage = () => {
       }
 
       try {
-        const response = await axios.get(`http://localhost:8000/author/paper/${id}`, {
+        const response = await axios.get(`https://wcise-tr2s.vercel.app/author/paper/${id}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setPaper(response.data.paper);
