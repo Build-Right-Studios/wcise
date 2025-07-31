@@ -38,14 +38,14 @@ const EditorsViewMore = () => {
   useEffect(() => {
   const fetchReviewers = async () => {
     try {
-      const response = await axios.get('http://localhost:8000/editor/suggested-reviewers');
+      const response = await axios.get('https://wcise-tr2s.vercel.app/editor/suggested-reviewers');
       const allReviewers = response.data;
 
       const paperTags = paper?.keyTags?.split(',').map(tag => tag.trim()) || [];
       const matchedReviewers = getTopReviewer(paperTags, allReviewers);
       setReviewers(matchedReviewers);
 
-      const statusResponse = await axios.get(`http://localhost:8000/reviewer/status/${paper?.id}`);
+      const statusResponse = await axios.get(`https://wcise-tr2s.vercel.app/reviewer/status/${paper?.id}`);
       const allStatuses = statusResponse.data;
 
       const statusMap = {};
@@ -67,7 +67,7 @@ const EditorsViewMore = () => {
   const handleSendMail = async (rev) => {
     try {
       const response = await axios.post(
-        `http://localhost:8000/send-mail/${encodeURIComponent(rev.email)}`,
+        `https://wcise-tr2s.vercel.app/send-mail/${encodeURIComponent(rev.email)}`,
         {
           name: rev.name,
           paperTitle: paper?.title || 'Paper',

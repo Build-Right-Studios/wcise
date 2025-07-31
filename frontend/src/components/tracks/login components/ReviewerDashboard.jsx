@@ -20,7 +20,7 @@ const ReviewerDashboard = () => {
   const isValidObjectId = (id) => /^[0-9a-fA-F]{24}$/.test(id);
 
   const fetchPapers = async (reviewerId) => {
-    const response = await axios.get(`http://localhost:8000/reviewer/assigned-papers/${reviewerId}`);
+    const response = await axios.get(`https://wcise-tr2s.vercel.app/reviewer/assigned-papers/${reviewerId}`);
     setPapers(response.data);
 
     if (paperId) {
@@ -82,7 +82,7 @@ const ReviewerDashboard = () => {
     }
 
     try {
-      await axios.post(`http://localhost:8000/reviewer/add-comment/${targetPaperId}`, {
+      await axios.post(`https://wcise-tr2s.vercel.app/reviewer/add-comment/${targetPaperId}`, {
         reviewerId: reviewer._id,
         text: comments,
       });
@@ -103,7 +103,7 @@ const ReviewerDashboard = () => {
     }
 
     try {
-      await axios.post('http://localhost:8000/reviewer/respond', {
+      await axios.post('https://wcise-tr2s.vercel.app/reviewer/respond', {
         paperId: targetPaperId,
         email: reviewer.email,
         status,
