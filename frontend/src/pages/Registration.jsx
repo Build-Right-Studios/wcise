@@ -29,7 +29,7 @@ const handlePayUMoney = async (e) => {
     productinfo: formData.paperId || "Conference Registration"
   };
 
-  const res = await fetch('http://localhost:8000/payu/initiate', {
+  const res = await fetch('https://wcise-tr2s.vercel.app/payu/initiate', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(payload)
