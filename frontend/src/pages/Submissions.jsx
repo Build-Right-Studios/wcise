@@ -1,5 +1,7 @@
 import React from 'react'
 import submissions from '../images/submission.png'
+import submissions1 from '../images/submission1.png'
+import submissions2 from '../images/submission2.png'
 
 function Submissions() {
   return (
@@ -18,7 +20,7 @@ function Submissions() {
         <a className='mt-12 text-xl text-[#122e76] underline' href="#">Click here to download the WCISE Template</a>
       </div>
       <div className='mt-4 text-center relative'>
-        <img className="absolute w-full lg:h-50" src=".\src\images\submissions1.png" alt="submissions" />
+        <img className="absolute w-full lg:h-50" src={submissions1} alt="submissions" />
 
         <h5 className='mt-26 text-xl font-bold text-[#1d3b58] absolute lg:left-110'>Submitted papers must comply with plagiarism policy and procedures</h5>
       </div>
@@ -67,7 +69,7 @@ function Submissions() {
         <p className='text-justify mt-2 lg:mt-4 mb-5 lg:mb-10 mx-5 lg:mx-10 text-[#1d3b58]'>The conference will be conducted in hybrid mode and virtual presentation is available for the individuals using a suitable online conference platform. Virtual Presentation permits contributors to submit abstract/full length papers for refereeing and publication in the conference publications, exactly like a regular paper. Virtual authors whose abstracts/full length papers are accepted (and who have paid registration fees) should submit a power point presentation (with video and/or audio), mp4, or any other multimedia file of their work as due to the different time zone, if they are not available for presentation at the scheduled time then their video presentation will be run as per the conference schedule. Virtual presentation duration of each author will last between 8 to 10 minutes. A high speed internet connection is recommended for live virtual presentations.
         </p></div>
       <div className='mt-4 text-center relative'>
-        <img className="absolute w-full h-80 lg:h-80" src=".\src\images\submission2.png" alt="submissions" />
+        <img className="absolute w-full h-80 lg:h-80" src={submissions2} alt="submissions" />
         <h4 className='mt-4 mx-4 text-xl lg:text-3xl font-bold absolute lg:left-110 text-white ml-25 lg:ml-55'>Important Dates</h4>
         <br />
         <div className='text-white absolute lg:left-110 mt-12 text-center'>
