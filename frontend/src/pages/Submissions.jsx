@@ -1,5 +1,5 @@
 import React from 'react'
-import {submissions} from '../images/submission.png'
+import submissions from '../images/submission.png'
 
 function Submissions() {
   return (
