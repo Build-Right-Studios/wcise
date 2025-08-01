@@ -1,6 +1,9 @@
 import React from 'react';
 import { useState } from 'react';
 import FormModal from '../components/FormModal';
+import payment from "../images/payment.png"
+import cash from "../images/cash.png"
+
 function Registration() {
     const [showCcavenueForm, setShowCcavenueForm] = useState(false);
     const [formData, setFormData] = useState({
@@ -167,7 +170,7 @@ const handlePayUMoney = async (e) => {
       <div className="w-full px-6 py-20 bg-white">
         <div className="flex flex-col lg:flex-row justify-between items-center gap-20 max-w-7xl mx-auto">
           <img
-            src="./src/images/payment.png"
+            src={payment}
             alt="Pay Icon"
             className="w-32 sm:w-40 md:w-48 lg:w-60 xl:w-72"
           />
@@ -266,8 +269,7 @@ const handlePayUMoney = async (e) => {
           </div>
 
           <img
-            src="./src/images/cash.png"
-
+            src={cash}
             alt="Cash Icon"
             className="w-28 sm:w-36 md:w-44 lg:w-56 xl:w-64"
           />
