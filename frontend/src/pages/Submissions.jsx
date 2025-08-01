@@ -1,6 +1,6 @@
 import React from 'react'
 import submissions from '../images/submission.png'
-import submissions1 from '../images/submission1.png'
+import submissions1 from '../images/submissions1.png'
 import submissions2 from '../images/submission2.png'
 
 function Submissions() {
