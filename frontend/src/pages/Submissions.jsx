@@ -1,4 +1,5 @@
 import React from 'react'
+import {submissions} from '../images/submission.png'
 
 function Submissions() {
   return (
@@ -7,7 +8,7 @@ function Submissions() {
       <p className=' mb-2 mx-5 text-justify text-lg text-[#4267b2]'>Research papers are invited for submission in WCISE’23. All the full length accepted papers of WCISE will be published in the peer reviewed SCOPUS/Non-SCOPUS Journals and SCOPUS Indexed book chapater as per their registration category.</p>
 
       <div>
-        <img className="object-cover w-full mt-4 h-20 lg:h-40 " src=".\src\images\submission.png" alt="Submission" />
+        <img className="object-cover w-full mt-4 h-20 lg:h-40 " src={submissions} alt="Submission" />
       </div>
 
       <div className='mt-4 text-center font-bold'>
