@@ -52,16 +52,16 @@ function CallForPapers() {
 
         {/* Call for paper parts */}
         <div className='text-3xl text-center md:text-5xl font-bold m-4'>CALL FOR PAPERS</div>
-        <div className='md:m-8 sm:m-6 m-2 md:text-2xl p-2 text-justify h-auto w-auto text-xl md:h-auto md:w-200 md:justify-center flex'><p>WCISE-2023 is the premier forum for the presentation of advancement in technology and research results. All the participants are encouraged for their contribution to the conference through submissions of their research abstracts and papers. Originality and unpublished results of conceptual, experimental or theoretical work in all areas of electronics and computer systems are encouraged and cordially invited for presentation at the conference.</p></div>
+        <div className='md:m-8 sm:m-6 m-2 md:text-2xl p-2 text-justify h-auto w-auto text-xl md:h-auto md:w-200 md:justify-center flex'><p>WCISE-2025 is the premier forum for the presentation of advancement in technology and research results. All the participants are encouraged for their contribution to the conference through submissions of their research abstracts and papers. Originality and unpublished results of conceptual, experimental or theoretical work in all areas of electronics and computer systems are encouraged and cordially invited for presentation at the conference.</p></div>
         <div className='flex md:flex-row  gap-4 flex-col items-center p-8'>
           <div className='w-1/2 max-sm:hidden'><img src='/src/images/cfp-1.png' alt='image'></img></div>
-          <div className='bg-[#1d3b58] text-white h-auto w-80  md:text-2xl text-xl md:h-1/2 md:w-1/2 p-4 text-justify rounded-4xl '  ><p>Note: WCISE-2023 Submissions are solicited, but not limited to the following areas.</p></div>
+          <div className='bg-[#1d3b58] text-white h-auto w-80  md:text-2xl text-xl md:h-1/2 md:w-1/2 p-4 text-justify rounded-4xl '  ><p>Note: WCISE-2025 Submissions are solicited, but not limited to the following areas.</p></div>
         </div>
 
         {/* Topics Part */}
         <div className='text-4xl font-bold mt-6 text-center sm:text-5xl underline'>TOPICS</div>
-        <div className='flex flex-col gap-6 p-4 sm:m-8 sm:p-4'> 
-          <div className='flex flex-col gap-6 sm:flex-row sm:gap-8'> 
+        <div className='flex flex-col gap-6 p-4 sm:m-8 sm:p-4'>
+          <div className='flex flex-col gap-6 sm:flex-row sm:gap-8'>
             {/* Card 1 */}
             <div
               onClick={handleClickAndScroll}

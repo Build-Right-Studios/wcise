@@ -9,7 +9,7 @@ function ImportantNews() {
         <div className='relative h-72 mx-4 overflow-hidden text-xl'>
           <motion.div
             initial={{ y: "100%" }}
-            animate={{ y: "-70%" }}
+            animate={{ y: "-50%" }}
             transition={{
               duration: 8,
               repeat: Infinity,
@@ -33,16 +33,13 @@ function ImportantNews() {
 
           <div className='border-2 border-[#1d3b58] p-4 rounded mb-4 shadow-xl shadow-blue-500/30'>
             <h3 className='text-lg font-bold'>OPTION-1 SCOPUS Indexed Book Chapter</h3>
-            <div>Awaiting approval, Scrivener Publishing, Wiley (Indexed in SCOPUS).</div>
+            <div>Awaiting approval</div>
           </div>
 
-          <div className='border-2 border-[#1d3b58] p-4 mb-4 shadow-xl shadow-blue-500/30'>
-            <h3 className='text-lg font-bold'>OPTION-2 SCOPUS Indexed Journal</h3>
-            <div>Updated Soon</div>
-          </div>
+
 
           <div className='border-2 border-[#1d3b58] p-4 mb-4 shadow-xl shadow-blue-500/30'>
-            <h3 className='text-lg font-bold'>OPTION-3 NON SCOPUS Indexed JOURNALS</h3>
+            <h3 className='text-lg font-bold'>OPTION-2 NON SCOPUS Indexed JOURNALS</h3>
             <div>
               International Journal of Innovations in Management, Science and Engineering (Crossref, Google Scholar & Research Gate).<br />
               <a href="https://ijimse.co.in/" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">

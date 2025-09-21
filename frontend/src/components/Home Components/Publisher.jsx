@@ -110,7 +110,7 @@ function Publisher() {
             VENUE
           </div>
           <h2 className="text-3xl text-center">
-            Citrus Grand Pattaya, Pattaya,
+            Avani Pattaya Resort,
             <div>Thailand.</div>
           </h2>
         </div>
