@@ -41,6 +41,12 @@ function Awards() {
         >
           2023
         </Link>
+        <Link
+          to="/awards-2025"
+          className="w-44 h-44 rounded-full bg-[#61b0f2] border-[6px] border-[#2e4a91] flex justify-center items-center text-white font-bold text-xl shadow-md hover:scale-105 transition-transform duration-300"
+        >
+          2025
+        </Link>
       </div>
 
     </div>

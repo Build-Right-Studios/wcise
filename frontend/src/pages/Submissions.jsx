@@ -7,7 +7,7 @@ function Submissions() {
   return (
     <div>
       <h1 className='mt-6 text-4xl px-6 font-bold mb-8 text-center text-[#1d3b58]'>Paper Submission & Publication</h1>
-      <p className=' mb-2 mx-5 text-justify text-lg text-[#4267b2]'>Research papers are invited for submission in WCISE’23. All the full length accepted papers of WCISE will be published in the peer reviewed SCOPUS/Non-SCOPUS Journals and SCOPUS Indexed book chapater as per their registration category.</p>
+      <p className=' mb-2 mx-5 text-justify text-lg text-[#4267b2]'>Research papers are invited for submission in WCISE’25. All the full length accepted papers of WCISE will be published in the peer reviewed SCOPUS/Non-SCOPUS Journals.</p>
 
       <div>
         <img className="object-cover w-full mt-4 h-20 lg:h-40 " src={submissions} alt="Submission" />
@@ -37,16 +37,12 @@ function Submissions() {
         <h3 className='mt-6 text-center text-[#1d3b58] text-2xl font-bold mb-4'>ALL ACCEPTED PAPERS WILL BE PUBLISHED IN ONE OF THE FOLLOWING INDEX JOURNALS:</h3>
         <div className='border-2 border-[#1d3b58] p-4 rounded shadow-2xl mb-4'>
           <h3 className='text-lg font-bold'>OPTION-1 SCOPUS Indexed Book Chapter</h3>
-          <div>Awaiting approval, Scrivener Publishing, Wiley (Indexed in SCOPUS).</div>
+          <div>Awaiting approval</div>
         </div>
 
-        <div className='border-2 border-[#1d3b58] p-4 rounded shadow-2xl mb-4'>
-          <h3 className='text-lg font-bold'>OPTION-2 SCOPUS Indexed Journal</h3>
-          <div>Updated Soon</div>
-        </div>
 
         <div className='border-2 border-[#1d3b58] p-4 rounded shadow-2xl mb-4'>
-          <h3 className='text-lg font-bold'>OPTION-3 NON SCOPUS Indexed JOURNALS</h3>
+          <h3 className='text-lg font-bold'>OPTION-2 NON SCOPUS Indexed JOURNALS</h3>
           <div>International Journal of Innovations in Management, Science and Engineering (Crossref, Google Scholar & Research Gate).
             https://ijimse.co.in/
           </div>
@@ -80,7 +76,7 @@ function Submissions() {
           <h5 className='ml-6 lg:ml-45 lg:mr-45'>Last date for receiving CRC and Registration:</h5>
           <p className='mb-2'>November 30, 2023</p>
           <h5>Conference Dates:</h5>
-          <p>December 29-30, 2023</p>
+          <p>December 28-27, 2025</p>
         </div>
         <div>
           <div className='text-[#1d3b58] lg:left-100 text-center mt-80 lg:text-lg'>
