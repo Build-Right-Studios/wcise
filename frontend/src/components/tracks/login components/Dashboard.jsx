@@ -21,7 +21,8 @@ const Dashboard = () => {
       }
 
       try {
-        const response = await axios.get('http://localhost:8000/author/my-papers', {
+        // http://localhost:8000/author/my-papers to https://wcise-tr2s.vercel.app
+        const response = await axios.get('https://wcise-tr2s.vercel.app/author/my-papers', {
           headers: { Authorization: `Bearer ${token}` }
         });
 

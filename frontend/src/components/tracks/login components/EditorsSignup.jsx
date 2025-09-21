@@ -14,7 +14,7 @@ const EditorSignup = () => {
       photo: '/assets/default-avatar.png',
     });
 
-    axios.get('http://localhost:8000/editor/papers')
+    axios.get('https://wcise-tr2s.vercel.app/editor/papers')
       .then(response => {
         const fetchedPapers = response.data.map(paper => ({
           id: paper._id,

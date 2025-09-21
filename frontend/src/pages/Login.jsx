@@ -38,7 +38,7 @@ const Login = () => {
   const handleLoginSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:8000/login', {
+      const response = await axios.post('https://wcise-tr2s.vercel.app/login', {
         email,
         password,
         role: selectedRole
@@ -66,7 +66,7 @@ else if (selectedRole === "Reviewer") navigate("/reviewer/dashboard");
   const handleSignupSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:8000/signup', {
+      const response = await axios.post('https://wcise-tr2s.vercel.app/signup', {
         name: name || email.split('@')[0],
         email,
         password,
