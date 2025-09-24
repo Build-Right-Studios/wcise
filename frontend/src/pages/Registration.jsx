@@ -1,8 +1,7 @@
-import React from 'react';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import FormModal from '../components/FormModal';
-import payment from "../images/payment.png"
-import cash from "../images/cash.png"
+import payment from "../images/payment.png";
+import cash from "../images/cash.png";
 
 function Registration() {
   const [showCcavenueForm, setShowCcavenueForm] = useState(false);
@@ -22,42 +21,37 @@ function Registration() {
       price: 'USD 200',
     },
   ];
+
+  // ✅ async handler function
   const handlePayUMoney = async (e) => {
     e.preventDefault();
+
     const payload = {
       name: formData.name,
       email: formData.email,
       phone: '9999999999', // Optional, dummy in test mode
       amount: formData.amount,
-      productinfo: formData.paperId || "Conference Registration"
+      productinfo: formData.paperId || "Conference Registration",
     };
 
-    const res = await fetch('http://localhost:8000/payu/initiate', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
-    });
+    try {
+      // 🔹 Use your deployed backend instead of localhost
+      const res = await fetch('https://wcise-tr2s.vercel.app/payu/initiate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
 
-    const html = await res.text();
-    const newWindow = window.open();
-    newWindow.document.open();
-    newWindow.document.write(html);
-    newWindow.document.close();
+      const html = await res.text();
+      const newWindow = window.open();
+      newWindow.document.open();
+      newWindow.document.write(html);
+      newWindow.document.close();
+    } catch (err) {
+      console.error("Payment initiation failed:", err);
+      alert("Something went wrong. Please try again.");
+    }
   };
-
-  const res = await fetch('https://wcise-tr2s.vercel.app/payu/initiate', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(payload)
-  });
-
-  const html = await res.text();
-  const newWindow = window.open();
-  newWindow.document.open();
-  newWindow.document.write(html);
-  newWindow.document.close();
-};
-
 
   return (
     <div className="w-full">
@@ -80,7 +74,6 @@ function Registration() {
               <th className="border border-blue-900 p-2 font-semibold text-center">
                 FOR SCOPUS INDEXED<br className="hidden xs:inline" /> BOOK CHAPTERS
               </th>
-
               <th className="border border-blue-900 p-2 font-semibold text-center">
                 FOR NON-SCOPUS<br className="hidden xs:inline" /> JOURNALS
               </th>
@@ -92,7 +85,6 @@ function Registration() {
                 <span className="font-semibold block">Student/ Research Scholar</span>
                 With Paper Publication
               </td>
-
               <td className="border border-blue-900 p-2">USD 550</td>
               <td className="border border-blue-900 p-2">USD 300</td>
             </tr>
@@ -101,7 +93,6 @@ function Registration() {
                 <span className="font-semibold block">Delegates With Paper</span>
                 Publication (Academician)
               </td>
-
               <td className="border border-blue-900 p-2">USD 600</td>
               <td className="border border-blue-900 p-2">USD 350</td>
             </tr>
@@ -110,7 +101,6 @@ function Registration() {
                 <span className="font-semibold block">Delegates With Paper</span>
                 Publication (Industrial)
               </td>
-
               <td className="border border-blue-900 p-2">USD 650</td>
               <td className="border border-blue-900 p-2">USD 450</td>
             </tr>
@@ -158,8 +148,6 @@ function Registration() {
         </table>
       </div>
 
-
-
       {/* PAYMENT SECTION */}
       <div className="w-full px-6 py-20 bg-white">
         <div className="flex flex-col lg:flex-row justify-between items-center gap-20 max-w-7xl mx-auto">
@@ -173,6 +161,7 @@ function Registration() {
             <h2 className="text-5xl sm:text-6xl font-bold text-[#1d3b58] mb-10">PAYMENT</h2>
 
             <div className="flex flex-col md:flex-row gap-12 items-start justify-between w-full">
+              {/* PayUmoney (INR) */}
               <div className="flex flex-col items-center md:items-start w-full text-lg">
                 <div className="bg-[#1d3b58] text-white px-10 py-4 rounded-full font-semibold text-2xl mb-4 text-center">
                   Payment with PayUmoney
@@ -189,6 +178,7 @@ function Registration() {
                 </select>
               </div>
 
+              {/* PayUmoney Modal */}
               <div className="flex flex-col items-center md:items-start w-full text-lg">
                 <div className="bg-[#1d3b58] text-white px-10 py-4 rounded-full font-semibold text-2xl mb-4 text-center">
                   Payment with PayUMoney
@@ -197,9 +187,13 @@ function Registration() {
                 <p className="text-[#1d3b58] text-base leading-relaxed mb-4 text-justify">
                   For payment & registration, click PayUMoney.
                 </p>
-                <button className="px-8 py-4 border-2 border-[#1d3b58] font-bold bg-[#1d3b58] text-white text-xs hover:bg-[#3e5f81] hover:text-[#e0e7ef] hover:text-xl transition-all w-full max-w-xs cursor-pointer" onClick={() => setShowCcavenueForm(true)}>
+                <button
+                  className="px-8 py-4 border-2 border-[#1d3b58] font-bold bg-[#1d3b58] text-white text-xs hover:bg-[#3e5f81] hover:text-[#e0e7ef] hover:text-xl transition-all w-full max-w-xs cursor-pointer"
+                  onClick={() => setShowCcavenueForm(true)}
+                >
                   PAY WITH PAYU MONEY
                 </button>
+
                 {showCcavenueForm && (
                   <FormModal show={showCcavenueForm} onClose={() => setShowCcavenueForm(false)}>
                     <div className="flex flex-col gap-4">
@@ -255,9 +249,6 @@ function Registration() {
                     </div>
                   </FormModal>
                 )}
-
-
-
               </div>
             </div>
           </div>
@@ -291,7 +282,6 @@ function Registration() {
         </div>
       </div>
 
-
       {/* Note & Important */}
       <div className="w-auto px-6 sm:px-10 py-2 bg-white text-[#1d3b58]">
         <div className="max-w-7xl mx-auto space-y-2 text-lg sm:text-xl leading-relaxed">
@@ -308,12 +298,10 @@ function Registration() {
               <li><strong>Others (outside India)</strong> can pay in USD via CCAvenue.</li>
             </ul>
           </div>
-
         </div>
       </div>
     </div>
   );
 }
-
 
 export default Registration;
