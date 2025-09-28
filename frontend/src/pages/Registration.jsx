@@ -22,19 +22,21 @@ function Registration() {
     },
   ];
 
-  // 🔥 Fixed async function for PayU
+  // ✅ async handler function
   const handlePayUMoney = async (e) => {
     e.preventDefault();
+
     const payload = {
       name: formData.name,
       email: formData.email,
       phone: '9999999999', // Optional, dummy in test mode
       amount: formData.amount,
-      productinfo: formData.paperId || "Conference Registration"
+      productinfo: formData.paperId || "Conference Registration",
     };
 
     try {
-      const res = await fetch('http://localhost:8000/payu/initiate', {
+      // 🔹 Use your deployed backend instead of localhost
+      const res = await fetch('https://wcise-tr2s.vercel.app/payu/initiate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
@@ -47,6 +49,7 @@ function Registration() {
       newWindow.document.close();
     } catch (err) {
       console.error("Payment initiation failed:", err);
+      alert("Something went wrong. Please try again.");
     }
   };
 
@@ -158,6 +161,7 @@ function Registration() {
             <h2 className="text-5xl sm:text-6xl font-bold text-[#1d3b58] mb-10">PAYMENT</h2>
 
             <div className="flex flex-col md:flex-row gap-12 items-start justify-between w-full">
+              {/* PayUmoney (INR) */}
               <div className="flex flex-col items-center md:items-start w-full text-lg">
                 <div className="bg-[#1d3b58] text-white px-10 py-4 rounded-full font-semibold text-2xl mb-4 text-center">
                   Payment with PayUmoney
@@ -174,6 +178,7 @@ function Registration() {
                 </select>
               </div>
 
+              {/* PayUmoney Modal */}
               <div className="flex flex-col items-center md:items-start w-full text-lg">
                 <div className="bg-[#1d3b58] text-white px-10 py-4 rounded-full font-semibold text-2xl mb-4 text-center">
                   Payment with PayUMoney
@@ -188,6 +193,7 @@ function Registration() {
                 >
                   PAY WITH PAYU MONEY
                 </button>
+
                 {showCcavenueForm && (
                   <FormModal show={showCcavenueForm} onClose={() => setShowCcavenueForm(false)}>
                     <div className="flex flex-col gap-4">
