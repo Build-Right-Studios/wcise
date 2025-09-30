@@ -1,12 +1,22 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { FaPhone } from "react-icons/fa6";
 import { TfiEmail } from "react-icons/tfi";
 import { HiOutlineBuildingOffice2 } from "react-icons/hi2";
 import { IoLogoFacebook } from "react-icons/io";
 import { Link } from 'react-router-dom';
+import { IoLogoWhatsapp } from 'react-icons/io';
 
 
 function GetInTouch() {
+    const [submitted, setSubmitted] = useState(false);
+    const handleSubmit = (e) => {
+        e.preventDefault();
+
+        setSubmitted(true);
+
+        setTimeout(() => setSubmitted(false), 3000);
+    };
+
     return (
         <div>
             <div className='flex items-center justify-center flex-col gap-2 mb-20'>
@@ -42,7 +52,7 @@ function GetInTouch() {
                     <div className='w-full bg-gray-100'>
                         <div className='text-4xl text-center mb-4 pt-4'>Don't Hesitate To Contact Us</div>
 
-                        <form>
+                        <form onSubmit={handleSubmit}>
                             {/* Row 1 */}
                             <div className='flex flex-col lg:flex-row gap-4 px-10'>
                                 <div className='flex-1'>
@@ -71,7 +81,16 @@ function GetInTouch() {
                             </div>
                             <br />
                             <div className='flex items-center justify-center flex-col mb-4'>
-                                <button className='bg-[#050a30] text-xl px-4 py-1 rounded-sm text-white hover:cursor-pointer hover:bg-white hover:border hover:border-[#050a30] hover:text-[#050a30]'>SUBMIT</button>
+                                <button
+                                    type="submit"
+                                    className='bg-[#050a30] text-xl px-4 py-1 rounded-sm text-white hover:cursor-pointer hover:bg-white hover:border hover:border-[#050a30] hover:text-[#050a30]'>SUBMIT
+                                </button>
+
+                                {submitted && (
+                                    <div className="fixed top-5 left-1/2 transform -translate-x-1/2 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-50 animate-slideDown">
+                                        Message sent successfully !!
+                                    </div>
+                                )}
 
                             </div>
                         </form>
@@ -88,13 +107,24 @@ function GetInTouch() {
                         <div><strong className='text-[16px]'>Email : </strong><span className='text-[#1d3b58] cursor-pointer underline lg:text-[18px]'>wcise.convenor@gmail.com</span></div>
                         <div><strong className='text-[16px]'>Visit : </strong><span className='text-[#1d3b58] cursor-pointer underline lg:text-[18px]'>wcise.co.in</span></div>
                         <br />
+
                         <div className='text-[30px]'>We're on Socials</div>
-                        <a href="https://www.facebook.com/people/WCISE-Conference/100068581008071/" target="_blank" rel="noopener noreferrer">
-                            <div>
-                                <IoLogoFacebook size={45} className="text-[#1877F2] hover:opacity-80 cursor-pointer" />
-                            </div>
-                        </a>
+                        <div className='flex gap-4'>
+                            <a href="https://www.facebook.com/people/WCISE-Conference/100068581008071/" target="_blank" rel="noopener noreferrer">
+                                <div>
+                                    <IoLogoFacebook size={45} className="text-[#1877F2] hover:opacity-80 cursor-pointer" />
+                                </div>
+
+                            </a>
+                            <a href="https://wa.me/919667006019" target="_blank" rel="noopener noreferrer">
+                                <div>
+                                    <IoLogoWhatsapp size={45} className="text-[#25D366] hover:opacity-80 cursor-pointer" />
+                                </div>
+
+                            </a>
+                        </div>
                     </div>
+
                 </div>
             </div>
 
