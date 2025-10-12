@@ -28,7 +28,7 @@ const FullScreenSlider = () => {
       <div className="absolute inset-0 z-10 flex items-center justify-center text-white text-center bg-black/30">
         <div>
           <h1 className="text-3xl font-bold drop-shadow-xl">5<sup>TH</sup> WORLD CONFERENCE ON INNOVATIONS IN MANAGEMENT, SCIENCE AND ENGINEERING</h1>
-          <p className="text-xl mt-2 drop-shadow">December 28-27 2023</p>
+          <p className="text-xl mt-2 drop-shadow">December 27-28 2025</p>
           <br />
           <h1 className="text-xl mt-2 drop-shadow">Venue : Avani Pattaya Resort, Thailand</h1>
           <p className="text-xl mt-2 drop-shadow">HYBRID CONFERENCE</p>

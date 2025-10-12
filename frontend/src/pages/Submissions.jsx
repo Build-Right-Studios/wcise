@@ -70,11 +70,11 @@ function Submissions() {
         <br />
         <div className='text-white absolute lg:left-110 mt-12 text-center'>
           <h5 className='text-lg lg:mt-5'>Last Date of Paper Submission :</h5>
-          <p className='mb-2'>October 31, 2023</p>
+          <p className='mb-2'>October 31, 2025</p>
           <h5>Paper Acceptance Notification :</h5>
-          <p className='mb-2'>November 15, 2023</p>
+          <p className='mb-2'>November 15, 2025</p>
           <h5 className='ml-6 lg:ml-45 lg:mr-45'>Last date for receiving CRC and Registration:</h5>
-          <p className='mb-2'>November 30, 2023</p>
+          <p className='mb-2'>November 30, 2025</p>
           <h5>Conference Dates:</h5>
           <p>December 28-27, 2025</p>
         </div>
