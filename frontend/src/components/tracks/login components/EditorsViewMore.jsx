@@ -67,7 +67,7 @@ const EditorsViewMore = () => {
   const handleSendMail = async (rev) => {
     try {
       const response = await axios.post(
-        `https://wcise-tr2s.vercel.app/send-mail/${encodeURIComponent(rev.email)}`,
+  `http://localhost:8000/send-mail/${encodeURIComponent(rev.email)}`,
         {
           name: rev.name,
           paperTitle: paper?.title || 'Paper',

@@ -1,5 +1,5 @@
 import React from "react";
-import { motion } from "motion/react";
+import { motion } from "framer-motion";
 
 import img1 from "../../images/1.jpg";
 import img2 from "../../images/2.jpg";
@@ -110,7 +110,7 @@ function Publisher() {
             VENUE
           </div>
           <h2 className="text-3xl text-center">
-            Citrus Grand Pattaya, Pattaya,
+            Avani Pattaya Resort,
             <div>Thailand.</div>
           </h2>
         </div>

@@ -4,7 +4,7 @@ const nodemailer = require('nodemailer');
 const Review = require('../models/review.model')
 
 // POST /invite/:email
-router.post('/:email', async (req, res) => {
+router.post('/send-mail/:email', async (req, res) => {
   const { name, paperTitle, paperId, reviewerId } = req.body;
   const email = req.params.email;
 
@@ -17,7 +17,7 @@ router.post('/:email', async (req, res) => {
     secure: false,
     auth: {
       user: 'dhratikaushik05@gmail.com',
-      pass: 'mpcw nwsk izhc wcvy' // Use app password only!
+      pass: 'jvfb loxd fimz oxqp' // Use app password only!
     },
     tls: {
       rejectUnauthorized: false
