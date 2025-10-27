@@ -13,12 +13,16 @@ function Navbar() {
                 <div className="container mx-auto flex justify-between items-center py-4 px-6">
                     {/* Logo Section */}
                     <div>
-                        <Link to='/'><img src={wcise_logo} alt="WCISE Logo" className='h-16 w-auto px-2' /></Link>
+                        <img src={wcise_logo} alt="WCISE Logo" className='h-16 w-auto px-2' />
                     </div>
 
                     {/* Desktop Menu */}
                     <div className='hidden md:block mr-2'>
                         <ul className='flex items-center gap-6 text-gray-700 font-medium'>
+                            <NavLink to='/' className="relative inline-block py-1 px-1 text-gray-800 font-semibold group">
+                                <span className="relative z-10 group-hover:text-blue-500 transition">HOME</span>
+                                <span className="absolute left-0 bottom-0 h-0.5 w-0 bg-blue-500 transition-all duration-300 group-hover:w-full rounded"></span>
+                            </NavLink>
                             <NavLink to="/call-for-papers" className="relative inline-block py-1 px-1 text-gray-800 font-semibold group">
                                 <span className="relative z-10 group-hover:text-blue-500 transition">CALL FOR PAPERS</span>
                                 <span className="absolute left-0 bottom-0 h-0.5 w-0 bg-blue-500 transition-all duration-300 group-hover:w-full rounded"></span>
