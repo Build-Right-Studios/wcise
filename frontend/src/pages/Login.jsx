@@ -24,6 +24,8 @@ const Login = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [name, setName] = useState("");
   const [tags, setTags] = useState([]);
+  const [showModal, setShowModal] = useState(false);
+  const [userData, setUserData] = useState(null);
 
   const navigate = useNavigate();
 
@@ -38,24 +40,21 @@ const Login = () => {
   const handleLoginSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:8000/login', {
+      const response = await axios.post('https://wcise-tr2s.vercel.app/login', {
         email,
         password,
         role: selectedRole
       });
 
-      alert(response.data.message);
       localStorage.setItem('token', response.data.token);
 
-// Store reviewer object if role is Reviewer
-if (selectedRole === "Reviewer") {
-  localStorage.setItem('reviewer', JSON.stringify(response.data.user));
-}
+      if (selectedRole === "Reviewer") {
+        localStorage.setItem('reviewer', JSON.stringify(response.data.user));
+      }
 
-if (selectedRole === "Author") navigate("/author/dashboard");
-else if (selectedRole === "Editor") navigate("/editor/dashboard");
-else if (selectedRole === "Reviewer") navigate("/reviewer/dashboard");
-
+      // 👇 new: show modal instead of alert
+      setUserData(response.data.user);
+      setShowModal(true);
 
     } catch (error) {
       console.error(error);
@@ -88,9 +87,40 @@ else if (selectedRole === "Reviewer") navigate("/reviewer/dashboard");
     }
   };
 
+  const handleOkClick = () => {
+    setShowModal(false);
+    if (selectedRole === "Author") navigate("/author/dashboard");
+    else if (selectedRole === "Editor") navigate("/editor/dashboard");
+    else if (selectedRole === "Reviewer") navigate("/reviewer/dashboard");
+  };
+
   return (
     <div className={`min-h-screen w-screen p-4 flex items-center justify-center ${primaryGradientBg} font-inter`}>
-      <motion.div className="overflow-hidden max-w-md w-full bg-white p-8 rounded-2xl shadow-xl" initial={{ opacity: 0, y: 50 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, ease: "easeOut" }}>
+      <motion.div className="overflow-hidden max-w-md w-full bg-white p-8 rounded-2xl shadow-xl relative"
+        initial={{ opacity: 0, y: 50 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, ease: "easeOut" }}>
+
+        {/* 👇 new modal box */}
+        {showModal && userData && (
+          <div className="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
+            <div className="bg-white rounded-2xl p-6 shadow-lg w-80 text-center">
+              <h2 className="text-lg font-semibold mb-3 text-[#003366]">Welcome Back!</h2>
+              <p className="text-sm text-gray-700 mb-2"><strong>Name:</strong> {userData.name}</p>
+              <p className="text-sm text-gray-700 mb-2"><strong>Email:</strong> {userData.email}</p>
+              <p className="text-sm text-gray-700 mb-4"><strong>Role:</strong> {userData.role}</p>
+              <button
+                onClick={handleOkClick}
+                className="bg-[#0073e6] text-white px-4 py-2 rounded-lg hover:bg-[#005bb5] transition"
+              >
+                OK
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* rest of your component remains exactly the same */}
+        {/* no changes made below this line */}
 
         <motion.div className="relative h-10 flex justify-between mb-4">
           <div className={`w-1/2 text-center text-xl font-semibold ${isLogin ? 'text-black' : 'text-gray-400'}`}>Login Form</div>
