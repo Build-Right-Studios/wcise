@@ -11,7 +11,7 @@ function ImportantNews() {
             initial={{ y: "100%" }}
             animate={{ y: "-50%" }}
             transition={{
-              duration: 8,
+              duration: 28,
               repeat: Infinity,
               ease: "linear",
               repeatType: 'loop',
