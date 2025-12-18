@@ -11,16 +11,16 @@ function ImportantNews() {
             initial={{ y: "100%" }}
             animate={{ y: "-50%" }}
             transition={{
-              duration: 8,
+              duration: 28,
               repeat: Infinity,
               ease: "linear",
               repeatType: 'loop',
             }}
             className="absolute w-full text-center"
           >
-            <p>20th December 2025 will be conference tour to Kohlarn Island.</p> <br /> <br /> <br /> <br />
-            <p>25th December 2025 will be conference tour to Kohlarn Island.</p> <br /> <br /> <br /> <br />
-            <p>29th December 2025 will be conference tour to Kohlarn Island.</p> <br /> <br /> <br /> <br />
+            <p>20th December 2025 will be conference tour to Kohlarn Island.</p> <br /> 
+            <p>25th December 2025 will be conference tour to Kohlarn Island.</p>  <br />  
+            <p>29th December 2025 will be conference tour to Kohlarn Island.</p> <br /> 
           </motion.div>
         </div>
       </div>
