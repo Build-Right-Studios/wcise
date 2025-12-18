@@ -36,24 +36,23 @@ const EditorsViewMore = () => {
   const [manualMode, setManualMode] = useState(false);
 
   useEffect(() => {
-    const fetchReviewers = async () => {
-      try {
-        const response = await axios.get('https://wcise-tr2s.vercel.app/editor/suggested-reviewers');
-        const allReviewers = response.data || [];
-        setAllReviewers(allReviewers);
+  const fetchReviewers = async () => {
+    try {
+      const response = await axios.get('https://wcise-tr2s.vercel.app/editor/suggested-reviewers');
+      const allReviewers = response.data;
 
         const paperTags = paper?.keyTags?.split(',').map(tag => tag.trim()) || [];
         const matchedReviewers = getTopReviewer(paperTags, allReviewers);
         setReviewers(matchedReviewers);
 
-        const statusResponse = await axios.get(`https://wcise-tr2s.vercel.app/reviewer/status/${paper?.id}`);
-        const allStatuses = statusResponse.data || [];
+      const statusResponse = await axios.get(`https://wcise-tr2s.vercel.app/reviewer/status/${paper?.id}`);
+      const allStatuses = statusResponse.data;
 
-        const statusMap = {};
-        (matchedReviewers.length > 0 ? matchedReviewers : allReviewers).forEach(rev => {
-          const match = allStatuses.find(r => r.reviewerId === rev._id);
-          statusMap[rev._id] = match?.status || 'Waiting';
-        });
+      const statusMap = {};
+      matchedReviewers.forEach(rev => {
+        const match = allStatuses.find(r => r.reviewerId === rev._id);
+        statusMap[rev._id] = match?.status || 'Waiting';
+      });
 
         setStatusMap(statusMap);
       } catch (error) {
@@ -61,13 +60,14 @@ const EditorsViewMore = () => {
       }
     };
 
-    fetchReviewers();
-  }, [paper]);
+  fetchReviewers();
+}, [paper]);
+
 
   const handleSendMail = async (rev) => {
     try {
       const response = await axios.post(
-  `http://localhost:8000/send-mail/${encodeURIComponent(rev.email)}`,
+        `http://localhost:8000/send-mail/${encodeURIComponent(rev.email)}`,
         {
           name: rev.name,
           paperTitle: paper?.title || 'Paper',
@@ -146,20 +146,20 @@ const EditorsViewMore = () => {
                 Send Mail
               </button>
 
-              <button
-                disabled
-                className={`px-4 py-2 rounded text-sm cursor-default text-white ${
-                  statusMap[rev._id] === 'Accepted'
-                    ? 'bg-green-500'
-                    : statusMap[rev._id] === 'Declined'
-                    ? 'bg-red-500'
-                    : statusMap[rev._id] === 'Mail Sent'
-                    ? 'bg-yellow-500'
-                    : 'bg-gray-500'
-                }`}
-              >
-                {statusMap[rev._id]}
-              </button>
+                <button
+  disabled
+  className={`px-4 py-2 rounded text-sm cursor-default text-white ${
+    statusMap[rev._id] === 'Accepted'
+      ? 'bg-green-500'
+      : statusMap[rev._id] === 'Declined'
+      ? 'bg-red-500'
+      : statusMap[rev._id] === 'Mail Sent'
+      ? 'bg-yellow-500'
+      : 'bg-gray-500'
+  }`}
+>
+  {statusMap[rev._id]}
+</button>
 
               <button
                 onClick={() => handleSendPaper(rev)}
