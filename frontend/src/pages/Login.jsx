@@ -127,10 +127,6 @@ const Login = () => {
   </div>
 )}
 
-
-        {/* rest of your component remains exactly the same */}
-        {/* no changes made below this line */}
-
         <motion.div className="relative h-10 flex justify-between mb-4">
           <div className={`w-1/2 text-center text-xl font-semibold ${isLogin ? 'text-black' : 'text-gray-400'}`}>Login Form</div>
           <div className={`w-1/2 text-center text-xl font-semibold ${!isLogin ? 'text-black' : 'text-gray-400'}`}>Signup Form</div>
