@@ -99,6 +99,15 @@ router.get('/:id', async (req, res) => {
   }
 });
 
+// in editor.js (backend)
+router.get('/all-reviewers', async (req, res) => {
+  try {
+    const reviewers = await Reviewer.find();
+    res.json(reviewers);
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching reviewers' });
+  }
+});
 
 
 

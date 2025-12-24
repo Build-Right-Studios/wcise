@@ -13,9 +13,7 @@ const getTopReviewer = (paperTags, reviewers) => {
     let matchCount = 0;
 
     for (const tag of reviewerTags) {
-      if (paperTagSet.has(tag)) {
-        matchCount++;
-      }
+      if (paperTagSet.has(tag)) matchCount++;
     }
 
     if (matchCount > maxMatchCount) {
@@ -33,26 +31,28 @@ const EditorsViewMore = () => {
   const location = useLocation();
   const paper = location.state?.paper;
   const [reviewers, setReviewers] = useState([]);
+  const [allReviewers, setAllReviewers] = useState([]);
   const [statusMap, setStatusMap] = useState({});
+  const [manualMode, setManualMode] = useState(false);
 
   useEffect(() => {
-    const fetchReviewers = async () => {
-      try {
-        const response = await axios.get('https://wcise-tr2s.vercel.app/editor/suggested-reviewers');
-        const allReviewers = response.data;
+  const fetchReviewers = async () => {
+    try {
+      const response = await axios.get('https://wcise-tr2s.vercel.app/editor/suggested-reviewers');
+      const allReviewers = response.data;
 
         const paperTags = paper?.keyTags?.split(',').map(tag => tag.trim()) || [];
         const matchedReviewers = getTopReviewer(paperTags, allReviewers);
         setReviewers(matchedReviewers);
 
-        const statusResponse = await axios.get(`https://wcise-tr2s.vercel.app/reviewer/status/${paper?.id}`);
-        const allStatuses = statusResponse.data;
+      const statusResponse = await axios.get(`https://wcise-tr2s.vercel.app/reviewer/status/${paper?.id}`);
+      const allStatuses = statusResponse.data;
 
-        const statusMap = {};
-        matchedReviewers.forEach(rev => {
-          const match = allStatuses.find(r => r.reviewerId === rev._id);
-          statusMap[rev._id] = match?.status || 'Waiting';
-        });
+      const statusMap = {};
+      matchedReviewers.forEach(rev => {
+        const match = allStatuses.find(r => r.reviewerId === rev._id);
+        statusMap[rev._id] = match?.status || 'Waiting';
+      });
 
         setStatusMap(statusMap);
       } catch (error) {
@@ -60,8 +60,8 @@ const EditorsViewMore = () => {
       }
     };
 
-    fetchReviewers();
-  }, [paper]);
+  fetchReviewers();
+}, [paper]);
 
 
   const handleSendMail = async (rev) => {
@@ -77,6 +77,7 @@ const EditorsViewMore = () => {
       );
       console.log(response.data);
       alert(`Mail successfully sent to ${rev.email}`);
+      setStatusMap(prev => ({ ...prev, [rev._id]: 'Mail Sent' }));
     } catch (error) {
       console.error('Failed to send mail:', error);
       alert(`Failed to send mail to ${rev.email}`);
@@ -93,68 +94,86 @@ const EditorsViewMore = () => {
       <ProfileHeader profile={{ name: 'Editor', email: '', phone: '', photo: '' }} />
 
       <h2 className="text-3xl font-bold text-center text-[#1d3b58] mt-6 mb-8">
-        SUGGESTED REVIEWERS
+        {manualMode ? 'ALL REVIEWERS (Manual Assignment)' : 'SUGGESTED REVIEWERS'}
       </h2>
 
-      <div className="grid sm:grid-cols-2 gap-6 max-w-6xl mx-auto">
-        {reviewers.length > 0 ? (
-          reviewers.map((rev) => (
-            <div
-              key={rev._id}
-              className="bg-[#e9ecef] p-6 rounded-2xl shadow-md flex gap-4"
-            >
-              <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center text-xl font-bold text-[#1d3b58]">
-                {rev.name?.charAt(0).toUpperCase() || 'R'}
-              </div>
+      {/* If no matching reviewers found */}
+      {reviewers.length === 0 && !manualMode && (
+        <div className="text-center text-gray-700 mt-10">
+          <p className="mb-4 text-lg">No matching reviewers found for this paper.</p>
+          <button
+            onClick={() => setManualMode(true)}
+            className="bg-[#0073e6] text-white px-6 py-2 rounded-lg hover:bg-[#005bb5] transition"
+          >
+            Assign Reviewer Manually
+          </button>
+        </div>
+      )}
 
-              <div className="flex-1">
-                <h2 className="font-bold text-lg text-[#1d3b58]">{rev.name}</h2>
-                <p className="font-semibold text-sm text-gray-700">{rev.role}</p>
-
-                <p className="mt-2 font-bold text-sm text-[#1d3b58]">Email:</p>
-                <p className="text-sm break-words text-gray-800">{rev.email}</p>
-
-                <p className="mt-2 font-bold text-sm text-[#1d3b58]">Reviewer ID:</p>
-                <p className="text-sm break-words text-gray-800">{rev._id}</p>
-              </div>
-
-              <div className="flex flex-col gap-4 items-end justify-start mt-2">
-                <button
-                  onClick={() => handleSendMail(rev)}
-                  className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 text-sm"
-                >
-                  Send Mail
-                </button>
-
-                <button
-                  disabled
-                  className={`px-4 py-2 rounded text-sm cursor-default text-white ${statusMap[rev._id] === 'Accepted'
-                      ? 'bg-green-500'
-                      : statusMap[rev._id] === 'Declined'
-                        ? 'bg-red-500'
-                        : statusMap[rev._id] === 'Mail Sent'
-                          ? 'bg-yellow-500'
-                          : 'bg-gray-500'
-                    }`}
-                >
-                  {statusMap[rev._id]}
-                </button>
-
-                <button
-                  onClick={() => handleSendPaper(rev)}
-                  className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 text-sm"
-                >
-                  Send Paper
-                </button>
-              </div>
+      {/* Reviewer Grid */}
+      <div className="grid sm:grid-cols-2 gap-6 max-w-6xl mx-auto mt-6">
+        {(manualMode ? allReviewers : reviewers).map((rev) => (
+          <div
+            key={rev._id}
+            className="bg-[#e9ecef] p-6 rounded-2xl shadow-md flex gap-4"
+          >
+            <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center text-xl font-bold text-[#1d3b58]">
+              {rev.name?.charAt(0).toUpperCase() || 'R'}
             </div>
-          ))
-        ) : (
-          <p className="text-center text-gray-600">No matching reviewers found.</p>
-        )}
+
+            <div className="flex-1">
+              <h2 className="font-bold text-lg text-[#1d3b58]">{rev.name}</h2>
+              <p className="font-semibold text-sm text-gray-700">{rev.role}</p>
+
+              <p className="mt-2 font-bold text-sm text-[#1d3b58]">Email:</p>
+              <p className="text-sm break-words text-gray-800">{rev.email}</p>
+
+              <p className="mt-2 font-bold text-sm text-[#1d3b58]">Reviewer ID:</p>
+              <p className="text-sm break-words text-gray-800">{rev._id}</p>
+
+              {manualMode && (
+                <p className="mt-2 font-bold text-sm text-[#1d3b58]">
+                  Tags: <span className="font-normal text-gray-700">{rev.tags?.join(', ')}</span>
+                </p>
+              )}
+            </div>
+
+            <div className="flex flex-col gap-3 items-end justify-start mt-2">
+              <button
+                onClick={() => handleSendMail(rev)}
+                className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 text-sm"
+              >
+                Send Mail
+              </button>
+
+                <button
+  disabled
+  className={`px-4 py-2 rounded text-sm cursor-default text-white ${
+    statusMap[rev._id] === 'Accepted'
+      ? 'bg-green-500'
+      : statusMap[rev._id] === 'Declined'
+      ? 'bg-red-500'
+      : statusMap[rev._id] === 'Mail Sent'
+      ? 'bg-yellow-500'
+      : 'bg-gray-500'
+  }`}
+>
+  {statusMap[rev._id]}
+</button>
+
+              <button
+                onClick={() => handleSendPaper(rev)}
+                className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 text-sm"
+              >
+                Send Paper
+              </button>
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   );
 };
 
 export default EditorsViewMore;
+

@@ -11,6 +11,7 @@ const PaperDetailsCard = ({ paper, latestComment }) => {
   useEffect(() => {
     if (paper) {
       setAbstract(paper.abstract);
+      setStatus(paper.status || 'Under Review');
     }
   }, [paper]);
 
@@ -71,16 +72,21 @@ const PaperDetailsCard = ({ paper, latestComment }) => {
         {pdfFile && <p className="text-sm mt-2 text-green-600">{pdfFile.name}</p>}
       </div>
 
-      {/* Status */}
+      {/* 🔽 Status Dropdown */}
       <div className="bg-[#f3f6fb] mt-4 p-4 rounded-md">
         <label className="font-bold text-lg">Status :</label>
-        <input
-          type="text"
+        <select
           value={status}
           onChange={(e) => setStatus(e.target.value)}
-          disabled={!isEditing}
-          className="block mt-2 w-full p-2 border border-gray-300 rounded-md"
-        />
+          enabled={!isEditing}
+          className="block mt-2 w-full p-2 border border-gray-300 rounded-md bg-white disabled:bg-gray-100"
+        >
+          <option>Under Review</option>
+          <option>Minor Revision</option>
+          <option>Major Revision</option>
+          <option>Accepted</option>
+          <option>Rejected</option>
+        </select>
       </div>
 
       {/* ✅ Comment Section */}
