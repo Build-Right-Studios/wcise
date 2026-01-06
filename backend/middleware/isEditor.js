@@ -2,7 +2,7 @@ const User = require("../models/user.model");
 /**
  * EDITOR GUARD
  */
-export const isEditor = async (req, res, next) => {
+const isEditor = async (req, res, next) => {
   try {
     if (!req.user || !req.user.userId) {
       return res.status(401).json({
@@ -38,3 +38,5 @@ export const isEditor = async (req, res, next) => {
     });
   }
 };
+
+module.exports = isEditor;

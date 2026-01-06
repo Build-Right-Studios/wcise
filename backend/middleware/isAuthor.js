@@ -1,9 +1,9 @@
-const User = require("../models/user.model");
+const User = require("../models/user.model.js");
 
 /**
  * AUTHOR GUARD
  */
-export const isAuthor = async (req, res, next) => {
+const isAuthor = async (req, res, next) => {
   try {
     // Case 1: req.user missing
     if (!req.user || !req.user.userId) {
@@ -42,3 +42,5 @@ export const isAuthor = async (req, res, next) => {
     });
   }
 };
+
+module.exports = isAuthor;
