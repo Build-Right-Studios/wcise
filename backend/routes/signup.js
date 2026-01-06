@@ -8,6 +8,8 @@ const router = express.Router();
 
 const SECRET_KEY = process.env.JWT_SECRET || 'your_super_secret_key';
 
+const ALLOWED_SIGNUP_ROLES = ["Author", "Reviewer"];
+
 router.post('/', async (req, res) => {
   try {
     const { name, email, password, confirmPassword, role, tags = [] } = req.body;
@@ -20,30 +22,40 @@ router.post('/', async (req, res) => {
       return res.status(400).json({ message: 'Passwords do not match' });
     }
 
-    const existingUser = await User.findOne({ email });
-    const existingReviewer = await Reviewer.findOne({ email });
+    if (!ALLOWED_SIGNUP_ROLES.includes(role)) {
+      return res.status(403).json({ message: "Invalid role selected" });
+    }
 
-    if (existingUser || existingReviewer) {
+    const existingUser = await User.findOne({ email });
+
+    if (existingUser) {
       return res.status(400).json({ message: 'User already exists' });
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    let newUser;
+    const userData = {
+      name,
+      email,
+      password: hashedPassword,
+      roles: [role]
+    };
 
-    if (role === 'Reviewer') {
-      newUser = new Reviewer({ name, email, password: hashedPassword, role, tags });
-      await newUser.save();
-    } else {
-      newUser = new User({ name, email, password: hashedPassword, role });
-      await newUser.save();
+    if (role === "Reviewer") {
+      userData.reviewerProfile = { tags };
     }
 
-    const token = jwt.sign({ email, role }, SECRET_KEY, { expiresIn: '1h' });
+    const user = await User.create(userData);
+
+    const token = jwt.sign(
+      { userId: user._id },
+      SECRET_KEY,
+      { expiresIn: "6h" }
+    );
 
     res.status(201).json({ message: 'Signup successful', token });
   } catch (err) {
-    console.error(err);
+    console.error("Signup file error: ", err);
     res.status(500).json({ message: 'Server error' });
   }
 });
