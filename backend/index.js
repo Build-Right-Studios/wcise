@@ -9,8 +9,6 @@ const app = express();
  // Allow requests from your frontend origin
 app.use(cors());
 
-
-
 // Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -23,6 +21,10 @@ const reviewerRoute = require('./routes/reviewer');
 const authorRoute = require('./routes/author');
 const mailRoute = require('./routes/mailSend');
 const payuRoute = require('./routes/payu');
+const isAuthenticated = require('./middleware/isAuthenticated');
+const isAuthor = require('./middleware/isAuthor');
+const isReviewer = require('./middleware/isReviewer');
+const isEditor = require('./middleware/isEditor');
 
 
 // ✅ Connect to MongoDB
@@ -55,9 +57,9 @@ app.locals.users = users;
 // ✅ All routes (after middleware setup)
 app.use('/login', loginRoute);
 app.use('/signup', signupRoute);
-app.use('/editor', editorRoute);
-app.use('/reviewer', reviewerRoute);
-app.use('/author', authorRoute);
+app.use('/editor', isAuthenticated, isEditor, editorRoute);
+app.use('/reviewer', isAuthenticated, isReviewer, reviewerRoute);
+app.use('/author', isAuthenticated, isAuthor, authorRoute);
 app.use('/payu', payuRoute);
 
 app.use('/', mailRoute); // includes POST /send-mail/:email

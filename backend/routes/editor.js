@@ -43,6 +43,7 @@ router.get('/papers', async (req, res) => {
     res.status(500).json({ message: 'Failed to fetch papers' });
   }
 });
+
 router.get('/suggested-reviewers', async (req, res) => {
   try {
     const reviewers = await Reviewer.find();
