@@ -48,10 +48,13 @@ router.post('/', async (req, res) => {
     const user = await User.create(userData);
 
     const token = jwt.sign(
-      { userId: user._id },
-      SECRET_KEY,
-      { expiresIn: "6h" }
-    );
+  {
+    userId: user._id,
+    role: role
+  },
+  SECRET_KEY,
+  { expiresIn: "6h" }
+);
 
     res.status(201).json({ message: 'Signup successful', token });
   } catch (err) {
