@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import axios from 'axios';
 
+import { BACKEND_URL } from "../constant.js";
+
 const predefinedTags = [
   'AI', 'Machine Learning', 'Deep Learning', 'NLP', 'Data Science',
   'IoT', 'Cybersecurity', 'Blockchain', 'Cloud Computing', 'Big Data',
@@ -40,7 +42,7 @@ const Login = () => {
   const handleLoginSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('https://wcise-tr2s.vercel.app/login', {
+      const response = await axios.post(`${BACKEND_URL}/login`, {
         email,
         password,
         role: selectedRole
