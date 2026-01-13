@@ -62,7 +62,10 @@ const EditorsViewMore = () => {
         const matchedReviewers = getTopReviewer(paperTags, fetchedReviewers);
         setReviewers(matchedReviewers);
 
-        const statusResponse = await axios.get(`${BACKEND_URL}/reviewer/status/${paper?.id}`);
+        const statusResponse = await axios.get(`${BACKEND_URL}/editor/paper-status/${paper?.id}`, {
+          headers: { Authorization: `Bearer ${token}` } // Editor token
+        });
+
         const allStatuses = statusResponse.data;
 
         const statusMap = {};
@@ -96,9 +99,10 @@ const EditorsViewMore = () => {
           paperTitle: paper?.title || 'Paper',
           paperId: paper?.id || '',
           reviewerId: rev._id
-        }, {
-        headers: { Authorization: `Bearer ${token}` }
-      }
+        }, 
+      //   {
+      //   headers: { Authorization: `Bearer ${token}` }
+      // }
       );
       console.log(response.data);
       alert(`Mail successfully sent to ${rev.email}`);
@@ -174,12 +178,12 @@ const EditorsViewMore = () => {
               <button
                 disabled
                 className={`px-4 py-2 rounded text-sm cursor-default text-white ${statusMap[rev._id] === 'Accepted'
-                    ? 'bg-green-500'
-                    : statusMap[rev._id] === 'Declined'
-                      ? 'bg-red-500'
-                      : statusMap[rev._id] === 'Mail Sent'
-                        ? 'bg-yellow-500'
-                        : 'bg-gray-500'
+                  ? 'bg-green-500'
+                  : statusMap[rev._id] === 'Declined'
+                    ? 'bg-red-500'
+                    : statusMap[rev._id] === 'Mail Sent'
+                      ? 'bg-yellow-500'
+                      : 'bg-gray-500'
                   }`}
               >
                 {statusMap[rev._id]}
