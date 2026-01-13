@@ -21,9 +21,9 @@ router.post('/', async (req, res) => {
       return res.status(400).json({ message: 'Passwords do not match' });
     }
 
-    if (!ALLOWED_SIGNUP_ROLES.includes(role)) {
-      return res.status(403).json({ message: "Invalid role selected" });
-    }
+    // if (!ALLOWED_SIGNUP_ROLES.includes(role)) {
+    //   return res.status(403).json({ message: "Invalid role selected" });
+    // }
 
     const existingUser = await User.findOne({ email });
 
