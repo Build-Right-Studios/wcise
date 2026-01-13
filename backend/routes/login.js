@@ -41,10 +41,14 @@ router.post('/', async (req, res) => {
 
     // Generate token
     const token = jwt.sign(
-      { userId: user._id },
-      SECRET_KEY,
-      { expiresIn: "6h" }
-    );
+  {
+    userId: user._id,
+    role: role
+  },
+  SECRET_KEY,
+  { expiresIn: "6h" }
+);
+
 
     // Response payload
     res.status(200).json({

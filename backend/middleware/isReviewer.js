@@ -21,7 +21,7 @@ const isReviewer = async (req, res, next) => {
       });
     }
 
-    if (!user.roles.includes("Reviewer")) {
+    if (!user.role.includes("Reviewer")) {
       return res.status(403).json({
         success: false,
         message: "You don't have enough permissions."
