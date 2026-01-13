@@ -20,7 +20,7 @@ const isEditor = async (req, res, next) => {
       });
     }
 
-    if (!user.roles.includes("Editor")) {
+    if (!user.role.includes("Editor")) {
       return res.status(403).json({
         success: false,
         message: "You don't have enough permissions."
