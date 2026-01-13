@@ -26,7 +26,7 @@ const EditorsPapercard = ({ paper }) => {
         </button>
 
         <button
-          onClick={() => window.open(`/pdfs/${paper.pdf}`, '_blank')}
+          onClick={() => window.open(paper.pdf, '_blank')}
           className="bg-green-600 text-white px-4 py-1 rounded hover:bg-green-700 transition"
         >
           📄 View PDF
