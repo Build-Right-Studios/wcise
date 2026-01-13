@@ -56,11 +56,48 @@ function App() {
           <Route path="/keynote-admin" element={<KeynoteAdmin />} />
 
           {/* ✅ Tracks and Admin/Dashboard routes */}
-          <Route path="/author/dashboard" element={<Dashboard />} />
+          {/* <Route path="/author/dashboard" element={<Dashboard />} />
           <Route path="/author/new-paper" element={<Authorcomponent />} />
           <Route path="/author/paper-details" element={<PaperDetailsCard />} />
-          <Route path="/paper-details/:id" element={<PaperDetailsPage />} />
+          <Route path="/paper-details/:id" element={<PaperDetailsPage />} /> */}
           {/* /author/:id */}
+
+          <Route
+            path="/author/dashboard"
+            element={
+              <ProtectedRoute allowedRoles={["Author"]}>
+                <Dashboard />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/author/new-paper"
+            element={
+              <ProtectedRoute allowedRoles={["Author"]}>
+                <Authorcomponent />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/author/paper-details"
+            element={
+              <ProtectedRoute allowedRoles={["Author"]}>
+                <PaperDetailsCard />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/paper-details/:id"
+            element={
+              <ProtectedRoute allowedRoles={["Author"]}>
+                <PaperDetailsPage />
+              </ProtectedRoute>
+            }
+          />
+{/* ################################################################################### */}
 
           {/* <Route path="/editor/dashboard" element={<EditorSignup />} /> */}
           <Route
@@ -71,8 +108,15 @@ function App() {
               </ProtectedRoute>
             }
           />
-          <Route path="/editor/view-more/:paperId" element={<EditorsViewMore />} />
+          <Route path="/editor/view-more/:paperId" element={
+              <ProtectedRoute allowedRoles={["Editor"]}>
+                <EditorsViewMore />
+              </ProtectedRoute>
+            }
+          />
           {/* /editor/:id */}
+
+{/* ################################################################################### */}
 
           <Route path="/reviewer/dashboard" element={<ReviewerDashboard />} />
           <Route path="/reviewer/dashboard/:paperId" element={<ReviewerDashboard />} />

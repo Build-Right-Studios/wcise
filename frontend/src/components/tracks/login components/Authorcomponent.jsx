@@ -52,7 +52,7 @@ function Authorcomponent() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const token = localStorage.getItem('token');
+    const token = sessionStorage.getItem('token');
     if (!token) {
       alert('Please login first');
       return;
