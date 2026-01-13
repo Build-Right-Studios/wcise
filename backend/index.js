@@ -7,7 +7,17 @@ const bodyParser = require('body-parser');
 
 const app = express();
  // Allow requests from your frontend origin
-app.use(cors());
+app.use(cors({
+  origin: [
+    "https://www.wcise.co.in",
+    "http://localhost:5173"
+  ],
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+  credentials: true
+}));
+
+app.options("*", cors());
 
 // Middleware
 app.use(express.json());
