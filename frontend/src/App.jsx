@@ -30,6 +30,8 @@ import ReviewerDashboard from './components/tracks/login components/ReviewerDash
 import ReviewerReviewForm from './components/tracks/ReviewerReviewForm';
 import PaperDetailsPage from './components/tracks/login components/PaperDetailsPage';
 
+import ProtectedRoute from './components/ProtectedRoute';
+
 function App() {
 
   return (
@@ -60,10 +62,18 @@ function App() {
           <Route path="/paper-details/:id" element={<PaperDetailsPage />} />
           {/* /author/:id */}
 
-          <Route path="/editor/dashboard" element={<EditorSignup />} />
+          {/* <Route path="/editor/dashboard" element={<EditorSignup />} /> */}
+          <Route
+            path="/editor/dashboard"
+            element={
+              <ProtectedRoute allowedRoles={["Editor"]}>
+                <EditorSignup />
+              </ProtectedRoute>
+            }
+          />
           <Route path="/editor/view-more/:paperId" element={<EditorsViewMore />} />
           {/* /editor/:id */}
-          
+
           <Route path="/reviewer/dashboard" element={<ReviewerDashboard />} />
           <Route path="/reviewer/dashboard/:paperId" element={<ReviewerDashboard />} />
 
