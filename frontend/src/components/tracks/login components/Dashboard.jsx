@@ -5,6 +5,8 @@ import PaperCard from './PaperCard';
 import PaperDetailsCard from '../PaperDetailsCard';
 import axios from 'axios';
 
+import { BACKEND_URL } from '../../../constant.js';
+
 const Dashboard = () => {
   const [profile, setProfile] = useState(null);
   const [papers, setPapers] = useState([]);
@@ -22,7 +24,7 @@ const Dashboard = () => {
 
       try {
         // http://localhost:8000/author/my-papers to https://wcise-tr2s.vercel.app
-        const response = await axios.get('https://wcise-tr2s.vercel.app/author/my-papers', {
+        const response = await axios.get(`${BACKEND_URL}/author/my-papers`, {
           headers: { Authorization: `Bearer ${token}` }
         });
 
