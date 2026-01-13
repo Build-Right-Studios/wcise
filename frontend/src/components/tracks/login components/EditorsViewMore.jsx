@@ -38,33 +38,40 @@ const EditorsViewMore = () => {
   const [manualMode, setManualMode] = useState(false);
 
   useEffect(() => {
-  const fetchReviewers = async () => {
-    try {
-      const token = sessionStorage.getItem('token');
-      if (!token) {
-        alert('Please login first');
-        navigate('/login');
-        return;
-      }
-      const response = await axios.get(`${BACKEND_URL}/editor/suggested-reviewers`, {
+    const fetchReviewers = async () => {
+      try {
+        const token = sessionStorage.getItem('token');
+        if (!token) {
+          alert('Please login first');
+          navigate('/login');
+          return;
+        }
+        const response = await axios.get(`${BACKEND_URL}/editor/suggested-reviewers`, {
           headers: { Authorization: `Bearer ${token}` }
         });
-      const allReviewers = response.data;
+        // const allReviewers = response.data;
+
+        const fetchedReviewers = Array.isArray(response.data)
+          ? response.data
+          : [];
+
+        // ✅ Step 2: store ALL reviewers in state
+        setAllReviewers(fetchedReviewers);
 
         const paperTags = paper?.keyTags?.split(',').map(tag => tag.trim()) || [];
-        const matchedReviewers = getTopReviewer(paperTags, allReviewers);
+        const matchedReviewers = getTopReviewer(paperTags, fetchedReviewers);
         setReviewers(matchedReviewers);
 
-      const statusResponse = await axios.get(`${BACKEND_URL}/reviewer/status/${paper?.id}`, {
+        const statusResponse = await axios.get(`${BACKEND_URL}/reviewer/status/${paper?.id}`, {
           headers: { Authorization: `Bearer ${token}` }
         });
-      const allStatuses = statusResponse.data;
+        const allStatuses = statusResponse.data;
 
-      const statusMap = {};
-      matchedReviewers.forEach(rev => {
-        const match = allStatuses.find(r => r.reviewerId === rev._id);
-        statusMap[rev._id] = match?.status || 'Waiting';
-      });
+        const statusMap = {};
+        matchedReviewers.forEach(rev => {
+          const match = allStatuses.find(r => r.reviewerId === rev._id);
+          statusMap[rev._id] = match?.status || 'Waiting';
+        });
 
         setStatusMap(statusMap);
       } catch (error) {
@@ -72,8 +79,8 @@ const EditorsViewMore = () => {
       }
     };
 
-  fetchReviewers();
-}, [paper]);
+    fetchReviewers();
+  }, [paper]);
 
 
   const handleSendMail = async (rev) => {
@@ -92,8 +99,8 @@ const EditorsViewMore = () => {
           paperId: paper?.id || '',
           reviewerId: rev._id
         }, {
-          headers: { Authorization: `Bearer ${token}` }
-        }
+        headers: { Authorization: `Bearer ${token}` }
+      }
       );
       console.log(response.data);
       alert(`Mail successfully sent to ${rev.email}`);
@@ -166,20 +173,19 @@ const EditorsViewMore = () => {
                 Send Mail
               </button>
 
-                <button
-  disabled
-  className={`px-4 py-2 rounded text-sm cursor-default text-white ${
-    statusMap[rev._id] === 'Accepted'
-      ? 'bg-green-500'
-      : statusMap[rev._id] === 'Declined'
-      ? 'bg-red-500'
-      : statusMap[rev._id] === 'Mail Sent'
-      ? 'bg-yellow-500'
-      : 'bg-gray-500'
-  }`}
->
-  {statusMap[rev._id]}
-</button>
+              <button
+                disabled
+                className={`px-4 py-2 rounded text-sm cursor-default text-white ${statusMap[rev._id] === 'Accepted'
+                    ? 'bg-green-500'
+                    : statusMap[rev._id] === 'Declined'
+                      ? 'bg-red-500'
+                      : statusMap[rev._id] === 'Mail Sent'
+                        ? 'bg-yellow-500'
+                        : 'bg-gray-500'
+                  }`}
+              >
+                {statusMap[rev._id]}
+              </button>
 
               <button
                 onClick={() => handleSendPaper(rev)}
