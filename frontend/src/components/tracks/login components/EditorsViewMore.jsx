@@ -3,6 +3,8 @@ import axios from 'axios';
 import { useLocation } from 'react-router-dom';
 import ProfileHeader from './Profileheader';
 
+import { BACKEND_URL } from '../../../constant';
+
 const getTopReviewer = (paperTags, reviewers) => {
   const paperTagSet = new Set(paperTags.map(tag => tag.trim().toLowerCase()));
   let maxMatchCount = 0;
@@ -38,14 +40,24 @@ const EditorsViewMore = () => {
   useEffect(() => {
   const fetchReviewers = async () => {
     try {
-      const response = await axios.get('https://wcise-tr2s.vercel.app/editor/suggested-reviewers');
+      const token = sessionStorage.getItem('token');
+      if (!token) {
+        alert('Please login first');
+        navigate('/login');
+        return;
+      }
+      const response = await axios.get(`${BACKEND_URL}/editor/suggested-reviewers`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
       const allReviewers = response.data;
 
         const paperTags = paper?.keyTags?.split(',').map(tag => tag.trim()) || [];
         const matchedReviewers = getTopReviewer(paperTags, allReviewers);
         setReviewers(matchedReviewers);
 
-      const statusResponse = await axios.get(`https://wcise-tr2s.vercel.app/reviewer/status/${paper?.id}`);
+      const statusResponse = await axios.get(`${BACKEND_URL}/reviewer/status/${paper?.id}`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
       const allStatuses = statusResponse.data;
 
       const statusMap = {};
@@ -66,13 +78,21 @@ const EditorsViewMore = () => {
 
   const handleSendMail = async (rev) => {
     try {
+      const token = sessionStorage.getItem('token');
+      if (!token) {
+        alert('Please login first');
+        navigate('/login');
+        return;
+      }
       const response = await axios.post(
-        `http://localhost:8000/send-mail/${encodeURIComponent(rev.email)}`,
+        `${BACKEND_URL}/send-mail/${encodeURIComponent(rev.email)}`,
         {
           name: rev.name,
           paperTitle: paper?.title || 'Paper',
           paperId: paper?.id || '',
           reviewerId: rev._id
+        }, {
+          headers: { Authorization: `Bearer ${token}` }
         }
       );
       console.log(response.data);
