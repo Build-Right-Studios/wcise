@@ -45,19 +45,21 @@ router.get('/papers', async (req, res) => {
   }
 });
 
+// Get all reviewers (not editors)
 router.get('/suggested-reviewers', async (req, res) => {
   try {
-    const reviewers = await User.find({ role: "Editor" });
-    res.status(200).json({
-      success: true,
-      count: reviewers.length,
-      data: reviewers
-    });
+    // Fetch only users with role "Reviewer"
+    const reviewers = await User.find({ role: "Reviewer" });
+
+    // Return an array directly for frontend
+    res.status(200).json(reviewers);
+
   } catch (err) {
     console.error('Error fetching reviewers:', err);
     res.status(500).json({ message: 'Failed to fetch reviewers' });
   }
 });
+
 // editor.js
 
 /// Assign reviewer to paper
