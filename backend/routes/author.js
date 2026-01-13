@@ -7,7 +7,7 @@ const streamifier = require('streamifier');
 const mongoose = require('mongoose');
 const Paper = require('../models/paper.js');
 
-const { authenticationToken } = require('../utilities/utilities.js');
+// const { authenticationToken } = require('../utilities/utilities.js');
 const User = require('../models/user.model');
 // Cloudinary Config
 
@@ -21,7 +21,7 @@ cloudinary.config({
 // Use memory storage for multer (no disk write)
 const upload = multer({ storage: multer.memoryStorage() });
 
-router.post('/new-paper', upload.single('file'), authenticationToken, async (req, res) => {
+router.post('/new-paper', upload.single('file'), async (req, res) => {
   try {
     const { title, abstract } = req.body;
     const user = req.user;
@@ -94,7 +94,7 @@ router.post('/new-paper', upload.single('file'), authenticationToken, async (req
 });
 
 /* Get All Papers of the Logged-in Author */
-router.get('/my-papers', authenticationToken, async (req, res) => {
+router.get('/my-papers', async (req, res) => {
   try {
     const userId = req.user.id;
 
@@ -116,7 +116,7 @@ router.get('/my-papers', authenticationToken, async (req, res) => {
 });
 
 /* Get Paper by ID */
-router.get('/paper/:id', authenticationToken, async (req, res) => {
+router.get('/paper/:id', async (req, res) => {
   try {
     const paper = await Paper.findById(req.params.id);
     if (!paper) {

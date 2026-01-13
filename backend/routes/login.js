@@ -29,7 +29,7 @@ router.post('/', async (req, res) => {
     }
 
     // Check role exists for this user
-    if (!user.roles.includes(role)) {
+    if (!user.role.includes(role)) {
       return res.status(403).json({ message: "Role not assigned to this user" });
     }
 

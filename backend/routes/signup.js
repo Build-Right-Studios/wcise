@@ -2,7 +2,6 @@ const express = require('express');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/user.model');
-const Reviewer = require('../models/reviewer.model');
 
 const router = express.Router();
 
@@ -38,7 +37,7 @@ router.post('/', async (req, res) => {
       name,
       email,
       password: hashedPassword,
-      roles: [role]
+      role: [role]
     };
 
     if (role === "Reviewer") {
