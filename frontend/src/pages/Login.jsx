@@ -67,7 +67,7 @@ const Login = () => {
   const handleSignupSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('https://wcise-tr2s.vercel.app/signup', {
+      const response = await axios.post(`${BACKEND_URL}/signup`, {
         name: name || email.split('@')[0],
         email,
         password,
