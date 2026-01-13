@@ -3,6 +3,8 @@ import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import PaperDetailsCard from '../PaperDetailsCard';
 
+import { BACKEND_URL } from '../../../constant';
+
 const PaperDetailsPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -19,7 +21,7 @@ const PaperDetailsPage = () => {
       }
 
       try {
-        const response = await axios.get(`https://wcise-tr2s.vercel.app/author/paper/${id}`, {
+        const response = await axios.get(`${BACKEND_URL}/author/paper/${id}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setPaper(response.data.paper);

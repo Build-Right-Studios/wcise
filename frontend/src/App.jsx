@@ -58,11 +58,12 @@ function App() {
           <Route path="/author/new-paper" element={<Authorcomponent />} />
           <Route path="/author/paper-details" element={<PaperDetailsCard />} />
           <Route path="/paper-details/:id" element={<PaperDetailsPage />} />
-
           {/* /author/:id */}
+
           <Route path="/editor/dashboard" element={<EditorSignup />} />
           <Route path="/editor/view-more/:paperId" element={<EditorsViewMore />} />
           {/* /editor/:id */}
+          
           <Route path="/reviewer/dashboard" element={<ReviewerDashboard />} />
           <Route path="/reviewer/dashboard/:paperId" element={<ReviewerDashboard />} />
 

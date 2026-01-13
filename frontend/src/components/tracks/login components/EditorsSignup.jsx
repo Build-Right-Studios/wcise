@@ -3,6 +3,8 @@ import axios from 'axios';
 import ProfileHeader from './Profileheader';
 import EditorsPapercard from './EditorsPaperCard';
 
+import { BACKEND_URL } from '../../../constant';
+
 const EditorSignup = () => {
   const [profile, setProfile] = useState(null);
   const [papers, setPapers] = useState([]);
@@ -14,7 +16,7 @@ const EditorSignup = () => {
       photo: '/assets/default-avatar.png',
     });
 
-    axios.get('https://wcise-tr2s.vercel.app/editor/papers')
+    axios.get(`${BACKEND_URL}/editor/papers`)
       .then(response => {
         const fetchedPapers = response.data.map(paper => ({
           id: paper._id,
