@@ -10,13 +10,21 @@ const EditorSignup = () => {
   const [papers, setPapers] = useState([]);
 
   useEffect(() => {
+    const token = sessionStorage.getItem('token');
+      if (!token) {
+        alert('Please login first');
+        navigate('/login');
+        return;
+      }
     setProfile({
       name: 'Melissa',
       email: 'melissa@example.com',
       photo: '/assets/default-avatar.png',
     });
 
-    axios.get(`${BACKEND_URL}/editor/papers`)
+    axios.get(`${BACKEND_URL}/editor/papers`, {
+          headers: { Authorization: `Bearer ${token}` }
+        })
       .then(response => {
         const fetchedPapers = response.data.map(paper => ({
           id: paper._id,

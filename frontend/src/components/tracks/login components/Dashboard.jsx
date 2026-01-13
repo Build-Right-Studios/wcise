@@ -15,7 +15,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     const fetchPapers = async () => {
-      const token = localStorage.getItem('token');
+      const token = sessionStorage.getItem('token');
       if (!token) {
         alert('Please login first');
         navigate('/login');

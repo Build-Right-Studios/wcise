@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 
+import { BACKEND_URL } from '../../../constant';
+
 const ReviewerDashboard = () => {
   const [reviewer, setReviewer] = useState({
     _id: '',
@@ -20,7 +22,7 @@ const ReviewerDashboard = () => {
   const isValidObjectId = (id) => /^[0-9a-fA-F]{24}$/.test(id);
 
   const fetchPapers = async (reviewerId) => {
-    const response = await axios.get(`https://wcise-tr2s.vercel.app/reviewer/assigned-papers/${reviewerId}`);
+    const response = await axios.get(`${BACKEND_URL}/reviewer/assigned-papers/${reviewerId}`);
     setPapers(response.data);
 
     if (paperId) {
@@ -82,7 +84,7 @@ const ReviewerDashboard = () => {
     }
 
     try {
-      await axios.post(`https://wcise-tr2s.vercel.app/reviewer/add-comment/${targetPaperId}`, {
+      await axios.post(`${BACKEND_URL}/reviewer/add-comment/${targetPaperId}`, {
         reviewerId: reviewer._id,
         text: comments,
       });
@@ -103,7 +105,7 @@ const ReviewerDashboard = () => {
     }
 
     try {
-      await axios.post('https://wcise-tr2s.vercel.app/reviewer/respond', {
+      await axios.post(`${BACKEND_URL}/reviewer/respond`, {
         paperId: targetPaperId,
         email: reviewer.email,
         status,
