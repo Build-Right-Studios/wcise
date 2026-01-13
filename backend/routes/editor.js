@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Paper = require('../models/paper');
+const Review = require('../models/review.model')
 const Reviewer = require('../models/reviewer.model');
 const User = require('../models/user.model')
 
@@ -104,6 +105,33 @@ router.get('/:id', async (req, res) => {
   } catch (err) {
     console.error('Error fetching paper by ID:', err);
     res.status(500).json({ message: 'Error fetching paper' });
+  }
+});
+
+router.get('/paper-status/:paperId', async (req, res) => {
+  const { paperId } = req.params;
+
+  try {
+    // Find all reviews for this paper
+    const reviews = await Review.find({ paperId });
+
+    // Populate reviewer info (name, email) from User collection
+    const detailedReviews = await Promise.all(
+      reviews.map(async (r) => {
+        const reviewer = await User.findById(r.reviewerId).select('name email');
+        return {
+          reviewerId: r.reviewerId,
+          reviewerName: reviewer?.name || 'Unknown',
+          reviewerEmail: reviewer?.email || 'Unknown',
+          status: r.status
+        };
+      })
+    );
+
+    res.status(200).json(detailedReviews);
+  } catch (err) {
+    console.error('Error fetching paper status:', err);
+    res.status(500).json({ message: 'Failed to fetch paper status' });
   }
 });
 
