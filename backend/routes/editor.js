@@ -2,36 +2,37 @@ const express = require('express');
 const router = express.Router();
 const Paper = require('../models/paper');
 const Reviewer = require('../models/reviewer.model');
+const User = require('../models/user.model')
 
 // Add new paper
-router.post('/upload', async (req, res) => {
-  try {
-    const { title, paperId, tags, pdfName, status, date } = req.body;
+// router.post('/upload', async (req, res) => {
+//   try {
+//     const { title, paperId, tags, pdfName, status, date } = req.body;
 
-    if ( !title || !paperId || !tags || !pdfName || !status || !date ) {
-      return res.status(400).json({ message: 'All fields are required' });
-    }
+//     if ( !title || !paperId || !tags || !pdfName || !status || !date ) {
+//       return res.status(400).json({ message: 'All fields are required' });
+//     }
 
-    const paper = new Paper({
-      title,
-      paperId,
-      tags: Array.isArray(tags) ? tags : tags.split(',').map(tag => tag.trim()),
-      pdfName,
-      status,
-      date,
-    });
+//     const paper = new Paper({
+//       title,
+//       paperId,
+//       tags: Array.isArray(tags) ? tags : tags.split(',').map(tag => tag.trim()),
+//       pdfName,
+//       status,
+//       date,
+//     });
 
-    const savedPaper = await paper.save();
+//     const savedPaper = await paper.save();
 
-    res.status(201).json({
-      message: 'Paper uploaded successfully',
-      paper: savedPaper,
-    });
-  } catch (err) {
-    console.error('Error uploading paper:', err);
-    res.status(500).json({ message: 'Server error' });
-  }
-});
+//     res.status(201).json({
+//       message: 'Paper uploaded successfully',
+//       paper: savedPaper,
+//     });
+//   } catch (err) {
+//     console.error('Error uploading paper:', err);
+//     res.status(500).json({ message: 'Server error' });
+//   }
+// });
 
 // Get all papers
 router.get('/papers', async (req, res) => {
@@ -46,8 +47,12 @@ router.get('/papers', async (req, res) => {
 
 router.get('/suggested-reviewers', async (req, res) => {
   try {
-    const reviewers = await Reviewer.find();
-    res.json(reviewers);
+    const reviewers = await User.find({ role: "Editor" });
+    res.status(200).json({
+      success: true,
+      count: reviewers.length,
+      data: reviewers
+    });
   } catch (err) {
     console.error('Error fetching reviewers:', err);
     res.status(500).json({ message: 'Failed to fetch reviewers' });
@@ -101,15 +106,13 @@ router.get('/:id', async (req, res) => {
 });
 
 // in editor.js (backend)
-router.get('/all-reviewers', async (req, res) => {
-  try {
-    const reviewers = await Reviewer.find();
-    res.json(reviewers);
-  } catch (error) {
-    res.status(500).json({ message: 'Error fetching reviewers' });
-  }
-});
-
-
+// router.get('/all-reviewers', async (req, res) => {
+//   try {
+//     const reviewers = await Reviewer.find();
+//     res.json(reviewers);
+//   } catch (error) {
+//     res.status(500).json({ message: 'Error fetching reviewers' });
+//   }
+// });
 
 module.exports = router;

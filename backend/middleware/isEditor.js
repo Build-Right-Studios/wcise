@@ -4,14 +4,14 @@ const User = require("../models/user.model");
  */
 const isEditor = async (req, res, next) => {
   try {
-    if (!req.user || !req.user.userId) {
+    if (!req.user || !req.user.id) {
       return res.status(401).json({
         success: false,
         message: "User doesn't exist."
       });
     }
 
-    const user = await User.findById(req.user.userId);
+    const user = await User.findById(req.user.id);
 
     if (!user) {
       return res.status(401).json({

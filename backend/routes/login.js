@@ -6,7 +6,7 @@ const User = require('../models/user.model');
 const router = express.Router();
 const SECRET_KEY = process.env.JWT_SECRET || 'your_super_secret_key';
 
-const ALLOWED_LOGIN_ROLES = ["Author", "Reviewer"];
+const ALLOWED_LOGIN_ROLES = ["Author", "Reviewer", "Editor"];
 
 router.post('/', async (req, res) => {
   try {
