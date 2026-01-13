@@ -48,11 +48,12 @@ const Login = () => {
         role: selectedRole
       });
 
-      localStorage.setItem('token', response.data.token);
+      sessionStorage.setItem('token', response.data.token);
+      sessionStorage.setItem('role', response.data.user.role);
 
-      if (selectedRole === "Reviewer") {
-        localStorage.setItem('reviewer', JSON.stringify(response.data.user));
-      }
+      // if (selectedRole === "Reviewer") {
+      //   localStorage.setItem('reviewer', JSON.stringify(response.data.user));
+      // }
 
       // 👇 new: show modal instead of alert
       setUserData(response.data.user);
@@ -77,7 +78,8 @@ const Login = () => {
       });
 
       alert(response.data.message);
-      localStorage.setItem('token', response.data.token);
+      sessionStorage.setItem('token', response.data.token);
+      sessionStorage.setItem('role', selectedRole);
 
       if (selectedRole === "Author") navigate("/author/dashboard");
       else if (selectedRole === "Editor") navigate("/editor/dashboard");
