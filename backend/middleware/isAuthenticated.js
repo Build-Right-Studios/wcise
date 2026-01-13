@@ -36,7 +36,7 @@ const isAuthenticated = (req, res, next) => {
     }
 
     // Case 3: Valid token
-    req.user = decoded; // { userId }
+    req.user = { id: decoded.userId }; // { userId }
     next();
 
   } catch (err) {

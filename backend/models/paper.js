@@ -20,6 +20,7 @@
 // module.exports = mongoose.model('Papers', paperSchema);
 
 const mongoose = require("mongoose");
+const Counter = require("./counter.js");
 
 const paperSchema = new mongoose.Schema(
   {
