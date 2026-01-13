@@ -62,9 +62,7 @@ const EditorsViewMore = () => {
         const matchedReviewers = getTopReviewer(paperTags, fetchedReviewers);
         setReviewers(matchedReviewers);
 
-        const statusResponse = await axios.get(`${BACKEND_URL}/reviewer/status/${paper?.id}`, {
-          headers: { Authorization: `Bearer ${token}` }
-        });
+        const statusResponse = await axios.get(`${BACKEND_URL}/reviewer/status/${paper?.id}`);
         const allStatuses = statusResponse.data;
 
         const statusMap = {};
