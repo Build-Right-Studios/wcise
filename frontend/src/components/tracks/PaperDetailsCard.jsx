@@ -35,8 +35,10 @@ const PaperDetailsCard = ({ paper, latestComment }) => {
       {/* Details */}
       <div className="flex justify-between bg-[#f3f6fb] p-4 rounded-b-md flex-wrap gap-y-4">
         <div className="flex flex-col text-left text-sm font-medium gap-2 w-full sm:w-[45%]">
-          <div><span className="font-semibold">Paper ID :</span><br />{paper._id}</div>
-          <div><span className="font-semibold">Key Tags :</span><br />{paper.keywords.join(', ')}</div>
+          <div><span className="font-semibold">Paper ID :</span><br />{paper.paperCode}</div>
+          <div><span className="font-semibold">Key Tags :</span><br />
+            {Array.isArray(paper.keywords) ? paper.keywords.join(', ') : '-'}
+          </div>
         </div>
         <div className="flex flex-col text-left text-sm font-medium gap-2 w-full sm:w-[45%]">
           <div><span className="font-semibold">Author ID :</span><br />{paper.author}</div>

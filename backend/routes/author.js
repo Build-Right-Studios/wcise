@@ -115,21 +115,84 @@ router.get('/my-papers', async (req, res) => {
   }
 });
 
-/* Get Paper by ID */
-router.get('/paper/:id', async (req, res) => {
+// GET current logged-in author
+router.get('/me', async (req, res) => {
   try {
-    const paper = await Paper.findById(req.params.id);
+    const author = req.currentUser;
+
+    res.status(200).json({
+      success: true,
+      author: {
+        _id: author._id,
+        name: author.name,
+        email: author.email,
+        phone: author.phone,
+        role: author.role
+      }
+    });
+
+  } catch (error) {
+    console.error('Error fetching reviewer profile:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to fetch reviewer profile'
+    });
+  }
+});
+
+
+/* Get Paper by ID */
+// router.get('/paper/:id', async (req, res) => {
+//   try {
+//     const paper = await Paper.findById(req.params.id);
+//     if (!paper) {
+//       return res.status(404).json({ success: false, message: 'Paper not found' });
+//     }
+
+//     // Fetch all users who commented on this paper
+//     const users = await User.find({ 'comments.paperId': paper._id });
+
+//     let latestComment = null;
+
+//     for (const user of users) {
+//       const comments = user.comments.filter(c => c.paperId.toString() === paper._id.toString());
+//       for (const c of comments) {
+//         if (!latestComment || new Date(c.commentedAt) > new Date(latestComment.commentedAt)) {
+//           latestComment = c;
+//         }
+//       }
+//     }
+
+//     res.status(200).json({ success: true, paper, latestComment });
+//   } catch (error) {
+//     console.error('Error fetching paper by ID:', error);
+//     res.status(500).json({ success: false, message: 'Server error' });
+//   }
+// });
+
+router.get('/paper/:paperCode', async (req, res) => {
+  try {
+    const { paperCode } = req.params;
+
+    const paper = await Paper.findOne({ paperCode });
+
     if (!paper) {
-      return res.status(404).json({ success: false, message: 'Paper not found' });
+      return res.status(404).json({
+        success: false,
+        message: 'Paper not found'
+      });
     }
 
-    // Fetch all users who commented on this paper
+    // Fetch users who commented on this paper
     const users = await User.find({ 'comments.paperId': paper._id });
 
     let latestComment = null;
 
     for (const user of users) {
-      const comments = user.comments.filter(c => c.paperId.toString() === paper._id.toString());
+      const comments = user.comments.filter(
+        c => c.paperId.toString() === paper._id.toString()
+      );
+
       for (const c of comments) {
         if (!latestComment || new Date(c.commentedAt) > new Date(latestComment.commentedAt)) {
           latestComment = c;
@@ -137,10 +200,18 @@ router.get('/paper/:id', async (req, res) => {
       }
     }
 
-    res.status(200).json({ success: true, paper, latestComment });
+    res.status(200).json({
+      success: true,
+      paper,
+      latestComment
+    });
+
   } catch (error) {
-    console.error('Error fetching paper by ID:', error);
-    res.status(500).json({ success: false, message: 'Server error' });
+    console.error('Error fetching paper by paperCode:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Server error'
+    });
   }
 });
 

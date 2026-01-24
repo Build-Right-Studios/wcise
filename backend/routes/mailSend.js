@@ -76,16 +76,33 @@ const express = require('express');
 const router = express.Router();
 const { Resend } = require('resend');
 const Review = require('../models/review.model');
+const jwt = require("jsonwebtoken");
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 router.post('/send-mail/:email', async (req, res) => {
   try {
-    const { name, paperTitle, paperId, reviewerId } = req.body;
+    const { name, paperTitle, paperCode, reviewerId } = req.body;
     const email = req.params.email;
 
-    const acceptUrl = `${process.env.FRONTEND_URL}/reviewer/respond/${paperId}?reviewerId=${reviewerId}&status=Accepted`;
-    const declineUrl = `${process.env.FRONTEND_URL}/reviewer/respond/${paperId}?reviewerId=${reviewerId}&status=Declined`;
+    console.log(process.env.INVITE_SECRET)
+
+    const inviteToken = jwt.sign(
+      {
+        paperCode,
+        reviewerId,
+        action: "REVIEW_INVITE"
+      },
+      process.env.INVITE_SECRET,
+      { expiresIn: "7d" }
+    );
+
+    // const acceptUrl = `${process.env.APP_BASE}/reviewer/respond/${paperCode}?reviewerId=${reviewerId}&status=Accepted`;
+    // const declineUrl = `${process.env.APP_BASE}/reviewer/respond/${paperCode}?reviewerId=${reviewerId}&status=Declined`;
+
+    const acceptUrl = `${process.env.APP_BASE}/reviewer/respond?token=${inviteToken}&status=Accepted`;
+    const declineUrl = `${process.env.APP_BASE}/reviewer/respond?token=${inviteToken}&status=Declined`;
+
 
     const subject = `Review Invitation for "${paperTitle}"`;
 
@@ -105,16 +122,18 @@ router.post('/send-mail/:email', async (req, res) => {
       <p>Regards,<br/>Editorial Team</p>
     `;
 
-    await resend.emails.send({
-      from: 'Editorial Board <noreply@yourdomain.com>',
+    const resendResponse = await resend.emails.send({
+      from: 'Editorial Board <onboarding@resend.dev>',
       to: email,
       subject,
       html
     });
 
+    console.log('Resend response:', resendResponse);
+
     await Review.findOneAndUpdate(
-      { paperId, reviewerId },
-      { paperId, reviewerId, status: 'Mail Sent' },
+      { paperCode, reviewerId },
+      { paperCode, reviewerId, status: 'Mail Sent' },
       { upsert: true, new: true }
     );
 

@@ -6,7 +6,7 @@ import PaperDetailsCard from '../PaperDetailsCard';
 import { BACKEND_URL } from '../../../constant';
 
 const PaperDetailsPage = () => {
-  const { id } = useParams();
+  const { paperCode } = useParams();
   const navigate = useNavigate();
   const [paper, setPaper] = useState(null);
   const [latestComment, setLatestComment] = useState(null);
@@ -21,7 +21,7 @@ const PaperDetailsPage = () => {
       }
 
       try {
-        const response = await axios.get(`${BACKEND_URL}/author/paper/${id}`, {
+        const response = await axios.get(`${BACKEND_URL}/author/paper/${paperCode }`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setPaper(response.data.paper);
@@ -34,7 +34,7 @@ const PaperDetailsPage = () => {
     };
 
     fetchPaper();
-  }, [id, navigate]);
+  }, [paperCode, navigate]);
 
   return (
     <div className="min-h-screen bg-[#f6f9fc] p-6">
