@@ -7,7 +7,7 @@ const EditorsPapercard = ({ paper }) => {
   return (
     <div className="bg-white p-4 rounded-lg shadow-sm border hover:shadow-md transition">
       <h3 className="text-lg font-semibold mb-1">{paper.title}</h3>
-      <p><strong>Paper ID:</strong> {paper.id}</p>
+      <p><strong>Paper ID:</strong> {paper.paperCode}</p>
       <p><strong>Tags:</strong> {paper.keyTags}</p>
       <p><strong>PDF:</strong> <span className="block max-w-full overflow-hidden 
       text-ellipsis break-all">
@@ -18,7 +18,7 @@ const EditorsPapercard = ({ paper }) => {
 
       <div className="mt-3 flex justify-between items-center">
         <button
-          onClick={() => navigate(`/editor/view-more/${paper.id}`, { state: { paper } })}
+          onClick={() => navigate(`/editor/view-more/${paper.paperCode}`, { state: { paper } })}
 
           className="bg-[#4267B2] text-white px-4 py-1 rounded hover:bg-[#365899] transition"
         >

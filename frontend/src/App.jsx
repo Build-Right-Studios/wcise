@@ -90,7 +90,7 @@ function App() {
           />
 
           <Route
-            path="/paper-details/:id"
+            path="/paper-details/:paperCode"
             element={
               <ProtectedRoute allowedRoles={["Author"]}>
                 <PaperDetailsPage />
@@ -108,7 +108,7 @@ function App() {
               </ProtectedRoute>
             }
           />
-          <Route path="/editor/view-more/:paperId" element={
+          <Route path="/editor/view-more/:paperCode" element={
               <ProtectedRoute allowedRoles={["Editor"]}>
                 <EditorsViewMore />
               </ProtectedRoute>
@@ -117,9 +117,18 @@ function App() {
           {/* /editor/:id */}
 
 {/* ################################################################################### */}
-
-          <Route path="/reviewer/dashboard" element={<ReviewerDashboard />} />
-          <Route path="/reviewer/dashboard/:paperId" element={<ReviewerDashboard />} />
+          <Route path="/reviewer/dashboard" element={
+              <ProtectedRoute allowedRoles={["Reviewer"]}>
+                <ReviewerDashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route path="/reviewer/dashboard/:paperCode" element={
+              <ProtectedRoute allowedRoles={["Reviewer"]}>
+                <ReviewerDashboard />
+              </ProtectedRoute>
+            }
+          />
 
           {/* /reviewer/:id */}
           <Route path="*" element={<NotFound />} />

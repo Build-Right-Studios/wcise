@@ -12,13 +12,11 @@ const mongoose = require("mongoose");
 
 const reviewSchema = new mongoose.Schema(
   {
-    paperId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Paper",
+    paperCode: {
+      type: String,
       required: true,
       index: true
     },
-
     reviewerId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",

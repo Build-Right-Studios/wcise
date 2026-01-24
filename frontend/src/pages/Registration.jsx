@@ -3,6 +3,8 @@ import FormModal from '../components/FormModal';
 import payment from "../images/payment.png";
 import cash from "../images/cash.png";
 
+import { BACKEND_URL } from '../constant';
+
 function Registration() {
   const [showCcavenueForm, setShowCcavenueForm] = useState(false);
   const [formData, setFormData] = useState({
@@ -36,7 +38,7 @@ function Registration() {
 
     try {
       // 🔹 Use your deployed backend instead of localhost
-      const res = await fetch('https://wcise-tr2s.vercel.app/payu/initiate', {
+      const res = await fetch(`${BACKEND_URL}/payu/initiate`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),

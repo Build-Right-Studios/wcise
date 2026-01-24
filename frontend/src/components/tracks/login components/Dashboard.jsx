@@ -14,34 +14,53 @@ const Dashboard = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchPapers = async () => {
-      const token = sessionStorage.getItem('token');
+    const fetchAuthorData = async () => {
+      const token = sessionStorage.getItem("token");
       if (!token) {
-        alert('Please login first');
-        navigate('/login');
+        alert("Please login first");
+        navigate("/login");
         return;
       }
 
       try {
-        // http://localhost:8000/author/my-papers to https://wcise-tr2s.vercel.app
-        const response = await axios.get(`${BACKEND_URL}/author/my-papers`, {
-          headers: { Authorization: `Bearer ${token}` }
+        // 1️⃣ Fetch author profile
+        const profileRes = await axios.get(`${BACKEND_URL}/author/me`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         });
 
-        setProfile(response.data.user);
-        setPapers(response.data.papers);
+        setProfile(profileRes.data.author);
+
+        // 2️⃣ Fetch author's papers
+        const papersRes = await axios.get(`${BACKEND_URL}/author/my-papers`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        setPapers(papersRes.data.papers);
+
       } catch (error) {
-        console.error('Error fetching papers:', error);
-        alert('Failed to load papers');
+        console.error("Error fetching author data:", error);
+
+        if (error.response?.status === 401) {
+          sessionStorage.clear();
+          navigate("/login");
+        } else {
+          alert("Failed to load dashboard");
+        }
       }
     };
 
-    fetchPapers();
+    fetchAuthorData();
   }, [navigate]);
+
 
   return (
     <div className="min-h-screen bg-[#f6f9fc] p-6 relative">
       {profile && <ProfileHeader profile={profile} />}
+
       <h2 className="text-2xl font-bold mt-6 mb-4 text-center">My Research Papers</h2>
 
       <div className="flex justify-center">
@@ -54,7 +73,7 @@ const Dashboard = () => {
             + New Paper
           </div>
 
-          {papers.map((paper) => (
+          {/* {papers.map((paper) => (
             <PaperCard
               key={paper._id}
               paper={{
@@ -69,7 +88,26 @@ const Dashboard = () => {
               }}
               onViewMore={() => navigate(`/paper-details/${paper._id}`)}
             />
+          ))} */}
+          {papers.map((paper) => (
+            <PaperCard
+              key={paper.paperCode}   // ✅ better key
+              paper={{
+                paperCode: paper.paperCode,   // optional but useful
+                title: paper.title,
+                keyTags: paper.keywords.join(', '),
+                pdf: (
+                  <span className="block max-w-full overflow-hidden text-ellipsis break-all">
+                    {paper.pdf}
+                  </span>
+                ),
+                status: 'Under Review',
+                date: new Date(paper.submittedAt).toLocaleDateString(),
+              }}
+              onViewMore={() => navigate(`/paper-details/${paper.paperCode}`)}
+            />
           ))}
+
         </div>
       </div>
 

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import ProfileHeader from './Profileheader';
 
 import { BACKEND_URL } from '../../../constant';
@@ -31,6 +31,7 @@ const getTopReviewer = (paperTags, reviewers) => {
 
 const EditorsViewMore = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const paper = location.state?.paper;
   const [reviewers, setReviewers] = useState([]);
   const [allReviewers, setAllReviewers] = useState([]);
@@ -62,15 +63,19 @@ const EditorsViewMore = () => {
         const matchedReviewers = getTopReviewer(paperTags, fetchedReviewers);
         setReviewers(matchedReviewers);
 
-        const statusResponse = await axios.get(`${BACKEND_URL}/editor/paper-status/${paper?.id}`, {
+        const statusResponse = await axios.get(`${BACKEND_URL}/editor/paper-status/${paper?.paperCode}`, {
           headers: { Authorization: `Bearer ${token}` } // Editor token
         });
 
         const allStatuses = statusResponse.data;
 
         const statusMap = {};
-        matchedReviewers.forEach(rev => {
-          const match = allStatuses.find(r => r.reviewerId === rev._id);
+
+        fetchedReviewers.forEach(rev => {
+          const match = allStatuses.find(
+            r => String(r.reviewerId) === String(rev._id)
+          );
+
           statusMap[rev._id] = match?.status || 'Waiting';
         });
 
@@ -97,12 +102,12 @@ const EditorsViewMore = () => {
         {
           name: rev.name,
           paperTitle: paper?.title || 'Paper',
-          paperId: paper?.id || '',
+          paperCode: paper?.paperCode || '',
           reviewerId: rev._id
-        }, 
-      //   {
-      //   headers: { Authorization: `Bearer ${token}` }
-      // }
+        },
+        //   {
+        //   headers: { Authorization: `Bearer ${token}` }
+        // }
       );
       console.log(response.data);
       alert(`Mail successfully sent to ${rev.email}`);
@@ -175,7 +180,7 @@ const EditorsViewMore = () => {
                 Send Mail
               </button>
 
-              <button
+              {/* <button
                 disabled
                 className={`px-4 py-2 rounded text-sm cursor-default text-white ${statusMap[rev._id] === 'Accepted'
                   ? 'bg-green-500'
@@ -187,6 +192,20 @@ const EditorsViewMore = () => {
                   }`}
               >
                 {statusMap[rev._id]}
+              </button> */}
+
+              <button
+                disabled
+                className={`px-4 py-2 rounded text-sm cursor-default text-white ${statusMap[rev._id] === 'Accepted'
+                  ? 'bg-green-500'
+                  : statusMap[rev._id] === 'Declined'
+                    ? 'bg-red-500'
+                    : statusMap[rev._id] === 'Mail Sent'
+                      ? 'bg-yellow-500'
+                      : 'bg-gray-500'
+                  }`}
+              >
+                {statusMap[rev._id] || 'Waiting'}
               </button>
 
               <button
