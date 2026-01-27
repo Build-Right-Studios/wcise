@@ -55,7 +55,7 @@ function Committee() {
 
   return (
     <div className='s m:p-6 p-auto  text-[#1d3b58]'>
-      <h1 className="sm:text-4xl text-2xl font-bold text-center mb-10">STEERING COMMITTEE</h1>
+      <h1 className="sm:text-4xl text-2xl font-bold text-center mb-10">STEERING COMMITTEES</h1>
 
       <ArrowCard
         title="General Chairs"
