@@ -1,5 +1,7 @@
 import React from 'react'
-
+import submission_img from "../images/submission_img.jpg";
+import submission_img2 from "../images/submission_img2.png";
+import { Link } from "react-router-dom";
 
 function Submissions() {
   return (
@@ -8,18 +10,30 @@ function Submissions() {
       <div className="bg-blue-800 text-white flex flex-col items-center min-h-screen px-4 pt-10 ">
         <h2 className="text-5xl font-semibold mb-3 text-center mt-13"> Paper Submission & Publication </h2>
         <p className="text-center max-w-2xl mt-5 mb-10 text-md ">
-          Research papers are invited for submission in WCISE'25. All the full length accepted papers of WCISE will be published in the peer reviewed SCOPUS/Non-SCOPUS Journals.
+          Research papers are invited for submission in WCISE'26. All the full length accepted papers of WCISE will be published in the peer reviewed SCOPUS Indexed Book Chapter and Non-SCOPUS Journals.
         </p>
-        <div className="bg-gray-300 rounded-xl w-90 md:w-[700px] h-70 flex items-center justify-center text-gray-500 text-2xl font-semibold">
-          img
+        <div className="bg-gray-200 rounded-2xl w-full max-w-[700px] h-[280px] md:h-[350px] flex items-center justify-center overflow-hidden shadow-md mb-2">
+          <img
+            src={submission_img}
+            alt="Submission"
+            className="w-full h-full object-cover rounded-2xl"
+          />
         </div>
       </div>
       {/* Second Page */}
       <div className="bg-white items-center min-h-screen">
         <h2 className="text-4xl text-black font-bold mt-18 text-center">Submit Your Research</h2>
-        <p className="text-2xl  text-gray-600 text-center mt-5 mb-7 text-md">
-          Author are invited to submit paper through the Google form link
+        <p className="text-gray-600 text-center mt-5 mb-6 text-lg">
+          Authors are invited to submit their papers through our submission portal.
         </p>
+
+        <div className="flex justify-center">
+          <Link to="/login">
+            <button className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3 rounded-xl shadow-md transition duration-300">
+              Submit Paper
+            </button>
+          </Link>
+        </div>
 
         <h2 className="text-4xl text-black font-bold text-center mt-25">
           Submitted papers must comply with plagiarism policy and procedures
@@ -62,7 +76,7 @@ function Submissions() {
           <div className="bg-white p-6 rounded-2xl shadow-md text-center hover:shadow-lg transition border-l-3 border-blue-800">
             <div className="text-4xl mb-3">📘</div>
             <h3 className="text-lg font-bold text-gray-800 mb-2">
-              SCOPUS Indexed Journals
+              SCOPUS Indexed Book Chapter/Journals
             </h3>
             <p className="text-gray-600 text-sm">
               The publication process for the full length papers registered under the category of SCOPUS Indexed International Journals will take maximum of six months after the conference.
@@ -171,7 +185,7 @@ function Submissions() {
       <div className="bg-gradient-to-r from-blue-700 via-blue-600 to-blue-500 py-20 px-4">
         <div className="max-w-4xl mx-auto bg-white rounded-2xl shadow-xl p-10 text-center">
 
-        
+
 
           <h2 className="text-2xl font-bold text-gray-900 mb-4">
             Important Note
@@ -179,9 +193,9 @@ function Submissions() {
 
 
           <p className="text-gray-600 leading-relaxed text-sm md:text-base">
-            The authors registered for the WCISF with paper publication may revise
+            The authors registered for the WCISE with paper publication may revise
             the paper even after the conference based on the reviewer/editor
-            comments of the Journal. The WCISF committee has the sole authority
+            comments of the Journal. The WCISE committee has the sole authority
             for deciding and choosing the International journals for the
             publication of the full-length papers under the registered category.
             The authors cannot decide or choose the specific International journal
@@ -200,12 +214,16 @@ function Submissions() {
         <div class="grid grid-cols-1 md:grid-cols-2 gap-10 items-center max-w-6xl mt-10 mx-auto">
 
 
-          <div class="bg-gray-200 w-full h-80 md:h-80 rounded-lg flex items-center justify-center text-gray-500 text-xl font-semibold">
-            img
+          <div className="w-full flex justify-center px-4 md:px-0 my-6">
+            <img
+              src={submission_img2}
+              alt="Submission"
+              className="w-full max-w-md md:max-w-2xl h-auto object-contain rounded-lg"
+            />
           </div>
 
 
-          <div class="text-gray-700 font-semibold text-lg md:text-base">
+          <div class="text-gray-700 font-semibold text-lg text-justify md:text-base">
             <p>
               The conference will be conducted in hybrid mode and virtual presentation is available for the individuals using a suitable online conference platform. Virtual Presentation permits contributors to submit abstract/full length papers for refereeing and publication in the conference publications, exactly like a regular paper. Virtual authors whose abstracts/full length papers are accepted (and who have paid registration fees) should submit a power point presentation (with video and/or audio), mp4, or any other multimedia file of their work as due to the different time zone, if they are not available for presentation at the scheduled time then their video presentation will be run as per the conference schedule. Virtual presentation duration of each author will last between 8 to 10 minutes. A high speed internet connection is recommended for live virtual presentations.
             </p>
@@ -214,7 +232,7 @@ function Submissions() {
       </div>
 
       {/* Seven Page */}
-      <div className="min-h-screen flex items-center justify-center bg-white">
+      {/* <div className="min-h-screen flex items-center justify-center bg-white">
 
         <div className="bg-[#1E2A5E] text-white mb-8 rounded-lg shadow-lg  w-full max-w-9xl text-center">
           <h1 className="text-7xl font-bold mt-10 mb-10">Important Dates</h1>
@@ -243,11 +261,10 @@ function Submissions() {
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
 
       {/* Eight Page */}
-      <div className="w-full bg-gray-300 py-16 rounded-lg text-center shadow-sm mb-30">
-        <div className="flex flex-col items-center space-y-4">
+        <div className="flex flex-col items-center space-y-4 mb-4">
 
 
           <h2 className="text-xl font-semibold">Get In Touch</h2>
@@ -263,7 +280,6 @@ function Submissions() {
           </a>
         </div>
       </div>
-    </div>
 
 
   )

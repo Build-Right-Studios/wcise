@@ -5,12 +5,12 @@ function Awards2025() {
     return (
         <div>
             <div className="text-[#1d3b58] sm:p-6 px-6 py-8">
-                <h1 className="sm:text-4xl text-2xl font-bold text-center mt-8">WCISE 2025 AWARDS</h1>
+                <h1 className="sm:text-4xl text-2xl font-bold text-center mt-8">WCISE 2026 AWARDS</h1>
                 <h3 className="sm:text-3xl text-xl font-bold text-center mt-9">
-                    WCISE'25 International Awards-Bangkok under the Aegis of Ministry of Micro, Small & Medium Enterprises (MSME), Government of India.
+                    WCISE'26 International Awards-Bangkok under the Aegis of Ministry of Micro, Small & Medium Enterprises (MSME), Government of India.
                 </h3>
                 <h3 className="sm:text-3xl text-xl font-bold text-center mt-5">
-                    For Upcoming WCISE Conference and Awards - 28th-27th December 2025
+                    For Upcoming WCISE Conference and Awards - 6th-7th June 2026
                 </h3>
 
                 <div className="mt-12 space-y-5">
@@ -22,43 +22,82 @@ function Awards2025() {
                     </p>
                 </div><br />
 
-                <div className="relative justify-center text-center max-w-full max-h-screen min-h-screen mb-55 mt-10">
+                {/* <div className="relative justify-center text-center max-w-full max-h-screen min-h-screen mb-55 mt-10">
                     <div class="bg-[#0a0f35] text-white rounded-xl p-4 item-center">
                         <h1 className="text-4xl font-bold mt-3 ">AWARDS NAME</h1>
                         <ul className="list-disc text-left max-w-1x1 space-y-1 ml-6 mt-6">
-                            <li>WCISE'25 International Award for Best Paper in conference</li>
-                            <li>WCISE'25 International Award for Life Time Achievement</li>
-                            <li>WCISE'25 International Award for Young Scientist</li>
-                            <li>WCISE'25 International Award of the Year (College Level)</li>
-                            <li>WCISE'25 International Award for Best Teacher of the Year (School Level)</li>
-                            <li>WCISE'25 International Award for Best Researcher in Social Science</li>
-                            <li>WCISE'25 International Award for Best Educators</li>
-                            <li>WCISE'25 International Award for Student/Research</li>
-                            <li>WCISE'25 International Award for Academic Leadership</li>
-                            <li>WCISE'25 International Award for Best Thesis</li>
-                            <li>WCISE'25 International Award for Best Doctorial Thesis</li>
-                            <li>WCISE'25 International Award for Best Research Paper</li>
-                            <li>WCISE'25 International Award for Engineer of the Year</li>
-                            <li>WCISE'25 International Award for Contribution in Medical Science</li>
-                            <li>WCISE'25 International Award for Contribution in Dental Science</li>
-                            <li>WCISE'25 International Award for Contribution in Plant and Agricultural Science</li>
-                            <li>WCISE'25 International Award for Student of the Year (College Level)</li>
-                            <li>WCISE'25 International Award for Student of the Year (School Level)</li>
-                            <li>WCISE'25 International Award for Best College</li>
-                            <li>WCISE'25 International Award for Best University Award</li>
-                            <li>WCISE'25 International Award for Contribution in Food Science and Technology</li>
-                            <li>WCISE'25 International Award for Best Researcher in Environment Science</li>
-                            <li>WCISE'25 International Award for Contribution in Pharmacy Science</li>
-                            <li>WCISE'25 International Award for Growing Institute</li>
-                            <li>WCISE'25 International Award for Distinguished Professor</li>
-                            <li>WCISE'25 International Award for Distinguished Director/Principal</li>
-                            <li>WCISE'25 International Award for Distinguished Administrator</li>
-                            <li>WCISE'25 International Award for Distinguished Mathematician</li>
-                            <li>WCISE'25 International Award for Distinguished Teacher</li>
+                            <li>WCISE'26 International Award for Best Paper in conference</li>
+                            <li>WCISE'26 International Award for Life Time Achievement</li>
+                            <li>WCISE'26 International Award for Young Scientist</li>
+                            <li>WCISE'26 International Award of the Year (College Level)</li>
+                            <li>WCISE'26 International Award for Best Teacher of the Year (School Level)</li>
+                            <li>WCISE'26 International Award for Best Researcher in Social Science</li>
+                            <li>WCISE'26 International Award for Best Educators</li>
+                            <li>WCISE'26 International Award for Student/Research</li>
+                            <li>WCISE'26 International Award for Academic Leadership</li>
+                            <li>WCISE'26 International Award for Best Thesis</li>
+                            <li>WCISE'26 International Award for Best Doctorial Thesis</li>
+                            <li>WCISE'26 International Award for Best Research Paper</li>
+                            <li>WCISE'26 International Award for Engineer of the Year</li>
+                            <li>WCISE'26 International Award for Contribution in Medical Science</li>
+                            <li>WCISE'26 International Award for Contribution in Dental Science</li>
+                            <li>WCISE'26 International Award for Contribution in Plant and Agricultural Science</li>
+                            <li>WCISE'26 International Award for Student of the Year (College Level)</li>
+                            <li>WCISE'26 International Award for Student of the Year (School Level)</li>
+                            <li>WCISE'26 International Award for Best College</li>
+                            <li>WCISE'26 International Award for Best University Award</li>
+                            <li>WCISE'26 International Award for Contribution in Food Science and Technology</li>
+                            <li>WCISE'26 International Award for Best Researcher in Environment Science</li>
+                            <li>WCISE'26 International Award for Contribution in Pharmacy Science</li>
+                            <li>WCISE'26 International Award for Growing Institute</li>
+                            <li>WCISE'26 International Award for Distinguished Professor</li>
+                            <li>WCISE'26 International Award for Distinguished Director/Principal</li>
+                            <li>WCISE'26 International Award for Distinguished Administrator</li>
+                            <li>WCISE'26 International Award for Distinguished Mathematician</li>
+                            <li>WCISE'26 International Award for Distinguished Teacher</li>
+                        </ul>
+                    </div>
+                </div> */}
+                <div className="flex justify-center mt-14 mb-14 px-4">
+                    <div className="bg-[#0a0f35] text-white rounded-xl p-6 md:p-10 w-full max-w-full shadow-lg">
+                        <h2 className="text-2xl md:text-4xl font-bold text-center">
+                            AWARDS NAME
+                        </h2>
+
+                        <ul className="list-disc text-left space-y-2 ml-6 mt-6 text-sm md:text-base">
+                            <li>WCISE'26 International Award for Best Paper in Conference</li>
+                            <li>WCISE'26 International Award for Life Time Achievement</li>
+                            <li>WCISE'26 International Award for Young Scientist</li>
+                            <li>WCISE'26 International Award of the Year (College Level)</li>
+                            <li>WCISE'26 International Award for Best Teacher (School Level)</li>
+                            <li>WCISE'26 International Award for Best Researcher (Social Science)</li>
+                            <li>WCISE'26 International Award for Best Educator</li>
+                            <li>WCISE'26 International Award for Student/Research Scholar</li>
+                            <li>WCISE'26 International Award for Academic Leadership</li>
+                            <li>WCISE'26 International Award for Best Thesis</li>
+                            <li>WCISE'26 International Award for Best Doctoral Thesis</li>
+                            <li>WCISE'26 International Award for Best Research Paper</li>
+                            <li>WCISE'26 International Award for Engineer of the Year</li>
+                            <li>WCISE'26 International Award for Contribution in Medical Science</li>
+                            <li>WCISE'26 International Award for Contribution in Dental Science</li>
+                            <li>WCISE'26 International Award for Contribution in Agricultural Science</li>
+                            <li>WCISE'26 International Award for Student of the Year (College)</li>
+                            <li>WCISE'26 International Award for Student of the Year (School)</li>
+                            <li>WCISE'26 International Award for Best College</li>
+                            <li>WCISE'26 International Award for Best University</li>
+                            <li>WCISE'26 International Award for Contribution in Food Science</li>
+                            <li>WCISE'26 International Award for Best Researcher (Environment)</li>
+                            <li>WCISE'26 International Award for Contribution in Pharmacy</li>
+                            <li>WCISE'26 International Award for Growing Institute</li>
+                            <li>WCISE'26 International Award for Distinguished Professor</li>
+                            <li>WCISE'26 International Award for Distinguished Director/Principal</li>
+                            <li>WCISE'26 International Award for Distinguished Administrator</li>
+                            <li>WCISE'26 International Award for Distinguished Mathematician</li>
+                            <li>WCISE'26 International Award for Distinguished Teacher</li>
                         </ul>
                     </div>
                 </div>
-                <p className="mt-6 text-justify list-disc">
+                <p className=" mt-6 text-justify list-disc">
                     <span className="font-bold ">WCISE International Awards for Life Time Achievement:</span> Will be bestowed to the Principals , Directors, Academic Administrators, corporate member during their lifetimes, have made creative contributions on the basis of various qualitative and the quantitative parameters for their constructive endeavors in the field of Academics and researches or any other. Life Time Achievement Award recognizes an individual for contributions over the whole of a career, rather than or in addition to single contributions.
                 </p>
                 <p className="mt-3 text justify list-disc">
@@ -98,15 +137,15 @@ function Awards2025() {
                     <li>Citation Report will be available on various Research Databases & Social Media with photographs.</li>
                 </ul>
                 <br />
-                <hr className="bg-[#1d3b58] h-1.5 w-3/4 ml-auto" />
+                <hr className="bg-[#1d3b58] h-1.5 w-3/4" />
 
                 <div className="bg-[#1d3b58] text-white font-bold text-lg px-8 py-3 rounded-full w-fit text-center mt-7">Nomination Procedure
                 </div>
                 <ul className="mt-3 text-justify font-bold list-disc ml-4">
                     <li>Email your CV at wcise.convenor@gmail.com with choice of award category.</li>
                     <li>Your CV will be reviewed by WCISE committee panel members.</li>
-                    <li>youou will be notified within the week.</li>
-                    <li>The registration will be open till December 20, 2025.</li>
+                    <li>You will be notified within the week.</li>
+                    <li>The registration will be open till May 20th, 2026.</li>
                     <li>For more information Whatsup at +919667006019.</li>
                 </ul>
             </div>

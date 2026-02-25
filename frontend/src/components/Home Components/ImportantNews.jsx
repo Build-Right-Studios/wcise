@@ -18,9 +18,9 @@ function ImportantNews() {
             }}
             className="absolute w-full text-center"
           >
-            <p>20th December 2025 will be conference tour to Kohlarn Island.</p> <br /> 
-            <p>25th December 2025 will be conference tour to Kohlarn Island.</p>  <br />  
-            <p>29th December 2025 will be conference tour to Kohlarn Island.</p> <br /> 
+            <p>6th June 2026 will be reserved for Registration & Tour to Kohlarn Island.</p> <br />
+            <p>6th June 2026 will be reserved for Registration & Tour to Kohlarn Island.</p> <br /> 
+            <p>6th June 2026 will be reserved for Registration & Tour to Kohlarn Island.</p> <br />
           </motion.div>
         </div>
       </div>

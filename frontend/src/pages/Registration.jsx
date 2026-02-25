@@ -134,7 +134,7 @@ function Registration() {
       {/* Section 3: WCISE Award */}
       <div className="px-4 sm:px-5">
         <h2 className="text-center md:text-left mt-8 text-2xl sm:text-3xl font-bold text-[#1d3b58]">
-          WCISE'23 Awards
+          WCISE'26 Awards
         </h2>
       </div>
       <div className="w-full px-4 sm:px-5 py-4">
@@ -151,7 +151,7 @@ function Registration() {
       </div>
 
       {/* PAYMENT SECTION */}
-      <div className="w-full px-6 py-20 bg-white">
+      <div className="w-full px-6 py-15 bg-white">
         <div className="flex flex-col lg:flex-row justify-between items-center gap-20 max-w-7xl mx-auto">
           <img
             src={payment}
@@ -265,7 +265,7 @@ function Registration() {
 
       <div className="w-full p-0 bg-white text-[#1d3b58] text-justify">
         <div className="max-w-4xl mx-auto p-4">
-          <h2 className="text-3xl mt-15 sm:text-4xl font-bold mb-8">The Registration fee includes:</h2>
+          <h2 className="text-3xl sm:text-4xl font-bold mb-8">The Registration fee includes:</h2>
           <ul className="space-y-2 text-lg leading-relaxed">
             <li className="flex items-start"><span className="text-2xl mr-3">•</span>Access to all sessions including keynotes.</li>
             <li className="flex items-start">
@@ -285,7 +285,7 @@ function Registration() {
       </div>
 
       {/* Note & Important */}
-      <div className="w-auto px-6 sm:px-10 py-2 bg-white text-[#1d3b58]">
+      {/* <div className="w-auto px-6 sm:px-10 py-2 bg-white text-[#1d3b58]">
         <div className="max-w-7xl mx-auto space-y-2 text-lg sm:text-xl leading-relaxed">
           <div>
             <p className="font-bold text-3xl mt-10 sm:text-4xl mb-6 text-justify">Note :</p>
@@ -301,7 +301,7 @@ function Registration() {
             </ul>
           </div>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 }
