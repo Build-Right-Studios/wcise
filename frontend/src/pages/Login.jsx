@@ -28,6 +28,7 @@ const Login = () => {
   const [tags, setTags] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [userData, setUserData] = useState(null);
+  const [isLoading, setIsLoading] = useState(false); // ✅ NEW
 
   const navigate = useNavigate();
 
@@ -41,6 +42,7 @@ const Login = () => {
 
   const handleLoginSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
     try {
       const response = await axios.post(`${BACKEND_URL}/login`, {
         email,
@@ -62,11 +64,14 @@ const Login = () => {
     } catch (error) {
       console.error(error);
       alert(error.response?.data?.message || "Login failed");
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const handleSignupSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
     try {
       const response = await axios.post(`${BACKEND_URL}/signup`, {
         name: name || email.split('@')[0],
@@ -88,6 +93,8 @@ const Login = () => {
     } catch (error) {
       console.error(error);
       alert(error.response?.data?.message || "Signup failed");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -105,31 +112,48 @@ const Login = () => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, ease: "easeOut" }}>
 
+        {isLoading && (
+          <div className={`absolute inset-0 ${primaryGradientBg} flex items-center justify-center z-30`}>
+            <div className="bg-white p-6 rounded-2xl shadow-xl text-center w-80">
+              <h2 className="text-lg font-semibold text-[#003366] mb-3">
+                Please Wait...
+              </h2>
+              <p className="text-sm text-gray-700 mb-4">
+                Please wait while we process your request.
+                <br />
+                This may take up to <strong>60–90 seconds.</strong>
+                Thank you for your patience.
+              </p>
+              <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-blue-500 mx-auto"></div>
+            </div>
+          </div>
+        )}
+
         {/*  new modal box */}
         {showModal && userData && (
-  <div className={`absolute inset-0 ${primaryGradientBg} flex items-center justify-center z-20`}>
-    <div className="bg-white rounded-2xl p-6 shadow-2xl w-80 text-center">
-      <h2 className="text-lg font-semibold mb-3 text-[#003366]">
-        Welcome Back!
-      </h2>
-      <p className="text-sm text-gray-700 mb-2">
-        <strong>Name:</strong> {userData.name}
-      </p>
-      <p className="text-sm text-gray-700 mb-2">
-        <strong>Email:</strong> {userData.email}
-      </p>
-      <p className="text-sm text-gray-700 mb-4">
-        <strong>Role:</strong> {userData.role}
-      </p>
-      <button
-        onClick={handleOkClick}
-        className="bg-[#0073e6] text-white px-4 py-2 rounded-lg hover:bg-[#005bb5]"
-      >
-        OK
-      </button>
-    </div>
-  </div>
-)}
+          <div className={`absolute inset-0 ${primaryGradientBg} flex items-center justify-center z-20`}>
+            <div className="bg-white rounded-2xl p-6 shadow-2xl w-80 text-center">
+              <h2 className="text-lg font-semibold mb-3 text-[#003366]">
+                Welcome Back!
+              </h2>
+              <p className="text-sm text-gray-700 mb-2">
+                <strong>Name:</strong> {userData.name}
+              </p>
+              <p className="text-sm text-gray-700 mb-2">
+                <strong>Email:</strong> {userData.email}
+              </p>
+              <p className="text-sm text-gray-700 mb-4">
+                <strong>Role:</strong> {userData.role}
+              </p>
+              <button
+                onClick={handleOkClick}
+                className="bg-[#0073e6] text-white px-4 py-2 rounded-lg hover:bg-[#005bb5]"
+              >
+                OK
+              </button>
+            </div>
+          </div>
+        )}
 
         <motion.div className="relative h-10 flex justify-between mb-4">
           <div className={`w-1/2 text-center text-xl font-semibold ${isLogin ? 'text-black' : 'text-gray-400'}`}>Login Form</div>
