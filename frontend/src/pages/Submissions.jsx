@@ -27,12 +27,27 @@ function Submissions() {
           Authors are invited to submit their papers through our submission portal.
         </p>
 
-        <div className="flex justify-center">
+        <div className="flex flex-col items-center gap-4">
+          {/* Internal Submission */}
           <Link to="/login">
             <button className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3 rounded-xl shadow-md transition duration-300">
-              Submit Paper
+              Submit via Portal
             </button>
           </Link>
+
+          {/* Divider */}
+          <p className="text-gray-500 text-sm">OR</p>
+
+          {/* EasyChair External Submission */}
+          <a
+            href="https://easychair.org/conferences/?conf=wcise26"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <button className="bg-green-600 hover:bg-green-700 text-white font-semibold px-6 py-3 rounded-xl shadow-md transition duration-300">
+              Submit via EasyChair
+            </button>
+          </a>
         </div>
 
         <h2 className="text-4xl text-black font-bold text-center mt-25">
@@ -264,22 +279,22 @@ function Submissions() {
       </div> */}
 
       {/* Eight Page */}
-        <div className="flex flex-col items-center space-y-4 mb-4">
+      <div className="flex flex-col items-center space-y-4 mb-4">
 
 
-          <h2 className="text-xl font-semibold">Get In Touch</h2>
-          <p className="text-gray-500 text-sm">
-            For any query, feel free to contact us
-          </p>
+        <h2 className="text-xl font-semibold">Get In Touch</h2>
+        <p className="text-gray-500 text-sm">
+          For any query, feel free to contact us
+        </p>
 
-          <a
-            href="mailto:wcise.convenor@gmail.com"
-            className="bg-blue-600 text-white px-6 py-2 rounded-md shadow-md hover:bg-blue-700 transition"
-          >
-            wcise.convenor@gmail.com
-          </a>
-        </div>
+        <a
+          href="mailto:wcise.convenor@gmail.com"
+          className="bg-blue-600 text-white px-6 py-2 rounded-md shadow-md hover:bg-blue-700 transition"
+        >
+          wcise.convenor@gmail.com
+        </a>
       </div>
+    </div>
 
 
   )
