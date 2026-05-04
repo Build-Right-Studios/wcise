@@ -1,77 +1,3 @@
-// const express = require('express');
-// const router = express.Router();
-// const nodemailer = require('nodemailer');
-// const Review = require('../models/review.model')
-
-// // POST /invite/:email
-// router.post('/send-mail/:email', async (req, res) => {
-//   const { name, paperTitle, paperId, reviewerId } = req.body;
-//   const email = req.params.email;
-
-//   const acceptUrl = `http://localhost:8000/reviewer/respond/${paperId}?reviewerId=${reviewerId}&status=Accepted`;
-//   const declineUrl = `http://localhost:8000/reviewer/respond/${paperId}?reviewerId=${reviewerId}&status=Declined`;
-
-//   const transporter = nodemailer.createTransport({
-//     host: 'smtp.gmail.com',
-//     port: 587,
-//     secure: false,
-//     auth: {
-//       user: 'dhratikaushik05@gmail.com',
-//       pass: 'jvfb loxd fimz oxqp' // Use app password only!
-//     },
-//     tls: {
-//       rejectUnauthorized: false
-//     }
-//   });
-
-//   const subject = `Review Invitation for "${paperTitle}"`;
-
-//   const message = `
-//     <p>Dear ${name},</p>
-//     <p>You have been invited to review the paper titled: <strong>${paperTitle}</strong>.</p>
-//     <p>Paper ID: <strong>${paperId}</strong></p>
-
-//     <p>Please choose one of the options below:</p>
-
-//     <div style="margin: 20px 0;">
-//       <a href="${acceptUrl}" style="background-color:#28a745;color:white;padding:10px 20px;border-radius:5px;text-decoration:none;margin-right:10px;">
-//         ✅ Accept
-//       </a>
-
-//       <a href="${declineUrl}" style="background-color:#dc3545;color:white;padding:10px 20px;border-radius:5px;text-decoration:none;">
-//         ❌ Decline
-//       </a>
-//     </div>
-
-//     <p>Regards,<br/>Editorial Team</p>
-//   `;
-
-//   try {
-//     const info = await transporter.sendMail({
-//       from: '"Editorial Board" <dhratikaushik05@gmail.com>',
-//       to: email,
-//       subject,
-//       html: message
-
-//     });
-
-//     console.log("Mail sent:", info.response);
-
-//     await Review.findOneAndUpdate(
-//       { paperId, reviewerId },
-//       { paperId, reviewerId, status: 'Mail Sent',},
-//       { upsert: true, new: true }
-//     );
-
-//     res.status(200).json({ success: true, message: "Mail sent" });
-//   } catch (error) {
-//     console.error("Mail failed:", error);
-//     res.status(500).json({ success: false, message: error.message });
-//   }
-// });
-
-// module.exports = router;
-
 const express = require('express');
 const router = express.Router();
 const { Resend } = require('resend');
@@ -85,8 +11,14 @@ router.post('/send-mail/:email', async (req, res) => {
     const { name, paperTitle, paperCode, reviewerId } = req.body;
     const email = req.params.email;
 
-    console.log(process.env.INVITE_SECRET)
+    if (!name || !paperTitle || !paperCode || !reviewerId) {
+      return res.status(400).json({
+        success: false,
+        message: "Missing required fields"
+      });
+    }
 
+    // 🔐 Create invite token
     const inviteToken = jwt.sign(
       {
         paperCode,
@@ -97,12 +29,9 @@ router.post('/send-mail/:email', async (req, res) => {
       { expiresIn: "7d" }
     );
 
-    // const acceptUrl = `${process.env.APP_BASE}/reviewer/respond/${paperCode}?reviewerId=${reviewerId}&status=Accepted`;
-    // const declineUrl = `${process.env.APP_BASE}/reviewer/respond/${paperCode}?reviewerId=${reviewerId}&status=Declined`;
-
+    // 🔗 URLs
     const acceptUrl = `${process.env.APP_BASE}/reviewer/respond?token=${inviteToken}&status=Accepted`;
     const declineUrl = `${process.env.APP_BASE}/reviewer/respond?token=${inviteToken}&status=Declined`;
-
 
     const subject = `Review Invitation for "${paperTitle}"`;
 
@@ -122,8 +51,10 @@ router.post('/send-mail/:email', async (req, res) => {
       <p>Regards,<br/>Editorial Team</p>
     `;
 
+    // 📧 Send email
     const resendResponse = await resend.emails.send({
-      from: 'Editorial Board <onboarding@resend.dev>',
+      // ⚠️ CHANGE THIS after domain verification
+      from: 'Editorial Board <noreply@wcise.co.in>',
       to: email,
       subject,
       html
@@ -131,16 +62,42 @@ router.post('/send-mail/:email', async (req, res) => {
 
     console.log('Resend response:', resendResponse);
 
+    // ❗ IMPORTANT: Check for Resend error
+    if (resendResponse.error) {
+      console.error('Resend failed:', resendResponse.error);
+
+      // ❌ Do NOT mark as sent
+      await Review.findOneAndUpdate(
+        { paperCode, reviewerId },
+        { paperCode, reviewerId, status: 'Failed' },
+        { upsert: true, new: true }
+      );
+
+      return res.status(400).json({
+        success: false,
+        message: resendResponse.error.message || 'Email sending failed'
+      });
+    }
+
+    // ✅ Only update DB if email SUCCESS
     await Review.findOneAndUpdate(
       { paperCode, reviewerId },
       { paperCode, reviewerId, status: 'Mail Sent' },
       { upsert: true, new: true }
     );
 
-    res.json({ success: true, message: 'Mail sent successfully' });
+    return res.json({
+      success: true,
+      message: 'Mail sent successfully'
+    });
+
   } catch (err) {
     console.error('Mail error:', err);
-    res.status(500).json({ success: false, message: 'Mail sending failed' });
+
+    return res.status(500).json({
+      success: false,
+      message: err.message || 'Internal server error'
+    });
   }
 });
 
