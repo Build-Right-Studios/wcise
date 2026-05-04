@@ -32,6 +32,9 @@ router.post('/initiate', (req, res) => {
 
   const hash = crypto.createHash('sha512').update(hashString).digest('hex');
 
+  console.log('Environment:', process.env.PAYU_ENVIRONMENT);
+  console.log('PayU URL:', payuBaseUrl);
+
   const payuData = {
     key: merchantKey,
     txnid,
