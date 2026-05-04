@@ -110,7 +110,12 @@ const EditorsViewMore = () => {
         // }
       );
       console.log(response.data);
+      if (response.data?.success) {
       alert(`Mail successfully sent to ${rev.email}`);
+      setStatusMap(prev => ({ ...prev, [rev._id]: 'Mail Sent' }));
+    } else {
+      alert(`Mail failed: ${response.data?.message || 'Unknown error'}`);
+    }
       setStatusMap(prev => ({ ...prev, [rev._id]: 'Mail Sent' }));
     } catch (error) {
       console.error('Failed to send mail:', error);
