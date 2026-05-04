@@ -53,8 +53,7 @@ router.post('/send-mail/:email', async (req, res) => {
 
     // 📧 Send email
     const resendResponse = await resend.emails.send({
-      // ⚠️ CHANGE THIS after domain verification
-      from: 'Editorial Board <noreply@wcise.co.in>',
+      from: 'Editorial Board <onboarding@resend.dev>',
       to: email,
       subject,
       html
