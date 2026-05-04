@@ -45,10 +45,9 @@ function Registration() {
       });
 
       const html = await res.text();
-      const newWindow = window.open();
-      newWindow.document.open();
-      newWindow.document.write(html);
-      newWindow.document.close();
+      document.open();
+      document.write(html);
+      document.close();
     } catch (err) {
       console.error("Payment initiation failed:", err);
       alert("Something went wrong. Please try again.");

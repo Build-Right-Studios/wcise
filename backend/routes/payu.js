@@ -12,30 +12,43 @@ const payuBaseUrl = process.env.PAYU_ENVIRONMENT === 'TEST'
 router.post('/initiate', (req, res) => {
   const { name, email, phone, amount, productinfo } = req.body;
   const txnid = `ORDER_${Date.now()}`;
+  const formattedAmount = parseFloat(amount).toFixed(2);
 
-  const hashString = `${merchantKey}|${txnid}|${amount}|${productinfo}|${name}|${email}|||||||||||${salt}`;
+  const cleanName = name.trim();
+  const cleanEmail = email.trim();
+  const cleanProductinfo = productinfo.trim();
+
+  const hashString = [
+    merchantKey,
+    txnid,
+    formattedAmount,
+    cleanProductinfo,
+    cleanName,
+    cleanEmail,
+    '', '', '', '', '',  // udf1-udf5
+    '', '', '', '', '',  // 5 more empty
+    salt
+  ].join('|');
+
   const hash = crypto.createHash('sha512').update(hashString).digest('hex');
 
   const payuData = {
     key: merchantKey,
     txnid,
-    amount,
-    productinfo,
-    firstname: name,
-    email,
-    phone,
-    surl: `${process.env.APP_BASE}/payu/success`,
-    furl: `${process.env.APP_BASE}/payu/failure`,
+    amount: formattedAmount,
+    productinfo: cleanProductinfo,  // ✅ use clean version
+    firstname: cleanName,           // ✅ use clean version (must match hash)
+    email: cleanEmail,              // ✅ use clean version (must match hash)
+    phone: phone || '9999999999',
+    surl: `${process.env.APP_BASE}/payu/success`,  // ✅ Render backend URL
+    furl: `${process.env.APP_BASE}/payu/failure`,  // ✅ Render backend URL
     hash,
-    service_provider: 'payu_paisa',
-    action: payuBaseUrl
   };
 
-  // Auto-submitting HTML form
   const formHtml = `
     <html>
       <body onload="document.forms[0].submit()">
-        <form action="${payuData.action}" method="post">
+        <form action="${payuBaseUrl}" method="post">
           ${Object.entries(payuData)
             .map(([key, val]) => `<input type="hidden" name="${key}" value="${val}" />`)
             .join('')}
@@ -48,11 +61,15 @@ router.post('/initiate', (req, res) => {
 });
 
 router.post('/success', (req, res) => {
-  res.send(`<h2>✅ Payment Successful</h2><p>Transaction ID: ${req.body.txnid}</p>`);
+  const { txnid, amount, status } = req.body;
+  const frontendUrl = process.env.FRONTEND_URL || 'https://www.wcise.co.in';
+  res.redirect(`${frontendUrl}/payment-success?txnid=${txnid}&amount=${amount}&status=${status}`);
 });
 
 router.post('/failure', (req, res) => {
-  res.send(`<h2>❌ Payment Failed</h2><p>Reason: ${req.body.error_Message || 'Unknown'}</p>`);
+  const { txnid, error_Message } = req.body;
+  const frontendUrl = process.env.FRONTEND_URL || 'https://www.wcise.co.in';
+  res.redirect(`${frontendUrl}/payment-failure?txnid=${txnid}&reason=${encodeURIComponent(error_Message || 'Payment failed')}`);
 });
 
 module.exports = router;
