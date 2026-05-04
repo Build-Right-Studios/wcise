@@ -101,9 +101,9 @@ function GetInTouch() {
                         <h2 className='text-[24x] lg:text-[30px]'>Prof. (Dr) C. C. Tan</h2>
                         <br />
                         <p className='text-[16px]'>General Chair, WCISE</p>
-                        <p className='text-[16px]'>Rajamangala University of Technology,</p>
-                        <p className='text-[16px]'>Rattanakosin,</p>
-                        <p className='text-[16px]'>Bangkok, Thailand.</p>
+                        <p className='text-[16px]'>Director, Sino-Thai Research Unit,</p>
+                        <p className='text-[16px]'>International College,</p>
+                        <p className='text-[16px]'>National Institute of Development Administration, Bangkok, Thailand.</p>
                         <div><strong className='text-[16px]'>Email : </strong><span className='text-[#1d3b58] cursor-pointer underline lg:text-[18px]'>wcise.convenor@gmail.com</span></div>
                         <div><strong className='text-[16px]'>Visit : </strong><span className='text-[#1d3b58] cursor-pointer underline lg:text-[18px]'>wcise.co.in</span></div>
                         <br />

@@ -13,16 +13,21 @@ function ImportantLink() {
                         <ol className='list-disc flex flex-col gap-4 ml-4 mr-4 text-[#1d3b58]'>
                             <li>
                                 <div className='text-3xl'>SUBMISSION OF FINAL PAPER: </div>
-                                <div className='text-xl'>April 30, 2026</div>
+                                <div className='text-xl line-through decoration-red-500 text-red-500'>
+                                    April 30, 2026
+                                </div>
+                                <div className='text-xl text-blue-600'>May 15, 2026</div>
                             </li>
+
                             <li>
                                 <div className='text-3xl'>PAPER ACCEPTANCE NOTIFICATION:</div>
-                                <div className='text-xl'>May 15, 2026</div>
+                                <div className='text-xl line-through decoration-red-500 text-red-500'>
+                                    May 15, 2026
+                                </div>
+                                <div className='text-xl text-blue-600'>May 20, 2026</div>
                             </li>
-                            <li>
-                                <div className='text-3xl'>RECEIVING CRC AND REGISTRATION:</div>
-                                <div className='text-xl mb-4'>May 25, 2026</div>
-                            </li>
+
+                            <li> <div className='text-3xl'>RECEIVING CRC AND REGISTRATION:</div> <div className='text-xl mb-4'>May 25, 2026</div> </li>
                         </ol>
                     </div>
                 </div>
