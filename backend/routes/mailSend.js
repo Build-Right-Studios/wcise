@@ -53,7 +53,7 @@ router.post('/send-mail/:email', async (req, res) => {
 
     // 📧 Send email
     const resendResponse = await resend.emails.send({
-      from: 'Editorial Board <onboarding@resend.dev>',
+      from: 'Editorial Board <onboarding@wcise.co.in>',
       to: email,
       subject,
       html
