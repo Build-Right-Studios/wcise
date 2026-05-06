@@ -10,50 +10,49 @@ router.post('/add-comment/:paperCode', async (req, res) => {
   const { paperCode } = req.params;
   const { reviewerId, text } = req.body;
 
-  //  Log input values
-  console.log('Incoming request:');
-  console.log('Paper ID:', paperCode);
-  console.log('Reviewer ID:', reviewerId);
-  console.log('Comment Text:', text);
-
-  //  Validate ObjectId format
+  // Validate inputs
   if (!paperCode) {
     return res.status(400).json({ message: 'paperCode is required' });
   }
 
+  if (!text || !text.trim()) {
+    return res.status(400).json({ message: 'Comment text is required' });
+  }
+
   if (!mongoose.Types.ObjectId.isValid(reviewerId)) {
-    console.error('Invalid Reviewer ID format');
     return res.status(400).json({ message: 'Invalid reviewer ID format' });
   }
 
   try {
-    // ✅ Find the review document for that paper & reviewer
+    // Find paper
     const paper = await Paper.findOne({ paperCode });
-    console.log(paper);
-    
+
+    if (!paper) {
+      return res.status(404).json({ message: `Paper not found with code: ${paperCode}` });
+    }
+
     // Add comment to paper
-    const commentObj = { reviewerId, text };
+    const commentObj = { reviewerId, text: text.trim() };
     paper.comments = paper.comments || [];
     paper.comments.push(commentObj);
     await paper.save();
 
-    // Add comment to author (user)
+    // Add comment to author
     const author = await User.findById(paper.author);
     if (author) {
       author.comments = author.comments || [];
       author.comments.push({
-        paperCode,
-        comment: text,
+        paperId: paper._id,       // ✅ fixed: was paperCode (string), model requires ObjectId
+        comment: text.trim(),
         commentedAt: new Date()
       });
-
-
       await author.save();
     }
 
     res.status(200).json({ message: 'Comment added successfully', latestComment: commentObj });
+
   } catch (err) {
-    console.error(err);
+    console.error('Error in /add-comment:', err.message);
     res.status(500).json({ message: 'Failed to add comment', error: err.message });
   }
 });

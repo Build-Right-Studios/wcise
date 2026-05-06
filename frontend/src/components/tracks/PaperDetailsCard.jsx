@@ -1,10 +1,13 @@
 import React, { useState, useRef, useEffect } from 'react';
+import axios from 'axios';
+import { BACKEND_URL } from '../../constant.js';
 
 const PaperDetailsCard = ({ paper, latestComment }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [abstract, setAbstract] = useState('');
   const [status, setStatus] = useState('Under Review');
   const [pdfFile, setPdfFile] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const fileInputRef = useRef(null);
 
@@ -16,9 +19,36 @@ const PaperDetailsCard = ({ paper, latestComment }) => {
   }, [paper]);
 
   const handleEdit = () => setIsEditing(true);
-  const handleSave = () => {
-    setIsEditing(false);
-    console.log("Saved:", { abstract, status, pdfFile });
+
+  const handleSave = async () => {
+    const token = sessionStorage.getItem('token');
+    if (!token) return alert('Please login first');
+
+    try {
+      setLoading(true);
+      const formData = new FormData();
+      formData.append('abstract', abstract);
+      if (pdfFile) formData.append('file', pdfFile);
+
+      await axios.put(
+        `${BACKEND_URL}/author/paper/${paper.paperCode}`,
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'multipart/form-data',
+          },
+        }
+      );
+
+      alert('Paper updated successfully!');
+      setIsEditing(false);
+    } catch (err) {
+      console.error('Save failed:', err);
+      alert('Failed to save changes');
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handlePdfUpload = (e) => setPdfFile(e.target.files[0]);
@@ -42,7 +72,9 @@ const PaperDetailsCard = ({ paper, latestComment }) => {
         </div>
         <div className="flex flex-col text-left text-sm font-medium gap-2 w-full sm:w-[45%]">
           <div><span className="font-semibold">Author ID :</span><br />{paper.author}</div>
-          <div><span className="font-semibold">Submission Date :</span><br />{new Date(paper.submittedAt).toLocaleDateString()}</div>
+          <div><span className="font-semibold">Submission Date :</span><br />
+            {new Date(paper.submittedAt).toLocaleDateString()}
+          </div>
         </div>
       </div>
 
@@ -60,7 +92,9 @@ const PaperDetailsCard = ({ paper, latestComment }) => {
       {/* Upload PDF */}
       <div
         onClick={() => isEditing && fileInputRef.current.click()}
-        className={`mt-4 p-4 rounded-md text-center text-gray-700 border border-dotted border-gray-600 ${isEditing ? 'cursor-pointer hover:bg-gray-100' : 'cursor-not-allowed bg-gray-100'}`}
+        className={`mt-4 p-4 rounded-md text-center text-gray-700 border border-dotted border-gray-600 ${
+          isEditing ? 'cursor-pointer hover:bg-gray-100' : 'cursor-not-allowed bg-gray-100'
+        }`}
       >
         Upload PDF
         <input
@@ -74,24 +108,20 @@ const PaperDetailsCard = ({ paper, latestComment }) => {
         {pdfFile && <p className="text-sm mt-2 text-green-600">{pdfFile.name}</p>}
       </div>
 
-      {/* 🔽 Status Dropdown */}
+      {/* Status — READ ONLY for author */}
       <div className="bg-[#f3f6fb] mt-4 p-4 rounded-md">
         <label className="font-bold text-lg">Status :</label>
-        <select
-          value={status}
-          onChange={(e) => setStatus(e.target.value)}
-          enabled={!isEditing}
-          className="block mt-2 w-full p-2 border border-gray-300 rounded-md bg-white disabled:bg-gray-100"
-        >
-          <option>Under Review</option>
-          <option>Minor Revision</option>
-          <option>Major Revision</option>
-          <option>Accepted</option>
-          <option>Rejected</option>
-        </select>
+        <div className={`mt-2 w-full p-2 border border-gray-300 rounded-md bg-gray-100 font-medium ${
+          status === 'Accepted' ? 'text-green-600' :
+          status === 'Rejected' ? 'text-red-600' :
+          status === 'Minor Revision' || status === 'Major Revision' ? 'text-yellow-600' :
+          'text-blue-600'
+        }`}>
+          {status}
+        </div>
       </div>
 
-      {/* ✅ Comment Section */}
+      {/* Comment Section */}
       <div className="bg-[#f3f6fb] mt-4 p-4 rounded-md">
         <label className="font-bold text-lg block mb-1">Latest Reviewer Comment:</label>
         {latestComment && latestComment.comment ? (
@@ -110,8 +140,10 @@ const PaperDetailsCard = ({ paper, latestComment }) => {
       <div className="flex justify-end gap-4 mt-4">
         <button
           onClick={handleEdit}
-          className={`px-6 py-2 rounded text-white ${isEditing ? 'bg-gray-400' : 'bg-[#0A2B6C] hover:bg-[#1a3c7c]'}`}
           disabled={isEditing}
+          className={`px-6 py-2 rounded text-white ${
+            isEditing ? 'bg-gray-400' : 'bg-[#0A2B6C] hover:bg-[#1a3c7c]'
+          }`}
         >
           Edit
         </button>
@@ -127,10 +159,12 @@ const PaperDetailsCard = ({ paper, latestComment }) => {
 
         <button
           onClick={handleSave}
-          className={`px-6 py-2 rounded text-white ${!isEditing ? 'bg-gray-400' : 'bg-[#0A2B6C] hover:bg-[#1a3c7c]'}`}
-          disabled={!isEditing}
+          disabled={!isEditing || loading}
+          className={`px-6 py-2 rounded text-white ${
+            !isEditing || loading ? 'bg-gray-400' : 'bg-[#0A2B6C] hover:bg-[#1a3c7c]'
+          }`}
         >
-          Save
+          {loading ? 'Saving...' : 'Save'}
         </button>
       </div>
     </div>

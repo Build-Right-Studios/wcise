@@ -99,10 +99,18 @@ const ReviewerDashboard = () => {
     if (!comments.trim()) return alert('Please write a comment.');
 
     try {
-      await axios.post(`${BACKEND_URL}/reviewer/add-comment/${selectedPaper.paperCode}`, {
-        reviewerId: profile._id,
-        text: comments,
-      });
+      await axios.post(
+        `${BACKEND_URL}/reviewer/add-comment/${selectedPaper.paperCode}`,
+        {
+          reviewerId: profile._id,
+          text: comments,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${sessionStorage.getItem("token")}`,  // ✅ Add this
+          },
+        }
+      );
       alert('Comment saved!');
       setLatestComment(comments);
       setComments('');
@@ -113,18 +121,19 @@ const ReviewerDashboard = () => {
   };
 
   const handleResponse = async (status) => {
-    const targetPaperId = selectedPaper._id || selectedPaper.id;
-    if (!isValidObjectId(targetPaperId)) {
-      alert('Invalid paper ID format');
-      return;
-    }
-
     try {
-      await axios.post(`${BACKEND_URL}/reviewer/respond`, {
-        paperCode: selectedPaper.paperCode,
-        reviewerId: profile._id,
-        status,
-      });
+      await axios.post(
+        `${BACKEND_URL}/reviewer/assign/${selectedPaper.paperCode}`,
+        {
+          reviewerId: profile._id,
+          status,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+          },
+        }
+      );
 
       alert(`Paper ${status}!`);
       await fetchPapers(profile._id);

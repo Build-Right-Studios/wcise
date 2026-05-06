@@ -247,4 +247,48 @@ router.post('/paper-details', async (req, res) => {
   }
 });
 
+router.put('/paper/:paperCode', upload.single('file'), async (req, res) => {
+  try {
+    const { paperCode } = req.params;
+    const { abstract } = req.body;
+    const userId = req.user.id;
+
+    const paper = await Paper.findOne({ paperCode });
+
+    if (!paper) {
+      return res.status(404).json({ success: false, message: 'Paper not found' });
+    }
+
+    // Make sure only the author can edit their own paper
+    if (paper.author.toString() !== userId) {
+      return res.status(403).json({ success: false, message: 'Not authorized' });
+    }
+
+    if (abstract) paper.abstract = abstract;
+
+    // If new PDF uploaded, push to Cloudinary
+    if (req.file) {
+      const streamUpload = () => {
+        return new Promise((resolve, reject) => {
+          const stream = cloudinary.uploader.upload_stream(
+            { folder: 'uploads/', resource_type: 'raw', use_filename: true, unique_filename: false },
+            (error, result) => { if (result) resolve(result); else reject(error); }
+          );
+          streamifier.createReadStream(req.file.buffer).pipe(stream);
+        });
+      };
+      const result = await streamUpload();
+      paper.pdf = result.secure_url;
+    }
+
+    await paper.save();
+
+    res.status(200).json({ success: true, message: 'Paper updated successfully', paper });
+
+  } catch (err) {
+    console.error('ERROR in PUT /author/paper/:paperCode:', err);
+    res.status(500).json({ success: false, message: 'Server error', error: err.message });
+  }
+});
+
 module.exports = router;
