@@ -49,6 +49,7 @@ const Login = () => {
         password,
         role: selectedRole
       });
+      sessionStorage.clear();
 
       sessionStorage.setItem('token', response.data.token);
       sessionStorage.setItem('role', response.data.user.role);
