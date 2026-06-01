@@ -18,6 +18,12 @@ app.use(cors({
   credentials: true
 }));
 
+// Body Parsers
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
 // Routes
 const loginRoute = require('./routes/login');
 const signupRoute = require('./routes/signup');
@@ -42,12 +48,6 @@ const isEditor = require('./middleware/isEditor');
  * Mount Razorpay routes BEFORE express.json()
  * so webhook signature verification works correctly.
  */
-
-// Body Parsers
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use('/payment', paymentRoute);
 

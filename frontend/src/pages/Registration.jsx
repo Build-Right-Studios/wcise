@@ -78,12 +78,16 @@ function Registration() {
         }),
       });
 
-      if (!orderRes.ok) throw new Error("Failed to create order");
-      const { orderId, amount: orderAmount, currency } = await orderRes.json();
+      if (!orderRes.ok) {
+        const errBody = await orderRes.json().catch(() => ({}));
+        console.error("Create order failed:", orderRes.status, errBody);
+        throw new Error(errBody.error || `Order creation failed (${orderRes.status})`);
+      }
+      const { orderId, amount: orderAmount, currency, keyID } = await orderRes.json();
 
       // 2. Open Razorpay checkout
       const options = {
-        key: import.meta.env.VITE_RAZORPAY_KEY_ID,
+        key: keyID,
         amount: orderAmount,
         currency,
         name: "WCISE Conference",
@@ -302,9 +306,8 @@ function Registration() {
                   <select
                     value={category}
                     onChange={(e) => setCategory(e.target.value)}
-                    className={`w-full appearance-none bg-transparent border-b-[1.5px] py-2.5 pr-8 text-sm text-[#1d3b58] outline-none transition-colors cursor-pointer ${
-                      errors.category ? "border-red-400" : "border-[#1d3b58]/25 focus:border-[#1d3b58]"
-                    }`}
+                    className={`w-full appearance-none bg-transparent border-b-[1.5px] py-2.5 pr-8 text-sm text-[#1d3b58] outline-none transition-colors cursor-pointer ${errors.category ? "border-red-400" : "border-[#1d3b58]/25 focus:border-[#1d3b58]"
+                      }`}
                   >
                     <option value="">Select a category</option>
                     {CATEGORIES.map((c) => (
@@ -329,9 +332,8 @@ function Registration() {
                     placeholder="Enter amount in INR"
                     value={form.amount}
                     onChange={(e) => setForm({ ...form, amount: e.target.value })}
-                    className={`w-full bg-transparent border-b-[1.5px] py-2.5 pl-5 text-sm text-[#1d3b58] placeholder-[#1d3b58]/25 outline-none transition-colors ${
-                      errors.amount ? "border-red-400" : "border-[#1d3b58]/25 focus:border-[#1d3b58]"
-                    }`}
+                    className={`w-full bg-transparent border-b-[1.5px] py-2.5 pl-5 text-sm text-[#1d3b58] placeholder-[#1d3b58]/25 outline-none transition-colors ${errors.amount ? "border-red-400" : "border-[#1d3b58]/25 focus:border-[#1d3b58]"
+                      }`}
                   />
                 </div>
                 {errors.amount && <p className="mt-1 text-red-500 text-xs">{errors.amount}</p>}
@@ -344,9 +346,8 @@ function Registration() {
                   placeholder="Dr. Ananya Sharma"
                   value={form.name}
                   onChange={(e) => setForm({ ...form, name: e.target.value })}
-                  className={`w-full bg-transparent border-b-[1.5px] py-2.5 text-sm text-[#1d3b58] placeholder-[#1d3b58]/25 outline-none transition-colors ${
-                    errors.name ? "border-red-400" : "border-[#1d3b58]/25 focus:border-[#1d3b58]"
-                  }`}
+                  className={`w-full bg-transparent border-b-[1.5px] py-2.5 text-sm text-[#1d3b58] placeholder-[#1d3b58]/25 outline-none transition-colors ${errors.name ? "border-red-400" : "border-[#1d3b58]/25 focus:border-[#1d3b58]"
+                    }`}
                 />
                 {errors.name && <p className="mt-1 text-red-500 text-xs">{errors.name}</p>}
               </div>
@@ -360,9 +361,8 @@ function Registration() {
                     placeholder="you@institution.ac.in"
                     value={form.email}
                     onChange={(e) => setForm({ ...form, email: e.target.value })}
-                    className={`w-full bg-transparent border-b-[1.5px] py-2.5 text-sm text-[#1d3b58] placeholder-[#1d3b58]/25 outline-none transition-colors ${
-                      errors.email ? "border-red-400" : "border-[#1d3b58]/25 focus:border-[#1d3b58]"
-                    }`}
+                    className={`w-full bg-transparent border-b-[1.5px] py-2.5 text-sm text-[#1d3b58] placeholder-[#1d3b58]/25 outline-none transition-colors ${errors.email ? "border-red-400" : "border-[#1d3b58]/25 focus:border-[#1d3b58]"
+                      }`}
                   />
                   {errors.email && <p className="mt-1 text-red-500 text-xs">{errors.email}</p>}
                 </div>
@@ -373,9 +373,8 @@ function Registration() {
                     placeholder="98XXXXXXXX"
                     value={form.phone}
                     onChange={(e) => setForm({ ...form, phone: e.target.value })}
-                    className={`w-full bg-transparent border-b-[1.5px] py-2.5 text-sm text-[#1d3b58] placeholder-[#1d3b58]/25 outline-none transition-colors ${
-                      errors.phone ? "border-red-400" : "border-[#1d3b58]/25 focus:border-[#1d3b58]"
-                    }`}
+                    className={`w-full bg-transparent border-b-[1.5px] py-2.5 text-sm text-[#1d3b58] placeholder-[#1d3b58]/25 outline-none transition-colors ${errors.phone ? "border-red-400" : "border-[#1d3b58]/25 focus:border-[#1d3b58]"
+                      }`}
                   />
                   {errors.phone && <p className="mt-1 text-red-500 text-xs">{errors.phone}</p>}
                 </div>
@@ -444,11 +443,10 @@ function Registration() {
               <button
                 onClick={handlePay}
                 disabled={loading || !category}
-                className={`w-full py-4 rounded-lg font-semibold text-sm tracking-wide transition-all duration-150 flex items-center justify-center gap-2.5 ${
-                  loading || !category
+                className={`w-full py-4 rounded-lg font-semibold text-sm tracking-wide transition-all duration-150 flex items-center justify-center gap-2.5 ${loading || !category
                     ? "bg-[#1d3b58]/15 text-[#1d3b58]/30 cursor-not-allowed"
                     : "bg-[#1d3b58] text-white hover:bg-[#162d46] active:scale-[0.99]"
-                }`}
+                  }`}
               >
                 {loading ? (
                   <>
