@@ -1,12 +1,30 @@
+
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
 require('dotenv').config();
-const bodyParser = require('body-parser'); 
-
+const bodyParser = require('body-parser');
 
 const app = express();
- // Allow requests from your frontend origin
+
+// Routes
+const loginRoute = require('./routes/login');
+const signupRoute = require('./routes/signup');
+const editorRoute = require('./routes/editor');
+const reviewerRoute = require('./routes/reviewer');
+const authorRoute = require('./routes/author');
+const mailRoute = require('./routes/mailSend');
+const payuRoute = require('./routes/payu');
+const paymentRoute = require('./routes/payment');
+const reviewerInvite = require('./routes/reviewerInvite');
+
+// Middleware
+const isAuthenticated = require('./middleware/isAuthenticated');
+const isAuthor = require('./middleware/isAuthor');
+const isReviewer = require('./middleware/isReviewer');
+const isEditor = require('./middleware/isEditor');
+
+// CORS
 app.use(cors({
   origin: [
     "https://www.wcise.co.in",
@@ -17,34 +35,28 @@ app.use(cors({
   credentials: true
 }));
 
+/*
+ * IMPORTANT:
+ * Mount Razorpay routes BEFORE express.json()
+ * so webhook signature verification works correctly.
+ */
+app.use('/payment', paymentRoute);
 
-// Middleware
+// Body Parsers
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(bodyParser.json()); // Parse application/json
-app.use(bodyParser.urlencoded({ extended: true })); 
-const loginRoute = require('./routes/login');
-const signupRoute = require('./routes/signup');
-const editorRoute = require('./routes/editor');
-const reviewerRoute = require('./routes/reviewer');
-const authorRoute = require('./routes/author');
-const mailRoute = require('./routes/mailSend');
-const payuRoute = require('./routes/payu');
-const reviewerInvite = require('./routes/reviewerInvite');
-const isAuthenticated = require('./middleware/isAuthenticated');
-const isAuthor = require('./middleware/isAuthor');
-const isReviewer = require('./middleware/isReviewer');
-const isEditor = require('./middleware/isEditor');
- 
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
-
-// ✅ Connect to MongoDB
+// MongoDB Connection
 mongoose.connect(process.env.MONGODB_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true
 })
-.then(() => console.log("Connected to MongoDB"))
-.catch((err) => console.error("MongoDB connection error:", err.message));
+  .then(() => console.log("Connected to MongoDB"))
+  .catch((err) =>
+    console.error("MongoDB connection error:", err.message)
+  );
 
 // Dummy users (temporary testing data)
 const users = [
@@ -63,32 +75,50 @@ const users = [
     role: 'Author'
   }
 ];
+
 app.locals.users = users;
 
-// ✅ All routes (after middleware setup)
+// Application Routes
 app.use('/login', loginRoute);
 app.use('/signup', signupRoute);
-app.use('/', mailRoute); // includes POST /send-mail/:email
-app.use('/editor', isAuthenticated, isEditor, editorRoute);
+app.use('/', mailRoute);
+
+app.use('/editor',
+  isAuthenticated,
+  isEditor,
+  editorRoute
+);
+
 app.use('/reviewer', reviewerInvite);
-app.use('/reviewer', isAuthenticated, isReviewer, reviewerRoute);
-app.use('/author', isAuthenticated, isAuthor, authorRoute);
+
+app.use('/reviewer',
+  isAuthenticated,
+  isReviewer,
+  reviewerRoute
+);
+
+app.use('/author',
+  isAuthenticated,
+  isAuthor,
+  authorRoute
+);
+
 app.use('/payu', payuRoute);
 
-
-
-// Get all dummy users
+// Test Route
 app.get('/users', (req, res) => {
   res.json(app.locals.users);
 });
 
-// Default route
+// Health Check Route
 app.get('/', (req, res) => {
   res.send('Server is running successfully.');
 });
 
-// Start server
+// Start Server
 const PORT = process.env.PORT || 8000;
+
 app.listen(PORT, () => {
   console.log(`🚀 Server listening at http://localhost:${PORT}`);
 });
+
