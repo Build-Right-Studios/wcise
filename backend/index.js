@@ -7,6 +7,17 @@ const bodyParser = require('body-parser');
 
 const app = express();
 
+// CORS
+app.use(cors({
+  origin: [
+    "https://www.wcise.co.in",
+    "http://localhost:5173"
+  ],
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+  credentials: true
+}));
+
 // Routes
 const loginRoute = require('./routes/login');
 const signupRoute = require('./routes/signup');
@@ -24,29 +35,21 @@ const isAuthor = require('./middleware/isAuthor');
 const isReviewer = require('./middleware/isReviewer');
 const isEditor = require('./middleware/isEditor');
 
-// CORS
-app.use(cors({
-  origin: [
-    "https://www.wcise.co.in",
-    "http://localhost:5173"
-  ],
-  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization"],
-  credentials: true
-}));
+
 
 /*
  * IMPORTANT:
  * Mount Razorpay routes BEFORE express.json()
  * so webhook signature verification works correctly.
  */
-app.use('/payment', paymentRoute);
 
 // Body Parsers
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
+app.use('/payment', paymentRoute);
 
 // MongoDB Connection
 mongoose.connect(process.env.MONGODB_URI, {
